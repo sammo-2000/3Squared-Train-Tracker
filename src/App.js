@@ -1,11 +1,13 @@
 import React from "react";
 import Map from "./components/Map";
 import "./css/tailwind.css";
+import Search from "./components/Search";
 
 function App() {
   return (
     <div>
-      <Map />
+      <Search />
+      {/* <Map /> */}
     </div>
   );
 }
