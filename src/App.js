@@ -1,11 +1,10 @@
 import React from "react";
-import logo from './logo.svg';
-import './App.css';
-import Map from './Map';
+import Map from "./Map";
+import "./tailwind.css";
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <Map />
     </div>
   );
