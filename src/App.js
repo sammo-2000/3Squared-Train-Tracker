@@ -1,6 +1,6 @@
 import React from "react";
-import Map from "./Map";
-import "./tailwind.css";
+import Map from "./components/Map";
+import "./css/tailwind.css";
 
 function App() {
   return (

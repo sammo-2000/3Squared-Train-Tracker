@@ -5,7 +5,7 @@ import { useMap } from "react-leaflet/hooks";
 import { Marker } from "react-leaflet";
 import { Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./leaflet.css";
+import "../css/leaflet.css";
 
 const center = [52.998463846073854, -1.2682985457466047];
 
