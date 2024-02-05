@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Search />
-      {/* <Map /> */}
+      <Map />
     </div>
   );
 }
