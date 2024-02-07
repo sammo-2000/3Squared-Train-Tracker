@@ -21,11 +21,13 @@ const Map = () => {
         <Marker
           Latitude={54.091617}
           Longitude={-1.793925}
-          PopupContent={
-            <h1>
-              POPUP! <strong>Hello</strong>
-            </h1>
-          }
+          Icons="station"
+          PopupContent={<h1>POPUP</h1>}
+        />
+        <Marker
+          Latitude={53.991617}
+          Longitude={-1.793925}
+          PopupContent={<h1>POPUP</h1>}
         />
       </MapContainer>
     </div>
