@@ -1,0 +1,5 @@
+/* npx tailwindcss -i ./tailwind.css -o ./src/css/tailwind.css --watch --minify */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
