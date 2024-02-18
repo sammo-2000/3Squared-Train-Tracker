@@ -38,10 +38,13 @@
 import React from "react";
 import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
+import { useMap } from 'react-leaflet'
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
 import Marker from "./CustomMarker";
 import Navbar from "./Navbar";
+import Nav from "./Nav";
+import { FloatButton } from 'antd';
 
 const Map = () => {
   return (
@@ -67,9 +70,11 @@ const Map = () => {
           }
         />
       </MapContainer>
-      <Navbar />
+      <Nav />
+      <FloatButton onClick={() => map.panTo([50, 20])} />
     </div>
   );
+  const map = useMap();
 };
 
 // style={{ // makes the div overlay the map
