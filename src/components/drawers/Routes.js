@@ -1,7 +1,8 @@
-import { Drawer, Button, Input, Space } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Drawer, Space, Button } from "antd";
 import "../../css/drawer.css";
 import { useState } from "react";
+import add from "../../assets/add.svg";
+import back from "../../assets/back.svg";
 
 const Routes = (props) => {
   const [overlayVisible, setOverlayVisible] = useState(false);
@@ -23,17 +24,23 @@ const Routes = (props) => {
         }}
         visible={true}
         placement="left"
-      >
-        <h1>Tracked Routes</h1>
-        <div className="overlayOpen"><Space style={{ marginTop: '20px' }}>
-          <Button type="primary" onClick={showOverlay} icon={<PlusOutlined />} />
+        closeIcon={<img src={back} />}
+        extra={
+          <Space>
+          <Button
+            onClick={null}
+            shape="circle"
+            type="primary"
+            ghost
+            icon={<img src={add} />}
+          ></Button>
         </Space>
-        </div>
-        <Input.Search placeholder="Search" />
+        }
+      >
         
       </Drawer>
 
-      //Add Trains overlay
+      
       <Drawer
         title="Routes"
         placement="left"
