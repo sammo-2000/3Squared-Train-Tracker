@@ -1,10 +1,12 @@
-import { Drawer, Space, Button, Empty, Input } from "antd";
+import { Drawer, Space, Button, Empty, Input, Tabs } from "antd";
+
 import "../../css/drawer.css";
 import { useState } from "react";
 
-import add from "../../assets/add.svg";
+import search from "../../assets/search.svg";
 import back from "../../assets/back.svg";
 import mapEmpty from "../../assets/map-empty.svg";
+import lightbulb from "../../assets/lightbulb.svg";
 
 const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -16,6 +18,19 @@ const Locations = (props) => {
   const onChildrenDrawerClose = () => {
     setChildrenDrawer(false);
   };
+
+  const items = [
+    {
+      key: "1",
+      label: "All",
+      children: "Content of Tab Pane 1",
+    },
+    {
+      key: "2",
+      label: "Recently Used",
+      children: "Content of Tab Pane 2",
+    },
+  ];
 
   return (
     <>
@@ -73,11 +88,62 @@ const Locations = (props) => {
           open={childrenDrawer}
           placement="left"
           closeIcon={<img className="rotate-180" src={back} />}
+          bodyStyle={{ padding: 0 }}
         >
           <Input
-            placeholder="input search text"
+            placeholder="Search TIPLOCs"
+            allowClear
+            size="large"
+            prefix={
+              <img
+                style={{
+                  padding: "0px 0.5rem",
+                  opacity: "50%",
+                }}
+                src={search}
+              />
+            }
             onSearch={() => console.log("search")}
+            style={{
+              borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+              marginTop: "-1px",
+              borderRight: "none",
+              borderLeft: "none",
+              borderRadius: "0",
+              padding: "1rem 1rem",
+            }}
           />
+
+          <Tabs
+            defaultActiveKey="0"
+            tabBarStyle={{
+              padding: ".5rem 2rem 0px 2rem",
+              fontWeight: "500",
+            }}
+          >
+            <Tabs.TabPane key={0} tab="All" style={{ padding: "0px 1rem" }}>
+              aa
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              key={1}
+              tab="Recently Used"
+              style={{ padding: "0px 1rem" }}
+            >
+              <Empty
+                image={lightbulb}
+                imageStyle={{
+                  height: 60,
+                  alignSelf: "center",
+                  display: "inline-block",
+                }}
+                description={
+                  <span className="font-semibold">
+                    You have no recently used locations.
+                  </span>
+                }
+              ></Empty>
+            </Tabs.TabPane>
+          </Tabs>
         </Drawer>
       </Drawer>
     </>
