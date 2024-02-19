@@ -1,4 +1,4 @@
-import { Drawer, Space, Button, Empty } from "antd";
+import { Drawer, Space, Button, Empty, Input } from "antd";
 import "../../css/drawer.css";
 import { useState } from "react";
 
@@ -67,14 +67,17 @@ const Locations = (props) => {
         ></Empty>
 
         <Drawer
-          title="Two-level Drawer"
-          width={320}
-          closable={false}
+          title="Track New Location"
+          closable={true}
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
           placement="left"
+          closeIcon={<img className="rotate-180" src={back} />}
         >
-          This is two-level drawer
+          <Input
+            placeholder="input search text"
+            onSearch={() => console.log("search")}
+          />
         </Drawer>
       </Drawer>
     </>
