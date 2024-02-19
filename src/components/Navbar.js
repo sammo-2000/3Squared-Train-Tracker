@@ -17,9 +17,7 @@ function Navbar() {
 
   return (
     <div>
-      {settingsModal && (
-        <Settings setOpen={settingsModal} />
-      )}
+      {settingsModal && <Settings setOpen={settingsModal} />}
 
       {activeDrawer === "locations" && (
         <Locations setActiveDraw={setActiveDrawer} />
