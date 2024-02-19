@@ -2,22 +2,50 @@ import {
   Drawer,
   Space,
   Button,
-  Empty,
   Input,
   Tabs,
   List,
   Popconfirm,
+  notification,
 } from "antd";
+
+import "../../css/drawer.css";
 import { useState } from "react";
+
 import search from "../../assets/search.svg";
-import add from "../../assets/add.svg";
 import back from "../../assets/back.svg";
 import train from "../../assets/train.svg";
-import lightbulb from "../../assets/lightbulb.svg";
 
 const Trains = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
-  const totalCount = 10;
+  const [searchText, setSearchText] = useState("");
+  const [recentlyUsed, setRecentlyUsed] = useState([]);
+  const [trackedTrains, setTrackedTrains] = useState([]);
+  const [notificationApi, notificationContext] = notification.useNotification();
+
+  const openLoadingNotification = () => {
+    notificationApi.open({
+      message: "Trains loading...",
+      description:
+        "Please wait while we load the route from your selected headcode. This may take a few seconds.",
+      duration: 5,
+    });
+  };
+  const duplicateTrainDetected = () => {
+    notificationApi.open({
+      message: "Headcode Already Added To Tracked Trains",
+      duration: 5,
+    });
+  };
+
+  const openRecentlyUsedNotification = () => {
+    notificationApi.open({
+      message: "Recently Used",
+      description:
+        "A location was added to your recently used list, you can disable this in settings.",
+      duration: 5,
+    });
+  };
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -26,6 +54,26 @@ const Trains = (props) => {
   const onChildrenDrawerClose = () => {
     setChildrenDrawer(false);
   };
+
+  const setTracked = (item) => {
+    // TODO: Need to make sure there isn't any duplicates
+    const isItemAlreadyTracked = recentlyUsed.some((trackedItem) => trackedItem.Headcode === item.Headcode);
+    if (isItemAlreadyTracked) {
+      duplicateTrainDetected();
+      return;
+    }
+    
+    setChildrenDrawer(false);
+    setSearchText("");
+    setRecentlyUsed([...recentlyUsed, item]);
+    setTrackedTrains([...trackedTrains, item]);
+    openLoadingNotification();
+
+    if (recentlyUsed.length === 0) {
+      openRecentlyUsedNotification();
+    }
+  };
+
   const data = [
     {
       Headcode: "5N09",
@@ -36,8 +84,10 @@ const Trains = (props) => {
     
   ];
 
+
   return (
     <>
+      {notificationContext}
       <Drawer
         title="Tracked Trains"
         onClose={() => {
@@ -45,7 +95,8 @@ const Trains = (props) => {
         }}
         open={true}
         placement="left"
-        closeIcon={<img src={back} />}
+        closeIcon={<img alt="back" src={back} />}
+        bodyStyle={{ padding: 0 }}
         extra={
           <Space>
             <Button
@@ -71,22 +122,55 @@ const Trains = (props) => {
           </Space>
         }
       >
-        <Empty
-          image={train}
-          imageStyle={{
-            height: 60,
-            alignSelf: "center",
-            display: "inline-block",
-          }}
-          description={
-            <span className="font-semibold">
-              You have no Trains tracked.
-            </span>
+        <Input
+          placeholder="Search Headcode"
+          allowClear
+          size="large"
+          prefix={
+            <img
+              style={{
+                padding: "0px 0.5rem",
+                opacity: "50%",
+              }}
+              alt="search"
+              src={search}
+            />
           }
-        ></Empty>
-      </Drawer>
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{
+            borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+            marginTop: "-1px",
+            borderRight: "none",
+            borderLeft: "none",
+            borderRadius: "0",
+            padding: "1rem 1rem",
+          }}
+        />
 
-      <Drawer
+        <List
+          size="large"
+          dataSource={trackedTrains.filter((item) => {
+            return item.Headcode.toLowerCase().includes(searchText.toLowerCase());
+          })}
+          renderItem={(item) => (
+            <Popconfirm
+              icon={null}
+              title="Track Train"
+              description="Are you sure you want to track this Train?"
+              onConfirm={() => setTracked(item)}
+              onCancel={null}
+              okText="Yes"
+              cancelText="No"
+            >
+              <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                <div>{item.Headcode}</div>
+                <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>
+              </List.Item>
+            </Popconfirm>
+          )}
+        />
+
+        <Drawer
           title="Track New Train"
           closable={true}
           onClose={onChildrenDrawerClose}
@@ -109,7 +193,7 @@ const Trains = (props) => {
                 src={search}
               />
             }
-            onSearch={() => console.log("search")}
+            onChange={(e) => setSearchText(e.target.value)}
             style={{
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
               marginTop: "-1px",
@@ -131,47 +215,60 @@ const Trains = (props) => {
             <Tabs.TabPane key={0} tab="All">
               <List
                 size="large"
-                dataSource={data}
+                dataSource={data.filter((item) => {
+                  return item.Headcode
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase());
+                })}
                 renderItem={(item) => (
                   <Popconfirm
                     icon={null}
                     title="Track Train"
                     description="Are you sure you want to track this Train?"
-                    onConfirm={null}
+                    onConfirm={() => setTracked(item)}
                     onCancel={null}
                     okText="Yes"
                     cancelText="No"
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
                       <div>{item.Headcode}</div>
-                      <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>                    
+                      <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>
                     </List.Item>
                   </Popconfirm>
                 )}
               />
             </Tabs.TabPane>
-            <Tabs.TabPane
-              key={1}
-              tab="Recently Used"
-              style={{ padding: "0px 1rem" }}
-            >
-              <Empty
-                image={lightbulb}
-                imageStyle={{
-                  height: 60,
-                  alignSelf: "center",
-                  display: "inline-block",
-                  margin: "1rem",
-                }}
-                description={
-                  <span className="font-semibold">
-                    You have no recently used Trains.
-                  </span>
-                }
-              ></Empty>
+            <Tabs.TabPane key={1} tab="Recently Used">
+              <List
+                size="large"
+                dataSource={recentlyUsed.filter((item) => {
+                  return item.Headcode
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase());
+                })}
+                renderItem={(item) => (
+                  <Popconfirm
+                    icon={null}
+                    title="Track Train"
+                    description="Are you sure you want to track this Train?"
+                    onConfirm={() => setTracked(item)}
+                    onCancel={() =>
+                      setRecentlyUsed(recentlyUsed.filter((i) => i !== item))
+                    }
+                    okText="Yes"
+                    cancelText="Remove from recently used"
+                  >
+                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                      <div>{item.Headcode}</div>
+                      <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>
+                    </List.Item>
+                  </Popconfirm>
+                )}
+              />
             </Tabs.TabPane>
           </Tabs>
         </Drawer>
+      </Drawer>
     </>
   );
 };
