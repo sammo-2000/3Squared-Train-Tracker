@@ -15,9 +15,7 @@ function Navbar() {
       {activeDrawer === "locations" && (
         <Locations setActiveDraw={setActiveDrawer} />
       )}
-      {activeDrawer === "trains" && (
-        <Trains setActiveDraw={setActiveDrawer} />
-      )}
+      {activeDrawer === "trains" && <Trains setActiveDraw={setActiveDrawer} />}
 
       <div className="shadow-box">
         <div
@@ -40,7 +38,14 @@ function Navbar() {
             className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
             onClick={() => setActiveDrawer("trains")}
           >
-            <img className="max-h-12" src={location} alt={`Icon ${1}`} />
+            <img className="max-h-12" src={train} alt={`Icon ${1}`} />
+          </div>
+          <div
+            key={2}
+            className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
+            onClick={() => setActiveDrawer("routes")}
+          >
+            <img className="max-h-12" src={route} alt={`Icon ${1}`} />
           </div>
         </div>
       </div>
