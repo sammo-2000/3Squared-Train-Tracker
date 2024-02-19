@@ -6,10 +6,6 @@ import { Dropdown, message, Space } from "antd";
 
 import { useTheme } from "../hooks/ThemeHooks";
 
-const onClick = ({ key }) => {
-  message.info(`Click on item ${key}`);
-};
-
 const items = [
   {
     label: "1st menu item",
@@ -31,8 +27,13 @@ const items = [
 const Settings = () => {
   const { setTheme } = useTheme();
   useEffect(() => {
-    setTheme(2);
+    setTheme(1);
   }, [setTheme]);
+
+  const onClick = ({ key }) => {
+    message.info(`Click on item ${key}`);
+    setTheme(key);
+  };
 
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
