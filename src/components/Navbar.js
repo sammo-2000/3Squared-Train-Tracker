@@ -1,43 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import location from "../assets/location.svg";
-import icon2 from "../assets/icon2.png";
-import icon3 from "../assets/icon3.png";
-import icon4 from "../assets/icon4.png";
-import icon5 from "../assets/icon5.png";
 
 import Locations from "./drawers/Locations";
 
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
-
-  useEffect(() => {
-    console.log(activeDrawer);
-  });
-
-  // useEffect(() => {
-  //   // Switch case for active drawer
-  //   switch (activeDrawer) {
-  //     case "locations":
-  //       console.log("Locations");
-  //       return <Locations />;
-  //     case "search":
-  //       console.log("Search");
-  //       break;
-  //     case "notifications":
-  //       console.log("Notifications");
-  //       break;
-  //     case "profile":
-  //       console.log("Profile");
-  //       break;
-  //     case "settings":
-  //       console.log("Settings");
-  //       break;
-  //     default:
-  //       console.log("Default");
-  //       break;
-  //   }
-  // }, [activeDrawer]);
 
   return (
     <div>
