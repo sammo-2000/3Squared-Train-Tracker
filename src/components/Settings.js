@@ -24,7 +24,7 @@ const items = [
   },
 ];
 
-const Settings = () => {
+const Settings = (props) => {
   const { setTheme } = useTheme();
   useEffect(() => {
     setTheme(1);
@@ -35,7 +35,7 @@ const Settings = () => {
     setTheme(key);
   };
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(props.setOpen);
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
     left: 0,
@@ -74,9 +74,9 @@ const Settings = () => {
       {/* <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
         <Settings />
       </div> */}
-      <div className="absolute top-[25rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
+      {/* <div className="absolute top-[25rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
         <Button onClick={showModal}>Settings</Button>
-      </div>
+      </div> */}
       <Modal
         title={
           <div

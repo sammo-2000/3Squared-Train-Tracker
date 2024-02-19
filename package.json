@@ -19,7 +19,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "tailwind": "npx tailwindcss -i ./tailwind.css -o ./src/css/tailwind.css --watch --minify"
   },
   "eslintConfig": {
     "extends": [

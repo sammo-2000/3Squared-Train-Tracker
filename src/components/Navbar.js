@@ -3,16 +3,24 @@ import React, { useState } from "react";
 import location from "../assets/location.svg";
 import route from "../assets/route.svg";
 import train from "../assets/train.svg";
+import settings from "../assets/settings.svg";
 
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
 
+import Settings from "./Settings";
+
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
+  const [settingsModal, setSettingsModal] = useState(false);
 
   return (
     <div>
+      {settingsModal && (
+        <Settings setOpen={settingsModal} />
+      )}
+
       {activeDrawer === "locations" && (
         <Locations setActiveDraw={setActiveDrawer} />
       )}
@@ -44,6 +52,14 @@ function Navbar() {
           >
             <img style={{ width: "2rem" }} src={route} alt={`Icon ${1}`} />
             <span>Routes</span>
+          </div>
+          <div
+            key={3}
+            className="flex items-center flex-col transition-color duration-200 hover:bg-gray-200 justify-center p-4 cursor-pointer"
+            onClick={() => setSettingsModal(settingsModal ? false : true)}
+          >
+            <img style={{ width: "2rem" }} src={settings} alt={`Icon ${1}`} />
+            <span>Settings</span>
           </div>
         </div>
       </div>
