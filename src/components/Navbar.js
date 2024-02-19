@@ -46,7 +46,7 @@ function Navbar() {
             Close
           </button>
           {/* This is where I check for the id of the active content then display content relating to that ID */}
-          {activeContent === 1 && <div>Section 1</div>}
+          {activeContent === 1 && console.log('Section 1')}
           {activeContent === 2 && <div>Section 2</div>}
           {activeContent === 3 && <div>Section 3</div>}
           {activeContent === 4 && <div>Section 4</div>}
