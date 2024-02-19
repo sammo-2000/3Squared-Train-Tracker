@@ -51,6 +51,21 @@ function Navbar() {
           <img className="max-h-12" src={icon1} alt={`Icon ${0}`} />
         </div>
       </div>
+
+      {activeContent && (
+        <div className='absolute top-0 left-0 w-[15%] z-[1000] h-full bg-white shadow-lg'>
+          <button onClick={() => setActiveContent(null)} style={{ cursor: 'pointer', position: 'absolute', top: 20, right: 20 }}>
+            Close
+          </button>
+          {/* This is where I check for the id of the active content then display content relating to that ID */}
+          {activeContent === 1 && <div>Section 1</div>}
+          {activeContent === 2 && <div>Section 2</div>}
+          {activeContent === 3 && <div>Section 3</div>}
+          {activeContent === 4 && <div>Section 4</div>}
+          {activeContent === 5 && <div>Section 5</div>}
+        </div>
+      )}
+
     </div>
   );
 }
