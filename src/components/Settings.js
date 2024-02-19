@@ -10,6 +10,16 @@ import { useTheme } from "../hooks/ThemeHooks";
 // Cookies
 import Cookies from 'js-cookie';
 
+// Should remove a specfic cookie will need for tomorrow, so leaving here
+// Cookies.remove('COOKIENAME');
+
+// Removes all cookies need to add a button for clearing cookies
+// const allCookies = Cookies.get();
+
+// for (const cookieName in allCookies) {
+//   Cookies.remove(cookieName);
+// }
+
 // Map Tilelayer Selector
 const items = [
   {
@@ -29,7 +39,7 @@ const items = [
 const Settings = (props) => {
   const { setTheme } = useTheme();
   useEffect(() => {
-    setTheme(1);
+    setTheme(2);
   }, [setTheme]);
 
   const onClick = ({ key }) => {
