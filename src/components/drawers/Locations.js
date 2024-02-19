@@ -7,6 +7,8 @@ import {
   List,
   Popconfirm,
   notification,
+  Menu,
+  message,
 } from "antd";
 
 import "../../css/drawer.css";
@@ -14,7 +16,6 @@ import { useState } from "react";
 
 import search from "../../assets/search.svg";
 import back from "../../assets/back.svg";
-import mapEmpty from "../../assets/map-empty.svg";
 
 const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -22,24 +23,7 @@ const Locations = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedLocations, setTrackedLocations] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
-
-  const openLoadingNotification = () => {
-    notificationApi.open({
-      message: "Routes loading...",
-      description:
-        "Please wait while we load routes from your selected location. This may take a few seconds.",
-      duration: 5,
-    });
-  };
-
-  const openRecentlyUsedNotification = () => {
-    notificationApi.open({
-      message: "Recently Used",
-      description:
-        "A location was added to your recently used list, you can disable this in settings.",
-      duration: 5,
-    });
-  };
+  const [messageApi, messageContext] = message.useMessage();
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -49,35 +33,65 @@ const Locations = (props) => {
     setChildrenDrawer(false);
   };
 
-  const setTracked = (item) => {
-    // TODO: Need to make sure there isn't any duplicates
+  const onTrackedLocationClick = (item, e) => {
+    if (e.key === "view-details") {
+      console.log("View details");
+      console.log(item);
+    }
 
+    if (e.key === "stop-tracking") {
+      setTrackedLocations(trackedLocations.filter((i) => i !== item));
+
+      messageApi.open({
+        type: "success",
+        content: "Location removed from tracking.",
+      });
+    }
+  };
+
+  const setTracked = (item) => {
     setChildrenDrawer(false);
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
     setTrackedLocations([...trackedLocations, item]);
-    openLoadingNotification();
 
+    // Inform user that routes are being loaded
+    notificationApi.open({
+      message: "Routes loading...",
+      description:
+        "Please wait while we load routes from your selected location. This may take a few seconds.",
+      duration: 5,
+    });
+
+    // Inform user that item was added to their 'recently used' list
     if (recentlyUsed.length === 0) {
-      openRecentlyUsedNotification();
+      notificationApi.open({
+        message: "Recently Used",
+        description:
+          "A location was added to your recently used list, you can disable this in settings.",
+        duration: 5,
+      });
     }
   };
 
   const data = [
     {
+      id: "1",
       title: "Liverpool Lime Street",
       tiploc: "LIVRPLS",
-      tracked: true,
     },
     {
+      id: "2",
       title: "Sheffield Station",
       tiploc: "SHEFLDS",
     },
     {
+      id: "3",
       title: "Manchester Piccadilly",
       tiploc: "MNCRPIC",
     },
     {
+      id: "4",
       title: "London Euston",
       tiploc: "LNDNEUS",
     },
@@ -86,6 +100,8 @@ const Locations = (props) => {
   return (
     <>
       {notificationContext}
+      {messageContext}
+
       <Drawer
         title="Tracked Locations"
         onClose={() => {
@@ -151,20 +167,39 @@ const Locations = (props) => {
             return item.title.toLowerCase().includes(searchText.toLowerCase());
           })}
           renderItem={(item) => (
-            <Popconfirm
-              icon={null}
-              title="Track location"
-              description="Are you sure you want to track this location?"
-              onConfirm={() => setTracked(item)}
-              onCancel={null}
-              okText="Yes"
-              cancelText="No"
-            >
-              <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                <div>{item.title}</div>
-                <div>{item.tiploc}</div>
-              </List.Item>
-            </Popconfirm>
+            <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+              <Menu
+                onClick={(e) => onTrackedLocationClick(item, e)}
+                style={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  borderRight: "none",
+                  margin: "0px",
+                  padding: "0px",
+                }}
+                defaultSelectedKeys={[]}
+                mode="vertical"
+                items={[
+                  {
+                    key: item.id,
+                    label: item.title,
+                    defaultSelectedKeys: [],
+                    children: [
+                      {
+                        key: "view-details",
+                        label: "View details",
+                        onClick: null,
+                      },
+                      {
+                        key: "stop-tracking",
+                        label: "Stop tracking",
+                        onClick: null,
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </List.Item>
           )}
         />
 
@@ -214,9 +249,14 @@ const Locations = (props) => {
               <List
                 size="large"
                 dataSource={data.filter((item) => {
-                  return item.title
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
+                  return (
+                    item.title
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase()) &&
+                    !trackedLocations.some(
+                      (trackedItem) => trackedItem.id === item.id
+                    )
+                  );
                 })}
                 renderItem={(item) => (
                   <Popconfirm
@@ -240,9 +280,14 @@ const Locations = (props) => {
               <List
                 size="large"
                 dataSource={recentlyUsed.filter((item) => {
-                  return item.title
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
+                  return (
+                    item.title
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase()) &&
+                    !trackedLocations.some(
+                      (trackedItem) => trackedItem.id === item.id
+                    )
+                  );
                 })}
                 renderItem={(item) => (
                   <Popconfirm

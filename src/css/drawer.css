@@ -5,3 +5,12 @@
     color: white !important;
     background-color: #1890ff !important;
   }
+
+  .ant-menu-submenu-title:hover {
+    background-color: transparent !important;
+  }
+
+  .ant-menu-vertical >.ant-menu-submenu>.ant-menu-submenu-title {
+    padding: 0px;
+    margin: 0px;
+  }
