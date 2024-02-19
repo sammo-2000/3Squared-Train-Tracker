@@ -2,11 +2,11 @@ import {
   Drawer,
   Space,
   Button,
-  Empty,
   Input,
   Tabs,
   List,
   Popconfirm,
+  notification,
 } from "antd";
 
 import "../../css/drawer.css";
@@ -15,10 +15,31 @@ import { useState } from "react";
 import search from "../../assets/search.svg";
 import back from "../../assets/back.svg";
 import mapEmpty from "../../assets/map-empty.svg";
-import lightbulb from "../../assets/lightbulb.svg";
 
 const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [recentlyUsed, setRecentlyUsed] = useState([]);
+  const [trackedLocations, setTrackedLocations] = useState([]);
+  const [notificationApi, notificationContext] = notification.useNotification();
+
+  const openLoadingNotification = () => {
+    notificationApi.open({
+      message: "Routes loading...",
+      description:
+        "Please wait while we load routes from your selected location. This may take a few seconds.",
+      duration: 5,
+    });
+  };
+
+  const openRecentlyUsedNotification = () => {
+    notificationApi.open({
+      message: "Recently Used",
+      description:
+        "A location was added to your recently used list, you can disable this in settings.",
+      duration: 5,
+    });
+  };
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -26,6 +47,20 @@ const Locations = (props) => {
 
   const onChildrenDrawerClose = () => {
     setChildrenDrawer(false);
+  };
+
+  const setTracked = (item) => {
+    // TODO: Need to make sure there isn't any duplicates
+
+    setChildrenDrawer(false);
+    setSearchText("");
+    setRecentlyUsed([...recentlyUsed, item]);
+    setTrackedLocations([...trackedLocations, item]);
+    openLoadingNotification();
+
+    if (recentlyUsed.length === 0) {
+      openRecentlyUsedNotification();
+    }
   };
 
   const data = [
@@ -50,6 +85,7 @@ const Locations = (props) => {
 
   return (
     <>
+      {notificationContext}
       <Drawer
         title="Tracked Locations"
         onClose={() => {
@@ -58,6 +94,7 @@ const Locations = (props) => {
         open={true}
         placement="left"
         closeIcon={<img alt="back" src={back} />}
+        bodyStyle={{ padding: 0 }}
         extra={
           <Space>
             <Button
@@ -83,19 +120,53 @@ const Locations = (props) => {
           </Space>
         }
       >
-        <Empty
-          image={mapEmpty}
-          imageStyle={{
-            height: 60,
-            alignSelf: "center",
-            display: "inline-block",
-          }}
-          description={
-            <span className="font-semibold">
-              You have no locations tracked.
-            </span>
+        <Input
+          placeholder="Search Locations"
+          allowClear
+          size="large"
+          prefix={
+            <img
+              style={{
+                padding: "0px 0.5rem",
+                opacity: "50%",
+              }}
+              alt="search"
+              src={search}
+            />
           }
-        ></Empty>
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{
+            borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+            marginTop: "-1px",
+            borderRight: "none",
+            borderLeft: "none",
+            borderRadius: "0",
+            padding: "1rem 1rem",
+          }}
+        />
+
+        <List
+          size="large"
+          dataSource={trackedLocations.filter((item) => {
+            return item.title.toLowerCase().includes(searchText.toLowerCase());
+          })}
+          renderItem={(item) => (
+            <Popconfirm
+              icon={null}
+              title="Track location"
+              description="Are you sure you want to track this location?"
+              onConfirm={() => setTracked(item)}
+              onCancel={null}
+              okText="Yes"
+              cancelText="No"
+            >
+              <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                <div>{item.title}</div>
+                <div>{item.tiploc}</div>
+              </List.Item>
+            </Popconfirm>
+          )}
+        />
 
         <Drawer
           title="Track New Location"
@@ -120,7 +191,7 @@ const Locations = (props) => {
                 src={search}
               />
             }
-            onSearch={() => console.log("search")}
+            onChange={(e) => setSearchText(e.target.value)}
             style={{
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
               marginTop: "-1px",
@@ -142,13 +213,17 @@ const Locations = (props) => {
             <Tabs.TabPane key={0} tab="All">
               <List
                 size="large"
-                dataSource={data}
+                dataSource={data.filter((item) => {
+                  return item.title
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase());
+                })}
                 renderItem={(item) => (
                   <Popconfirm
                     icon={null}
                     title="Track location"
                     description="Are you sure you want to track this location?"
-                    onConfirm={null}
+                    onConfirm={() => setTracked(item)}
                     onCancel={null}
                     okText="Yes"
                     cancelText="No"
@@ -161,25 +236,33 @@ const Locations = (props) => {
                 )}
               />
             </Tabs.TabPane>
-            <Tabs.TabPane
-              key={1}
-              tab="Recently Used"
-              style={{ padding: "0px 1rem" }}
-            >
-              <Empty
-                image={lightbulb}
-                imageStyle={{
-                  height: 60,
-                  alignSelf: "center",
-                  display: "inline-block",
-                  margin: "1rem",
-                }}
-                description={
-                  <span className="font-semibold">
-                    You have no recently used locations.
-                  </span>
-                }
-              ></Empty>
+            <Tabs.TabPane key={1} tab="Recently Used">
+              <List
+                size="large"
+                dataSource={recentlyUsed.filter((item) => {
+                  return item.title
+                    .toLowerCase()
+                    .includes(searchText.toLowerCase());
+                })}
+                renderItem={(item) => (
+                  <Popconfirm
+                    icon={null}
+                    title="Track location"
+                    description="Are you sure you want to track this location?"
+                    onConfirm={() => setTracked(item)}
+                    onCancel={() =>
+                      setRecentlyUsed(recentlyUsed.filter((i) => i !== item))
+                    }
+                    okText="Yes"
+                    cancelText="Remove from recently used"
+                  >
+                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                      <div>{item.title}</div>
+                      <div>{item.tiploc}</div>
+                    </List.Item>
+                  </Popconfirm>
+                )}
+              />
             </Tabs.TabPane>
           </Tabs>
         </Drawer>
