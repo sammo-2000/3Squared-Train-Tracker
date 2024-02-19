@@ -11,27 +11,7 @@ function Navbar() {
 
   useEffect(() => {
     // Switch case for active drawer
-    switch (activeDrawer) {
-      case "locations":
-        console.log("Locations");
-        break;
-      case "search":
-        console.log("Search");
-        break;
-      case "notifications":
-        console.log("Notifications");
-        break;
-      case "profile":
-        console.log("Profile");
-        break;
-      case "settings":
-        console.log("Settings");
-        break;
-      default:
-        console.log("Default");
-        break;
-    }
-  }, [activeDrawer]);
+  });
 
   return (
     <div className="shadow-box">
@@ -46,11 +26,33 @@ function Navbar() {
         <div
           key={0}
           className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
-          onClick={() => setActiveDrawer("locations")}
+          onClick={() => handleIconClick(Number(0))}
         >
           <img className="max-h-12" src={icon1} alt={`Icon ${0}`} />
         </div>
       </div>
+
+      {activeContent && (
+        <div className="absolute top-0 left-0 w-[15%] z-[1000] h-full bg-white shadow-lg">
+          <button
+            onClick={() => setActiveContent(null)}
+            style={{
+              cursor: "pointer",
+              position: "absolute",
+              top: 20,
+              right: 20,
+            }}
+          >
+            Close
+          </button>
+          {/* This is where I check for the id of the active content then display content relating to that ID */}
+          {activeContent === 1 && <div>Section 1</div>}
+          {activeContent === 2 && <div>Section 2</div>}
+          {activeContent === 3 && <div>Section 3</div>}
+          {activeContent === 4 && <div>Section 4</div>}
+          {activeContent === 5 && <div>Section 5</div>}
+        </div>
+      )}
     </div>
   );
 }

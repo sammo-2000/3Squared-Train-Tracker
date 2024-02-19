@@ -11,27 +11,8 @@ function Navbar() {
 
   useEffect(() => {
     // Switch case for active drawer
-    switch (activeDrawer) {
-      case "locations":
-        console.log("Locations");
-        break;
-      case "search":
-        console.log("Search");
-        break;
-      case "notifications":
-        console.log("Notifications");
-        break;
-      case "profile":
-        console.log("Profile");
-        break;
-      case "settings":
-        console.log("Settings");
-        break;
-      default:
-        console.log("Default");
-        break;
-    }
-  }, [activeDrawer]);
+    console.log("")
+  });
 
   return (
     <div className="shadow-box">

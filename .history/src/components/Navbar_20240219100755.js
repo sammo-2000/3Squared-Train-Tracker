@@ -11,27 +11,7 @@ function Navbar() {
 
   useEffect(() => {
     // Switch case for active drawer
-    switch (activeDrawer) {
-      case "locations":
-        console.log("Locations");
-        break;
-      case "search":
-        console.log("Search");
-        break;
-      case "notifications":
-        console.log("Notifications");
-        break;
-      case "profile":
-        console.log("Profile");
-        break;
-      case "settings":
-        console.log("Settings");
-        break;
-      default:
-        console.log("Default");
-        break;
-    }
-  }, [activeDrawer]);
+  });
 
   return (
     <div className="shadow-box">
@@ -46,7 +26,7 @@ function Navbar() {
         <div
           key={0}
           className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
-          onClick={() => setActiveDrawer("locations")}
+          onClick={() => setActiveDrawer("locaftions")}
         >
           <img className="max-h-12" src={icon1} alt={`Icon ${0}`} />
         </div>
