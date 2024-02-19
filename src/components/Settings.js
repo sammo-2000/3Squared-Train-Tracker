@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
-import Draggable from 'react-draggable';
-import { Button, Modal } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, message, Space } from 'antd';
+import React, { useRef, useState, useEffect } from "react";
+import Draggable from "react-draggable";
+import { Button, Modal } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { Dropdown, message, Space } from "antd";
 
-import { useTheme } from '../hooks/ThemeHooks';
+import { useTheme } from "../hooks/ThemeHooks";
 
 const onClick = ({ key }) => {
   message.info(`Click on item ${key}`);
@@ -12,26 +12,27 @@ const onClick = ({ key }) => {
 
 const items = [
   {
-    
-    label: '1st menu item',
-    key: '1',
-    theme: 'theme1',
+    label: "1st menu item",
+    key: "1",
+    theme: "theme1",
   },
   {
-    label: '2nd menu item',
-    key: '2',
-    theme: 'theme2',
+    label: "2nd menu item",
+    key: "2",
+    theme: "theme2",
   },
   {
-    label: '3rd menu item',
-    key: '3',
-    theme: 'theme3',
+    label: "3rd menu item",
+    key: "3",
+    theme: "theme3",
   },
 ];
 
-const Settings = ( onSelectTheme ) => {
-  const {setTheme} = useTheme();
-  setTheme(2);
+const Settings = () => {
+  const { setTheme } = useTheme();
+  useEffect(() => {
+    setTheme(2);
+  }, [setTheme]);
 
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -67,14 +68,9 @@ const Settings = ( onSelectTheme ) => {
     });
   };
 
-  const handleThemeClick = ({ key, theme }) => {
-    onSelectTheme(theme); // Pass selected theme to parent
-    setOpen(false);
-  };
-
   return (
     <>
-          {/* <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
+      {/* <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
         <Settings />
       </div> */}
       <div className="absolute top-[25rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
@@ -84,8 +80,8 @@ const Settings = ( onSelectTheme ) => {
         title={
           <div
             style={{
-              width: '100%',
-              cursor: 'move',
+              width: "100%",
+              cursor: "move",
             }}
             onMouseOver={() => {
               if (disabled) {
@@ -124,14 +120,13 @@ const Settings = ( onSelectTheme ) => {
             onClick,
           }}
         >
-          <a onClick={(e) => e.preventDefault()}>
+          <a onClick={(e) => e.preventDefault()} href="#">
             <Space>
               Hover me, Click menu item
               <DownOutlined />
             </Space>
           </a>
         </Dropdown>
-
       </Modal>
     </>
   );
