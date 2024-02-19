@@ -17,35 +17,31 @@ function Navbar() {
       )}
       {activeDrawer === "trains" && <Trains setActiveDraw={setActiveDrawer} />}
 
-      <div className="shadow-box">
-        <div
-          className="absolute top-[5.5rem] left-0 w-[4%] h-1/1 flex-col text-center z-[1000] m-3 rounded-lg overflow-hidden shadow-box"
-          style={{
-            backgroundColor: "#fff",
-            boxShadow:
-              "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
-          }}
-        >
+      <div className="">
+        <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
           <div
             key={0}
-            className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
+            className="flex items-center flex-col transition-color duration-200 hover:bg-gray-200 justify-center p-4 cursor-pointer text-gray-700"
             onClick={() => setActiveDrawer("locations")}
           >
-            <img className="max-h-12" src={location} alt={`Icon ${0}`} />
+            <img style={{ width: "2rem" }} src={location} alt={`Icon ${0}`} />
+            <span className="text-gray-700">Locations</span>
           </div>
           <div
             key={1}
-            className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
+            className="flex items-center flex-col transition-color duration-200 hover:bg-gray-200 justify-center p-4 cursor-pointer"
             onClick={() => setActiveDrawer("trains")}
           >
-            <img className="max-h-12" src={train} alt={`Icon ${1}`} />
+            <img style={{ width: "2rem" }} src={train} alt={`Icon ${1}`} />
+            <span>Trains</span>
           </div>
           <div
             key={2}
-            className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
+            className="flex items-center flex-col transition-color duration-200 hover:bg-gray-200 justify-center p-4 cursor-pointer"
             onClick={() => setActiveDrawer("routes")}
           >
-            <img className="max-h-12" src={route} alt={`Icon ${1}`} />
+            <img style={{ width: "2rem" }} src={route} alt={`Icon ${1}`} />
+            <span>Routes</span>
           </div>
         </div>
       </div>
