@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import icon1 from "../assets/icon1.png";
+import location from "../assets/location.svg";
 import icon2 from "../assets/icon2.png";
 import icon3 from "../assets/icon3.png";
 import icon4 from "../assets/icon4.png";
@@ -48,7 +48,7 @@ function Navbar() {
           className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
           onClick={() => setActiveDrawer("locations")}
         >
-          <img className="max-h-12" src={icon1} alt={`Icon ${0}`} />
+          <img className="max-h-12" src={location} alt={`Icon ${0}`} />
         </div>
       </div>
     </div>
