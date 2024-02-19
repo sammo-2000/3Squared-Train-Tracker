@@ -1,10 +1,22 @@
-import { Drawer, Space, Button } from "antd";
+import { Drawer, Space, Button, Empty } from "antd";
 import "../../css/drawer.css";
 import { useState } from "react";
+
 import add from "../../assets/add.svg";
 import back from "../../assets/back.svg";
+import mapEmpty from "../../assets/map-empty.svg";
 
 const Locations = (props) => {
+  const [childrenDrawer, setChildrenDrawer] = useState(false);
+
+  const showChildrenDrawer = () => {
+    setChildrenDrawer(true);
+  };
+
+  const onChildrenDrawerClose = () => {
+    setChildrenDrawer(false);
+  };
+
   return (
     <>
       <Drawer
@@ -18,7 +30,7 @@ const Locations = (props) => {
         extra={
           <Space>
             <Button
-              onClick={null}
+              onClick={showChildrenDrawer}
               shape="circle"
               type="primary"
               ghost
@@ -40,9 +52,30 @@ const Locations = (props) => {
           </Space>
         }
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Empty
+          image={mapEmpty}
+          imageStyle={{
+            height: 60,
+            alignSelf: "center",
+            display: "inline-block",
+          }}
+          description={
+            <span className="font-semibold">
+              You have no locations tracked.
+            </span>
+          }
+        ></Empty>
+
+        <Drawer
+          title="Two-level Drawer"
+          width={320}
+          closable={false}
+          onClose={onChildrenDrawerClose}
+          open={childrenDrawer}
+          placement="left"
+        >
+          This is two-level drawer
+        </Drawer>
       </Drawer>
     </>
   );
