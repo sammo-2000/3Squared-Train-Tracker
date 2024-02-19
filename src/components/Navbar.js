@@ -6,6 +6,7 @@ import train from "../assets/train.svg";
 
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
+import Routes from "./drawers/Routes";
 
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
@@ -17,6 +18,9 @@ function Navbar() {
       )}
       {activeDrawer === "trains" && (
         <Trains setActiveDraw={setActiveDrawer} />
+      )}
+      {activeDrawer === "routes" && (
+        <Routes setActiveDraw={setActiveDrawer} />
       )}
 
       <div className="shadow-box">
@@ -39,6 +43,13 @@ function Navbar() {
             key={1}
             className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
             onClick={() => setActiveDrawer("trains")}
+          >
+            <img className="max-h-12" src={location} alt={`Icon ${1}`} />
+          </div>
+          <div
+            key={1}
+            className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
+            onClick={() => setActiveDrawer("routes")}
           >
             <img className="max-h-12" src={location} alt={`Icon ${1}`} />
           </div>
