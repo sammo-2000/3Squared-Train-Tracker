@@ -4,13 +4,13 @@ import App from "./App";
 import "./css/tailwind.css";
 
 // Hooks
-import { FavTrainProvider } from "./contexts/FavTrainContext.js";
+import { SelectedTiplocProvider } from "./contexts/SelectedTiplocContext.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <FavTrainProvider>
+    <SelectedTiplocProvider>
       <App />
-    </FavTrainProvider>
+    </SelectedTiplocProvider>
   </React.StrictMode>
 );

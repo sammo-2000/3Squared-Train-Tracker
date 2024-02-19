@@ -3,7 +3,6 @@ import { MapContainer } from "react-leaflet/MapContainer";
 import { TileLayer } from "react-leaflet/TileLayer";
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
-import SetMarker from "./SetMarker";
 
 const Map = () => {
   return (
@@ -19,7 +18,6 @@ const Map = () => {
             accessToken={process.env.REACT_APP_MAP_API_KEY}
             url="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}"
           />
-          <SetMarker />
         </MapContainer>
       </div>
     </>
