@@ -22,7 +22,7 @@ const tiplocAPI = async (tiplocs, startDate, endDate) => {
   await Promise.all(
     tiplocData.map(async (element) => {
       if (element.cancelled) return;
-      if (i >= 5) return;
+      if (i !== 0) return;
       i++;
 
       const movment = await getMovementData(
