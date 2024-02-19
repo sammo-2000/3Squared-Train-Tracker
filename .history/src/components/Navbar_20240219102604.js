@@ -51,6 +51,7 @@ function Navbar() {
           <img className="max-h-12" src={icon1} alt={`Icon ${0}`} />
         </div>
       </div>
+
     </div>
   );
 }
