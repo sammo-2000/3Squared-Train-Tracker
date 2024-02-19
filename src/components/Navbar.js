@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import location from "../assets/location.svg";
-import icon2 from "../assets/icon2.png";
-import icon3 from "../assets/icon3.png";
-import icon4 from "../assets/icon4.png";
-import icon5 from "../assets/icon5.png";
+import route from "../assets/route.svg";
+import train from "../assets/train.svg";
 
 import Locations from "./drawers/Locations";
 
