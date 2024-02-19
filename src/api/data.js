@@ -18,9 +18,12 @@ const tiplocAPI = async (tiplocs, startDate, endDate) => {
   let data = [];
 
   // Get train movment and schedule data
+  let i = 0;
   await Promise.all(
     tiplocData.map(async (element) => {
       if (element.cancelled) return;
+      if (i >= 5) return;
+      i++;
 
       const movment = await getMovementData(
         element.activationId,
