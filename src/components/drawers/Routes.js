@@ -1,9 +1,12 @@
-import { Drawer, Space, Button, Empty, Input, Badge } from "antd";
+import { Drawer, Space, Button, Empty, Input, Badge, Tabs } from "antd";
 import { useState } from "react";
 
 import add from "../../assets/add.svg";
 import back from "../../assets/back.svg";
 import mapEmpty from "../../assets/map-empty.svg";
+
+const { TabPane } = Tabs;
+
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -75,10 +78,10 @@ const Routes = (props) => {
         open={childrenDrawer}
         placement="left"
         footer={
-          <div style={{ textAlign: 'right', Color: 'black' }}>
+          <div style={{ textAlign: 'right' }}>
             <Space>
-              <Button type="primary" style={{color: 'black'}} onClick={onChildrenDrawerClose}>Cancel</Button>
-              <Button type="primary" style={{color: 'black'}} onClick={() => console.log("Add Route")}>Add Route</Button>
+              <Button type="primary">Cancel</Button>
+              <Button type="primary" onClick={() => console.log("Add Route")}>Add Route</Button>
             </Space>
           </div>
         }
@@ -88,9 +91,18 @@ const Routes = (props) => {
           onSearch={() => console.log("search")}
         />
         <div style={{ marginTop: '10px' }}>
-          <Badge count={totalCount} style={{ backgroundColor: '#52c41a' }}>
-            <div style={{ display: 'inline-block', marginRight: '16px', cursor: 'pointer' }}>All</div>
-          </Badge>
+          <Tabs defaultActiveKey="all">
+          <TabPane
+              tab={
+                <Badge count={totalCount} style={{ backgroundColor: '#52c41a', display: 'inline-block', marginLeft: '16px' }}>
+                  <span style={{ color: 'black' }}>All</span>
+                </Badge> 
+              }
+              
+            >
+            
+            </TabPane>
+          </Tabs>
         </div>
       </Drawer>
     </>
