@@ -8,19 +8,16 @@ import { useTheme } from "../hooks/ThemeHooks";
 
 const items = [
   {
-    label: "1st menu item",
+    label: "Dark Theme",
     key: "1",
-    theme: "theme1",
   },
   {
-    label: "2nd menu item",
+    label: "Light Theme",
     key: "2",
-    theme: "theme2",
   },
   {
-    label: "3rd menu item",
+    label: "Realistic Theme",
     key: "3",
-    theme: "theme3",
   },
 ];
 
@@ -71,12 +68,6 @@ const Settings = (props) => {
 
   return (
     <>
-      {/* <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
-        <Settings />
-      </div> */}
-      {/* <div className="absolute top-[25rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
-        <Button onClick={showModal}>Settings</Button>
-      </div> */}
       <Modal
         title={
           <div
@@ -123,7 +114,7 @@ const Settings = (props) => {
         >
           <a onClick={(e) => e.preventDefault()} href="#">
             <Space>
-              Hover me, Click menu item
+              Map Themes
               <DownOutlined />
             </Space>
           </a>
