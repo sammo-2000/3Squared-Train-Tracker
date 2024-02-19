@@ -1,4 +1,13 @@
-import { Drawer, Space, Button, Empty, Input, Tabs } from "antd";
+import {
+  Drawer,
+  Space,
+  Button,
+  Empty,
+  Input,
+  Tabs,
+  List,
+  Popconfirm,
+} from "antd";
 
 import "../../css/drawer.css";
 import { useState } from "react";
@@ -19,16 +28,23 @@ const Locations = (props) => {
     setChildrenDrawer(false);
   };
 
-  const items = [
+  const data = [
     {
-      key: "1",
-      label: "All",
-      children: "Content of Tab Pane 1",
+      title: "Liverpool Lime Street",
+      tiploc: "LIVRPLS",
+      tracked: true,
     },
     {
-      key: "2",
-      label: "Recently Used",
-      children: "Content of Tab Pane 2",
+      title: "Sheffield Station",
+      tiploc: "SHEFLDS",
+    },
+    {
+      title: "Manchester Piccadilly",
+      tiploc: "MNCRPIC",
+    },
+    {
+      title: "London Euston",
+      tiploc: "LNDNEUS",
     },
   ];
 
@@ -41,7 +57,7 @@ const Locations = (props) => {
         }}
         open={true}
         placement="left"
-        closeIcon={<img src={back} />}
+        closeIcon={<img alt="back" src={back} />}
         extra={
           <Space>
             <Button
@@ -87,7 +103,7 @@ const Locations = (props) => {
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
           placement="left"
-          closeIcon={<img className="rotate-180" src={back} />}
+          closeIcon={<img alt="back" className="rotate-180" src={back} />}
           bodyStyle={{ padding: 0 }}
         >
           <Input
@@ -100,6 +116,7 @@ const Locations = (props) => {
                   padding: "0px 0.5rem",
                   opacity: "50%",
                 }}
+                alt="search"
                 src={search}
               />
             }
@@ -119,10 +136,30 @@ const Locations = (props) => {
             tabBarStyle={{
               padding: ".5rem 2rem 0px 2rem",
               fontWeight: "500",
+              marginBottom: "0px",
             }}
           >
-            <Tabs.TabPane key={0} tab="All" style={{ padding: "0px 1rem" }}>
-              aa
+            <Tabs.TabPane key={0} tab="All">
+              <List
+                size="large"
+                dataSource={data}
+                renderItem={(item) => (
+                  <Popconfirm
+                    icon={null}
+                    title="Track location"
+                    description="Are you sure you want to track this location?"
+                    onConfirm={null}
+                    onCancel={null}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                      <div>{item.title}</div>
+                      <div>{item.tiploc}</div>
+                    </List.Item>
+                  </Popconfirm>
+                )}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane
               key={1}
@@ -135,6 +172,7 @@ const Locations = (props) => {
                   height: 60,
                   alignSelf: "center",
                   display: "inline-block",
+                  margin: "1rem",
                 }}
                 description={
                   <span className="font-semibold">

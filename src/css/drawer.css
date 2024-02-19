@@ -1,3 +1,7 @@
 .ant-drawer-header-title {
   flex-direction: row-reverse;
   }
+  .ant-btn-primary {
+    color: white !important;
+    background-color: #1890ff !important;
+  }
