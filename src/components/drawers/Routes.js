@@ -83,7 +83,6 @@ const Routes = (props) => {
           <div style={{ textAlign: 'right' }}>
             <Space>
               <Button type="primary">Cancel</Button>
-              <Button type="primary" onClick={() => console.log("Add Route")}>Add Route</Button>
             </Space>
           </div>
         }
