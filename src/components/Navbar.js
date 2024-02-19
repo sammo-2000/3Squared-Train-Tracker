@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import location from "../assets/location.svg";
-import icon2 from "../assets/icon2.png";
-import icon3 from "../assets/icon3.png";
-import icon4 from "../assets/icon4.png";
-import icon5 from "../assets/icon5.png";
+<<<<<<< HEAD
+import route from "../assets/route.svg";
+import train from "../assets/train.svg";
+=======
+>>>>>>> 6fa2502b66ad6af19c4889b972ca547e022bc297
 
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
-
-  useEffect(() => {
-    console.log(activeDrawer);
-  });
 
   return (
     <div>

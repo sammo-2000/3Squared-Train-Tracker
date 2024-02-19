@@ -1,4 +1,5 @@
 import { Drawer } from "antd";
+import "../../css/drawer.css";
 import { useState } from "react";
 
 const Locations = (props) => {
