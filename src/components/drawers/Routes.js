@@ -1,13 +1,18 @@
-import { Drawer, Space, Button, Empty } from "antd";
-import "../../css/drawer.css";
+import { Drawer, Space, Button, Empty, Input, Badge, Tabs } from "antd";
 import { useState } from "react";
 
 import add from "../../assets/add.svg";
 import back from "../../assets/back.svg";
 import mapEmpty from "../../assets/map-empty.svg";
+import search from "../../assets/search.svg";
+
+
+const { TabPane } = Tabs;
+
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const totalCount = 10;
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -65,17 +70,60 @@ const Routes = (props) => {
             </span>
           }
         ></Empty>
+      </Drawer>
 
-        <Drawer
-          title="Two-level Drawer"
-          width={320}
-          closable={false}
-          onClose={onChildrenDrawerClose}
-          open={childrenDrawer}
-          placement="left"
-        >
-          This is two-level drawer
-        </Drawer>
+      <Drawer
+        title="Routes"
+        width={320}
+        closable={false}
+        onClose={onChildrenDrawerClose}
+        open={childrenDrawer}
+        placement="left"
+        footer={
+          <div style={{ textAlign: 'right' }}>
+            <Space>
+              <Button type="primary">Cancel</Button>
+            </Space>
+          </div>
+        }
+      >
+        <Input
+            placeholder="Search Routes"
+            allowClear
+            size="large"
+            prefix={
+              <img
+                style={{
+                  padding: "0px 0.5rem",
+                  opacity: "50%",
+                }}
+                alt="search"
+                src={search}
+              />
+            }
+            onSearch={() => console.log("search")}
+            style={{
+              borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+              marginTop: "-1px",
+              borderRight: "none",
+              borderLeft: "none",
+              borderRadius: "0",
+              padding: "1rem 1rem",
+            }}
+          />
+        
+        <div style={{ marginTop: '10px' }}>
+          <Tabs defaultActiveKey="all">
+          <TabPane
+              tab={
+                <Badge count={totalCount} style={{ backgroundColor: '#52c41a', display: 'inline-block', marginLeft: '16px' }}>
+                  <span style={{ color: 'black' }}>All</span>
+                </Badge> 
+              }
+            >
+            </TabPane>
+          </Tabs>
+        </div>
       </Drawer>
     </>
   );

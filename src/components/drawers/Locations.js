@@ -1,13 +1,29 @@
-import { Drawer, Space, Button, Empty, Input } from "antd";
+import {
+  Drawer,
+  Space,
+  Button,
+  Input,
+  Tabs,
+  List,
+  Popconfirm,
+  notification,
+  Menu,
+  message,
+} from "antd";
+
 import "../../css/drawer.css";
 import { useState } from "react";
 
-import add from "../../assets/add.svg";
+import search from "../../assets/search.svg";
 import back from "../../assets/back.svg";
-import mapEmpty from "../../assets/map-empty.svg";
 
 const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [recentlyUsed, setRecentlyUsed] = useState([]);
+  const [trackedLocations, setTrackedLocations] = useState([]);
+  const [notificationApi, notificationContext] = notification.useNotification();
+  const [messageApi, messageContext] = message.useMessage();
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -17,8 +33,75 @@ const Locations = (props) => {
     setChildrenDrawer(false);
   };
 
+  const onTrackedLocationClick = (item, e) => {
+    if (e.key === "view-details") {
+      console.log("View details");
+      console.log(item);
+    }
+
+    if (e.key === "stop-tracking") {
+      setTrackedLocations(trackedLocations.filter((i) => i !== item));
+
+      messageApi.open({
+        type: "success",
+        content: "Location removed from tracking.",
+      });
+    }
+  };
+
+  const setTracked = (item) => {
+    setChildrenDrawer(false);
+    setSearchText("");
+    setRecentlyUsed([...recentlyUsed, item]);
+    setTrackedLocations([...trackedLocations, item]);
+
+    // Inform user that routes are being loaded
+    notificationApi.open({
+      message: "Routes loading...",
+      description:
+        "Please wait while we load routes from your selected location. This may take a few seconds.",
+      duration: 5,
+    });
+
+    // Inform user that item was added to their 'recently used' list
+    if (recentlyUsed.length === 0) {
+      notificationApi.open({
+        message: "Recently Used",
+        description:
+          "A location was added to your recently used list, you can disable this in settings.",
+        duration: 5,
+      });
+    }
+  };
+
+  const data = [
+    {
+      id: "1",
+      title: "Liverpool Lime Street",
+      tiploc: "LIVRPLS",
+    },
+    {
+      id: "2",
+      title: "Sheffield Station",
+      tiploc: "SHEFLDS",
+    },
+    {
+      id: "3",
+      title: "Manchester Piccadilly",
+      tiploc: "MNCRPIC",
+    },
+    {
+      id: "4",
+      title: "London Euston",
+      tiploc: "LNDNEUS",
+    },
+  ];
+
   return (
     <>
+      {notificationContext}
+      {messageContext}
+
       <Drawer
         title="Tracked Locations"
         onClose={() => {
@@ -26,7 +109,8 @@ const Locations = (props) => {
         }}
         open={true}
         placement="left"
-        closeIcon={<img src={back} />}
+        closeIcon={<img alt="back" src={back} />}
+        bodyStyle={{ padding: 0 }}
         extra={
           <Space>
             <Button
@@ -52,19 +136,72 @@ const Locations = (props) => {
           </Space>
         }
       >
-        <Empty
-          image={mapEmpty}
-          imageStyle={{
-            height: 60,
-            alignSelf: "center",
-            display: "inline-block",
-          }}
-          description={
-            <span className="font-semibold">
-              You have no locations tracked.
-            </span>
+        <Input
+          placeholder="Search Locations"
+          allowClear
+          size="large"
+          prefix={
+            <img
+              style={{
+                padding: "0px 0.5rem",
+                opacity: "50%",
+              }}
+              alt="search"
+              src={search}
+            />
           }
-        ></Empty>
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{
+            borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+            marginTop: "-1px",
+            borderRight: "none",
+            borderLeft: "none",
+            borderRadius: "0",
+            padding: "1rem 1rem",
+          }}
+        />
+
+        <List
+          size="large"
+          dataSource={trackedLocations.filter((item) => {
+            return item.title.toLowerCase().includes(searchText.toLowerCase());
+          })}
+          renderItem={(item) => (
+            <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+              <Menu
+                onClick={(e) => onTrackedLocationClick(item, e)}
+                style={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  borderRight: "none",
+                  margin: "0px",
+                  padding: "0px",
+                }}
+                defaultSelectedKeys={[]}
+                mode="vertical"
+                items={[
+                  {
+                    key: item.id,
+                    label: item.title,
+                    defaultSelectedKeys: [],
+                    children: [
+                      {
+                        key: "view-details",
+                        label: "View details",
+                        onClick: null,
+                      },
+                      {
+                        key: "stop-tracking",
+                        label: "Stop tracking",
+                        onClick: null,
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </List.Item>
+          )}
+        />
 
         <Drawer
           title="Track New Location"
@@ -72,12 +209,107 @@ const Locations = (props) => {
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
           placement="left"
-          closeIcon={<img className="rotate-180" src={back} />}
+          closeIcon={<img alt="back" className="rotate-180" src={back} />}
+          bodyStyle={{ padding: 0 }}
         >
           <Input
-            placeholder="input search text"
-            onSearch={() => console.log("search")}
+            placeholder="Search TIPLOCs"
+            allowClear
+            size="large"
+            prefix={
+              <img
+                style={{
+                  padding: "0px 0.5rem",
+                  opacity: "50%",
+                }}
+                alt="search"
+                src={search}
+              />
+            }
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{
+              borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+              marginTop: "-1px",
+              borderRight: "none",
+              borderLeft: "none",
+              borderRadius: "0",
+              padding: "1rem 1rem",
+            }}
           />
+
+          <Tabs
+            defaultActiveKey="0"
+            tabBarStyle={{
+              padding: ".5rem 2rem 0px 2rem",
+              fontWeight: "500",
+              marginBottom: "0px",
+            }}
+          >
+            <Tabs.TabPane key={0} tab="All">
+              <List
+                size="large"
+                dataSource={data.filter((item) => {
+                  return (
+                    item.title
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase()) &&
+                    !trackedLocations.some(
+                      (trackedItem) => trackedItem.id === item.id
+                    )
+                  );
+                })}
+                renderItem={(item) => (
+                  <Popconfirm
+                    icon={null}
+                    title="Track location"
+                    description="Are you sure you want to track this location?"
+                    onConfirm={() => setTracked(item)}
+                    onCancel={null}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                      <div>{item.title}</div>
+                      <div>{item.tiploc}</div>
+                    </List.Item>
+                  </Popconfirm>
+                )}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane key={1} tab="Recently Used">
+              <List
+                size="large"
+                dataSource={recentlyUsed.filter((item) => {
+                  return (
+                    item.title
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase()) &&
+                    !trackedLocations.some(
+                      (trackedItem) => trackedItem.id === item.id
+                    )
+                  );
+                })}
+                renderItem={(item) => (
+                  <Popconfirm
+                    icon={null}
+                    title="Track location"
+                    description="Are you sure you want to track this location?"
+                    onConfirm={() => setTracked(item)}
+                    onCancel={() =>
+                      setRecentlyUsed(recentlyUsed.filter((i) => i !== item))
+                    }
+                    okText="Yes"
+                    cancelText="Remove from recently used"
+                  >
+                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                      <div>{item.title}</div>
+                      <div>{item.tiploc}</div>
+                    </List.Item>
+                  </Popconfirm>
+                )}
+              />
+            </Tabs.TabPane>
+          </Tabs>
         </Drawer>
       </Drawer>
     </>
