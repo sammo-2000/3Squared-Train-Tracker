@@ -4,6 +4,8 @@ import { useState } from "react";
 import add from "../../assets/add.svg";
 import back from "../../assets/back.svg";
 import mapEmpty from "../../assets/map-empty.svg";
+import search from "../../assets/search.svg";
+
 
 const { TabPane } = Tabs;
 
@@ -87,9 +89,30 @@ const Routes = (props) => {
         }
       >
         <Input
-          placeholder="Route"
-          onSearch={() => console.log("search")}
-        />
+            placeholder="Search Routes"
+            allowClear
+            size="large"
+            prefix={
+              <img
+                style={{
+                  padding: "0px 0.5rem",
+                  opacity: "50%",
+                }}
+                alt="search"
+                src={search}
+              />
+            }
+            onSearch={() => console.log("search")}
+            style={{
+              borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
+              marginTop: "-1px",
+              borderRight: "none",
+              borderLeft: "none",
+              borderRadius: "0",
+              padding: "1rem 1rem",
+            }}
+          />
+        
         <div style={{ marginTop: '10px' }}>
           <Tabs defaultActiveKey="all">
           <TabPane
@@ -98,9 +121,7 @@ const Routes = (props) => {
                   <span style={{ color: 'black' }}>All</span>
                 </Badge> 
               }
-              
             >
-            
             </TabPane>
           </Tabs>
         </div>
