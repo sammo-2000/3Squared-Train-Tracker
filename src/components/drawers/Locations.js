@@ -8,7 +8,7 @@ const Locations = (props) => {
   return (
     <>
       <Drawer
-        title="Locations"
+        title="Tracked Locations"
         onClose={() => {
           props.setActiveDraw("menu");
         }}
@@ -20,6 +20,8 @@ const Locations = (props) => {
             <Button
               onClick={null}
               shape="circle"
+              type="primary"
+              ghost
               icon={<img src={add} />}
             ></Button>
           </Space>
