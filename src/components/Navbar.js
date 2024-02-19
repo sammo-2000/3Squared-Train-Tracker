@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import location from "../assets/location.svg";
 import route from "../assets/route.svg";
 import train from "../assets/train.svg";
+
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 
