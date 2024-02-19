@@ -7,6 +7,7 @@ import icon4 from "../assets/icon4.png";
 import icon5 from "../assets/icon5.png";
 
 import Locations from "./drawers/Locations";
+import Trains from "./drawers/Trains";
 
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
@@ -15,34 +16,13 @@ function Navbar() {
     console.log(activeDrawer);
   });
 
-  // useEffect(() => {
-  //   // Switch case for active drawer
-  //   switch (activeDrawer) {
-  //     case "locations":
-  //       console.log("Locations");
-  //       return <Locations />;
-  //     case "search":
-  //       console.log("Search");
-  //       break;
-  //     case "notifications":
-  //       console.log("Notifications");
-  //       break;
-  //     case "profile":
-  //       console.log("Profile");
-  //       break;
-  //     case "settings":
-  //       console.log("Settings");
-  //       break;
-  //     default:
-  //       console.log("Default");
-  //       break;
-  //   }
-  // }, [activeDrawer]);
-
   return (
     <div>
       {activeDrawer === "locations" && (
         <Locations setActiveDraw={setActiveDrawer} />
+      )}
+      {activeDrawer === "trains" && (
+        <Trains setActiveDraw={setActiveDrawer} />
       )}
 
       <div className="shadow-box">
@@ -60,6 +40,13 @@ function Navbar() {
             onClick={() => setActiveDrawer("locations")}
           >
             <img className="max-h-12" src={location} alt={`Icon ${0}`} />
+          </div>
+          <div
+            key={1}
+            className="hover:bg-[#D8D8D8] rounded-lg max-h-12 flex justify-center w-[90%] mx-[5%] m-4"
+            onClick={() => setActiveDrawer("trains")}
+          >
+            <img className="max-h-12" src={location} alt={`Icon ${1}`} />
           </div>
         </div>
       </div>

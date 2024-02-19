@@ -2,21 +2,18 @@ import { Drawer } from 'antd'
 import { useState} from 'react';
 
 const Trains = (props) => {
-    const[open, setOpen] = useState(false);
-
-    const onClose = () => {
-        setOpen(false);
-    };
-
-    const showDrawer = () => {
-        setOpen(true);
-    };
-
-    return(
-        <Drawer title="Basic Drawer" onClose={props.onClose} open={props.open}>
+    <Drawer
+        title="Trains"
+        onClose={() => {
+          props.setActiveDraw("menu");
+        }}
+        open={true}
+        placement="left"
+      >
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
       </Drawer>
-    );
 };
+
+export default Trains;
