@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import location from "../assets/location.svg";
+<<<<<<< HEAD
+import route from "../assets/route.svg";
+import train from "../assets/train.svg";
+=======
+>>>>>>> 6fa2502b66ad6af19c4889b972ca547e022bc297
 
 import Locations from "./drawers/Locations";
 
