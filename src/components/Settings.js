@@ -4,8 +4,13 @@ import { Button, Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 
+// Theme Hook
 import { useTheme } from "../hooks/ThemeHooks";
 
+// Cookies
+import Cookies from 'js-cookie';
+
+// Map Tilelayer Selector
 const items = [
   {
     label: "Dark Theme",
@@ -30,6 +35,7 @@ const Settings = (props) => {
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
     setTheme(key);
+    Cookies.set('theme', key);
   };
 
   const [open, setOpen] = useState(props.setOpen);

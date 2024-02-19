@@ -6,10 +6,21 @@ import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
 import { map } from "leaflet";
 
-const Map = () => {
-  const { theme } = useTheme();
-  
+// Cookies
+import Cookies from 'js-cookie';
 
+
+
+const Map = () => {
+
+  const { theme: themeFromHook } = useTheme();
+
+  let theme;
+  const themeCookie = Cookies.get('theme');
+  
+  if (themeCookie) { theme = themeCookie; }
+  else { theme = themeFromHook; }
+  
   const mapThemes = {
     1: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
     2: 'https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}',
