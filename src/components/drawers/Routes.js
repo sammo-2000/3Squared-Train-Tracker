@@ -1,5 +1,4 @@
-import { Drawer, Space, Button, Empty } from "antd";
-import "../../css/drawer.css";
+import { Drawer, Space, Button, Empty, Input, Badge } from "antd";
 import { useState } from "react";
 
 import add from "../../assets/add.svg";
@@ -8,6 +7,7 @@ import mapEmpty from "../../assets/map-empty.svg";
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const totalCount = 10;
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -65,17 +65,33 @@ const Routes = (props) => {
             </span>
           }
         ></Empty>
+      </Drawer>
 
-        <Drawer
-          title="Two-level Drawer"
-          width={320}
-          closable={false}
-          onClose={onChildrenDrawerClose}
-          open={childrenDrawer}
-          placement="left"
-        >
-          This is two-level drawer
-        </Drawer>
+      <Drawer
+        title="Routes"
+        width={320}
+        closable={false}
+        onClose={onChildrenDrawerClose}
+        open={childrenDrawer}
+        placement="left"
+        footer={
+          <div style={{ textAlign: 'right', Color: 'black' }}>
+            <Space>
+              <Button type="primary" style={{color: 'black'}} onClick={onChildrenDrawerClose}>Cancel</Button>
+              <Button type="primary" style={{color: 'black'}} onClick={() => console.log("Add Route")}>Add Route</Button>
+            </Space>
+          </div>
+        }
+      >
+        <Input
+          placeholder="Route"
+          onSearch={() => console.log("search")}
+        />
+        <div style={{ marginTop: '10px' }}>
+          <Badge count={totalCount} style={{ backgroundColor: '#52c41a' }}>
+            <div style={{ display: 'inline-block', marginRight: '16px', cursor: 'pointer' }}>All</div>
+          </Badge>
+        </div>
       </Drawer>
     </>
   );
