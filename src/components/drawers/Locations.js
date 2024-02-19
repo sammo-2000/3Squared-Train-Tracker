@@ -1,20 +1,17 @@
 import { Drawer } from "antd";
 import { useState } from "react";
 
-const Locations = () => {
-  const [open, setOpen] = useState(true);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
+const Locations = (props) => {
   return (
     <>
-      <Drawer title="Basic Drawer" onClose={onClose} open={open}>
+      <Drawer
+        title="Basic Drawer"
+        onClose={() => {
+          props.setActiveDraw("menu");
+        }}
+        open={true}
+        placement="left"
+      >
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>
