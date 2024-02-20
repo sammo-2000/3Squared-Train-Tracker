@@ -48,4 +48,4 @@ const getScheduleData = async (activationId, scheduleId) => {
   return movmentData;
 };
 
-export { detailAPI };
+export { detailAPI, getMovementData};

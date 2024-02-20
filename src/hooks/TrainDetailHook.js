@@ -9,3 +9,5 @@ export const UseTrainDetail = () => {
 
   return context;
 };
+
+export default UseTrainDetail;
