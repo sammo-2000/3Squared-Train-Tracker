@@ -36,7 +36,7 @@ const Map = () => {
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             accessToken={process.env.REACT_APP_MAP_API_KEY}
-            url="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}"
+            url={mapThemes[theme] || 'https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}'}
           />
         </MapContainer>
       </div>
