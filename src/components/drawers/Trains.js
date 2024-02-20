@@ -221,7 +221,7 @@ const Trains = (props) => {
                   onClick={async () => {
                     let _trainDetail = [...trainDetail];
                     const _newData = await detailAPI([item]);
-                    _trainDetail.push(_newData);
+                    _trainDetail = [..._trainDetail, ..._newData];
                     await setTrainDetail(_trainDetail);
                   }}
                 >
