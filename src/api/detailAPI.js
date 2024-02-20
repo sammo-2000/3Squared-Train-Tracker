@@ -8,8 +8,6 @@ const detailAPI = async (TiplocDetailContext) => {
 
   await Promise.all(
     TiplocDetailContext.map(async (element) => {
-      if (element.cancelled) return;
-
       const movment = await getMovementData(
         element.activationId,
         element.scheduleId
