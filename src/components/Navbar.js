@@ -9,21 +9,32 @@ import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
 
-import Settings from "./Settings";
+import Settings from "./modals/Settings";
+
+import { notification, message } from "antd";
 
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [settingsModal, setSettingsModal] = useState(false);
+  const [notificationApi, notificationContext] = notification.useNotification();
+  const [messageApi, messageContext] = message.useMessage();
 
   return (
     <div>
-      {settingsModal && <Settings setOpen={settingsModal} />}
+      {notificationContext}
+      {messageContext}
 
       {activeDrawer === "locations" && (
-        <Locations setActiveDraw={setActiveDrawer} />
+        <Locations
+          setActiveDraw={setActiveDrawer}
+          notifications={[notificationContext, notificationApi]}
+          messages={[messageContext, messageApi]}
+        />
       )}
       {activeDrawer === "trains" && <Trains setActiveDraw={setActiveDrawer} />}
       {activeDrawer === "routes" && <Routes setActiveDraw={setActiveDrawer} />}
+
+      <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
 
       <div className="">
         <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">

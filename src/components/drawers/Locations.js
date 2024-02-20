@@ -13,46 +13,27 @@ import {
 
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
+import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
+import LocationDetails from "../modals/LocationDetails";
 
 // Cookies
 import Cookies from "js-cookie";
 
 const Locations = (props) => {
+  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
-  const [trackedLocations, setTrackedLocations] = useState([]);
-  const [notificationApi, notificationContext] = notification.useNotification();
-  const [messageApi, messageContext] = message.useMessage();
   const [data, setData] = useState([]);
+  const [notificationContext, notificationApi] = props.notifications;
+  const [messageContext, messageApi] = props.messages;
+  const [detailsModal, setDetailsModal] = useState(false);
 
   const direction = "left";
-
-  useEffect(() => {
-    if (trackedLocations.length > 0) {
-      trackedLocations.forEach(tiploc => {
-        Cookies.set(tiploc.Tiploc, JSON.stringify(tiploc));
-        var retrievedObject = JSON.parse(Cookies.get(tiploc.Tiploc));
-        console.log(retrievedObject);
-      });
-    }
-  });
-
-  const loadTrackedLocations = () => { 
-    const cookies = Cookies.get();
-    Object.keys(cookies).forEach(cookieName => {
-      // Check if the cookie name is a Tiploc
-      if (data.some(location => location.Tiploc.toString() === cookieName)) {
-        // Parse the cookie value and add it to trackedLocations
-        const tiploc = JSON.parse(cookies[cookieName]);
-        setTrackedLocations(prevLocations => [...prevLocations, tiploc]);
-      }
-    });
-    console.log("Tracked locations", trackedLocations);
-  } 
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -60,17 +41,15 @@ const Locations = (props) => {
 
   const onChildrenDrawerClose = () => {
     setChildrenDrawer(false);
-    loadTrackedLocations();
   };
 
   const onTrackedLocationClick = (item, e) => {
     if (e.key === "view-details") {
-      console.log("View details");
-      console.log(item);
+      setDetailsModal(true);
     }
 
     if (e.key === "stop-tracking") {
-      setTrackedLocations(trackedLocations.filter((i) => i !== item));
+      setSelectedTiploc(selectedTiploc.filter((i) => i !== item));
 
       messageApi.open({
         type: "success",
@@ -100,17 +79,6 @@ const Locations = (props) => {
     setRecentlyUsed([...recentlyUsed, item]);
     setTrackedLocations([...trackedLocations, item]);
 
-    // const cookies = Cookies.get();
-    // Object.keys(cookies).forEach(cookieName => {
-    //   // Check if the cookie name is a Tiploc
-    //   if (data.some(location => location.Tiploc.toString() === cookieName)) {
-    //     // Parse the cookie value and add it to trackedLocations
-    //     const tiploc = JSON.parse(cookies[cookieName]);
-    //     setTrackedLocations(prevLocations => [...prevLocations, tiploc]);
-    //   }
-    //   console.log("Tracked locations", trackedLocations);
-    // });
-    
     // Inform user that routes are being loaded
     notificationApi.open({
       message: "Routes loading...",
@@ -120,7 +88,7 @@ const Locations = (props) => {
     });
 
     // Inform user that item was added to their 'recently used' list
-    if (recentlyUsed.length === 0) {
+    if (recentlyUsed.length === 0 && selectedTiploc.length === 0) {
       notificationApi.open({
         message: "Recently Used",
         description:
@@ -131,19 +99,21 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
-    if (data.length === 0) {
-      console.log("Loading data...");
-      import("../../assets/data/tiplocs.json").then((data) => {
-        setData(data.Tiplocs);
+    if (data.length === 0 && childrenDrawer === true) {
+      import("../../assets/data/tiplocs.json").then((newData) => {
+        setData(newData.Tiplocs);
+        messageApi.open({
+          type: "success",
+          content:
+            newData.Tiplocs.length.toLocaleString() + " locations loaded.",
+        });
       });
     }
   });
 
   return (
     <>
-      {notificationContext}
-      {messageContext}
-
+      <LocationDetails isOpen={detailsModal} setOpen={setDetailsModal} />
       <Drawer
         title="Tracked Locations"
         onClose={() => {
@@ -156,7 +126,7 @@ const Locations = (props) => {
         extra={
           <Space>
             <Button
-              onClick={showChildrenDrawer}
+              onClick={() => setChildrenDrawer(true)}
               shape="circle"
               type="primary"
               ghost
@@ -205,7 +175,11 @@ const Locations = (props) => {
 
         <List
           size="large"
-          dataSource={trackedLocations.filter((item) => {
+          pagination={{
+            defaultPageSize: paginationSize,
+            showSizeChanger: false,
+          }}
+          dataSource={selectedTiploc.filter((item) => {
             return item.DisplayName.toLowerCase().includes(
               searchText.toLowerCase()
             );
@@ -223,6 +197,7 @@ const Locations = (props) => {
                 }}
                 defaultSelectedKeys={[]}
                 mode="vertical"
+                selectable={false}
                 items={[
                   {
                     key: item.Tiploc,
@@ -250,7 +225,7 @@ const Locations = (props) => {
         <Drawer
           title="Track New Location"
           closable={true}
-          onClose={onChildrenDrawerClose}
+          onClose={() => setChildrenDrawer(false)}
           open={childrenDrawer}
           placement={direction}
           closeIcon={<img alt="back" className="rotate-180" src={back} />}
@@ -294,15 +269,21 @@ const Locations = (props) => {
                 size="large"
                 dataSource={data.filter((item) => {
                   return (
-                    item.DisplayName.toLowerCase().includes(
+                    (item.DisplayName.toLowerCase().includes(
                       searchText.toLowerCase()
-                    ) &&
-                    !trackedLocations.some(
+                    ) ||
+                      item.Tiploc.toLowerCase().includes(
+                        searchText.toLowerCase()
+                      )) &&
+                    !selectedTiploc.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
                 })}
-                pagination={true}
+                pagination={{
+                  defaultPageSize: paginationSize,
+                  showSizeChanger: false,
+                }}
                 renderItem={(item) => (
                   <Popconfirm
                     icon={null}
@@ -324,12 +305,16 @@ const Locations = (props) => {
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
+                pagination={{
+                  defaultPageSize: paginationSize,
+                  showSizeChanger: false,
+                }}
                 dataSource={recentlyUsed.filter((item) => {
                   return (
                     item.DisplayName.toLowerCase().includes(
                       searchText.toLowerCase()
                     ) &&
-                    !trackedLocations.some(
+                    !selectedTiploc.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );

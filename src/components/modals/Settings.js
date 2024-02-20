@@ -1,18 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal, Tabs, Flex } from "antd";
+import { Button, Modal, Tabs } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 
 // Theme Hook
-import { useTheme } from "../hooks/ThemeHooks";
+import { useTheme } from "../../hooks/ThemeHooks";
 
 // Cookies
 import Cookies from "js-cookie";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
 // Cookies.remove('COOKIENAME');
-
 
 const allCookies = Cookies.get();
 
@@ -50,7 +49,6 @@ const Settings = (props) => {
     Cookies.set("theme", key);
   };
 
-  const [open, setOpen] = useState(props.setOpen);
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
     left: 0,
@@ -59,16 +57,16 @@ const Settings = (props) => {
     right: 0,
   });
   const draggleRef = useRef(null);
-  const showModal = () => {
-    setOpen(true);
-  };
+  // const showModal = () => {
+  //   setOpen(true);
+  // };
   const handleOk = (e) => {
     console.log(e);
-    setOpen(false);
+    props.setOpen(false);
   };
   const handleCancel = (e) => {
     console.log(e);
-    setOpen(false);
+    props.setOpen(false);
   };
   const onStart = (_event, uiData) => {
     const { clientWidth, clientHeight } = window.document.documentElement;
@@ -87,6 +85,7 @@ const Settings = (props) => {
   return (
     <>
       <Modal
+        centered
         title={
           <div
             style={{
@@ -108,12 +107,12 @@ const Settings = (props) => {
             // end
           >
             <span>
-              <SettingOutlined style={{ marginRight: '8px' }} />
+              <SettingOutlined style={{ marginRight: "8px" }} />
               Settings
             </span>
           </div>
         }
-        open={open}
+        open={props.isOpen}
         onOk={handleOk}
         onCancel={handleCancel}
         modalRender={(modal) => (
@@ -128,14 +127,7 @@ const Settings = (props) => {
         )}
       >
         <Tabs defaultActiveKey="1">
-          <TabPane
-            tab={
-              <span>
-                General
-              </span>
-            }
-            key="1"
-          >
+          <TabPane tab={<span>General</span>} key="1">
             <Dropdown
               menu={{
                 items,
@@ -143,24 +135,15 @@ const Settings = (props) => {
               }}
             >
               <a onClick={(e) => e.preventDefault()} href="#">
-                <Space>
-                  Map Themes
-                </Space>
+                <Space>Map Themes</Space>
               </a>
             </Dropdown>
           </TabPane>
-          <TabPane
-            tab={
-              <span>
-                Advanced
-              </span>
-            }
-            key="2"
-          >
+          <TabPane tab={<span>Advanced</span>} key="2">
             <span>
               Clear Cookies
               <Button
-                style={{ marginLeft: '8px' }}
+                style={{ marginLeft: "8px" }}
                 type="primary"
                 danger
                 onClick={() => {
