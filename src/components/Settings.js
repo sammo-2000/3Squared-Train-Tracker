@@ -1,20 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Button, Modal, Tabs, Flex } from "antd";
+import { SettingOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 
 // Theme Hook
 import { useTheme } from "../hooks/ThemeHooks";
 
 // Cookies
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
 // Cookies.remove('COOKIENAME');
 
-// Removes all cookies need to add a button for clearing cookies
-// const allCookies = Cookies.get();
+const allCookies = Cookies.get();
 
 // for (const cookieName in allCookies) {
 //   Cookies.remove(cookieName);
@@ -36,6 +35,8 @@ const items = [
   },
 ];
 
+const { TabPane } = Tabs;
+
 const Settings = (props) => {
   const { setTheme } = useTheme();
   useEffect(() => {
@@ -45,7 +46,7 @@ const Settings = (props) => {
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
     setTheme(key);
-    Cookies.set('theme', key);
+    Cookies.set("theme", key);
   };
 
   const [open, setOpen] = useState(props.setOpen);
@@ -105,7 +106,10 @@ const Settings = (props) => {
             onBlur={() => {}}
             // end
           >
-            Settings
+            <span>
+              <SettingOutlined style={{ marginRight: '8px' }} />
+              Settings
+            </span>
           </div>
         }
         open={open}
@@ -122,19 +126,53 @@ const Settings = (props) => {
           </Draggable>
         )}
       >
-        <Dropdown
-          menu={{
-            items,
-            onClick,
-          }}
-        >
-          <a onClick={(e) => e.preventDefault()} href="#">
-            <Space>
-              Map Themes
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
+        <Tabs defaultActiveKey="1">
+          <TabPane
+            tab={
+              <span>
+                General
+              </span>
+            }
+            key="1"
+          >
+            <Dropdown
+              menu={{
+                items,
+                onClick,
+              }}
+            >
+              <a onClick={(e) => e.preventDefault()} href="#">
+                <Space>
+                  Map Themes
+                </Space>
+              </a>
+            </Dropdown>
+          </TabPane>
+          <TabPane
+            tab={
+              <span>
+                Advanced
+              </span>
+            }
+            key="2"
+          >
+            <span>
+              Clear Cookies
+              <Button
+                style={{ marginLeft: '8px' }}
+                type="primary"
+                danger
+                onClick={() => {
+                  for (const cookieName in allCookies) {
+                    Cookies.remove(cookieName);
+                  }
+                }}
+              >
+                Clear
+              </Button>
+            </span>
+          </TabPane>
+        </Tabs>
       </Modal>
     </>
   );
