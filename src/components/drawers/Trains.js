@@ -17,8 +17,10 @@ import back from "../../assets/icons/back.svg";
 
 import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook.js";
 import { UseTiplocDetail } from "../../hooks/TiplocDetailHook.js";
+import { UseTrainDetail } from "../../hooks/TrainDetailHook.js";
 
 import { tiplocAPI } from "../../api/tiplocAPI.js";
+import { detailAPI } from "../../api/detailAPI.js";
 
 const Trains = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -28,6 +30,7 @@ const Trains = (props) => {
   const [notificationApi, notificationContext] = notification.useNotification();
   const { selectedTiploc } = UseSelectedTiploc();
   const { tiplocDetail, setTiplocDetail } = UseTiplocDetail();
+  const { trainDetail, setTrainDetail } = UseTrainDetail();
   const [emptyDetail, setEmptyDetail] = useState(true);
 
   useEffect(() => {
@@ -38,9 +41,7 @@ const Trains = (props) => {
         if (result.length > 0) {
           setEmptyDetail(false);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -215,13 +216,21 @@ const Trains = (props) => {
                     : ""
                 }`}
               >
-                <div className="flex flex-col gap-2">
+                <button
+                  className="flex flex-col gap-2 w-full items-start"
+                  onClick={async () => {
+                    let _trainDetail = [...trainDetail];
+                    const _newData = await detailAPI([item]);
+                    _trainDetail.push(_newData);
+                    await setTrainDetail(_trainDetail);
+                  }}
+                >
                   <p className="text-blue-400 text-sm">{item.headCode}</p>
                   <p className="font-bold text-lg">
                     {item.originLocation} - {item.destinationLocation}
                   </p>
                   <p className="text-gray-500">{item.lastReportedType}</p>
-                </div>
+                </button>
               </List.Item>
             )}
           />
