@@ -1,6 +1,6 @@
 import { Drawer, Space, Button, Input, Tabs, List, Popconfirm, notification, message } from "antd";
 import "../../css/drawer.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import {UseTrainDetail} from "../../hooks/TrainDetailHook.js"
@@ -10,9 +10,18 @@ const Routes = (props) => {
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedRoutes, setTrackedRoutes] = useState([]);
+  //---------------------------------------------
   const {trainDetail} = UseTrainDetail();
-  console.log(trainDetail);
+  //console.log(trainDetail);
+    useEffect(() => {
+      trainDetail.forEach(element => { 
+        console.log(element.schedule[0].tiploc);
+        console.log(element.schedule[element.schedule.length - 1].tiploc)
+      });
+      
+    },[trainDetail]);
   
+  //-----------------------------------------------
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
   };
