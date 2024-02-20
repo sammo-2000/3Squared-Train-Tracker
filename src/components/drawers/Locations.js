@@ -60,14 +60,12 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
-    console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
     if (selectedTiploc.length > 0) {
       selectedTiploc.forEach(tiploc => {
         const cookieName = "tiploc_" + tiploc.Tiploc;
         if (!Cookies.get(cookieName)) {
           Cookies.set(cookieName, JSON.stringify(tiploc));
         }
-        // var retrievedObject = JSON.parse(Cookies.get(cookieName));
       });
     }
   }, [selectedTiploc]);

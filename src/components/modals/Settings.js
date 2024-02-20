@@ -150,6 +150,7 @@ const Settings = (props) => {
                   for (const cookieName in allCookies) {
                     Cookies.remove(cookieName);
                   }
+                  window.location.reload();
                 }}
               >
                 Clear
