@@ -17,6 +17,7 @@ import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
+import LocationDetails from "../modals/LocationDetails";
 
 const Locations = (props) => {
   const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
@@ -27,21 +28,14 @@ const Locations = (props) => {
   const [data, setData] = useState([]);
   const [notificationContext, notificationApi] = props.notifications;
   const [messageContext, messageApi] = props.messages;
+  const [detailsModal, setDetailsModal] = useState(false);
 
   const direction = "left";
-
-  const showChildrenDrawer = () => {
-    setChildrenDrawer(true);
-  };
-
-  const onChildrenDrawerClose = () => {
-    setChildrenDrawer(false);
-  };
+  const paginationSize = 250; // add to settings (worse device = go lower) - performance presets
 
   const onTrackedLocationClick = (item, e) => {
     if (e.key === "view-details") {
-      console.log("View details");
-      console.log(item);
+      setDetailsModal(true);
     }
 
     if (e.key === "stop-tracking") {
@@ -94,6 +88,7 @@ const Locations = (props) => {
 
   return (
     <>
+      <LocationDetails isOpen={detailsModal} setOpen={setDetailsModal} />
       <Drawer
         title="Tracked Locations"
         onClose={() => {
@@ -106,7 +101,7 @@ const Locations = (props) => {
         extra={
           <Space>
             <Button
-              onClick={showChildrenDrawer}
+              onClick={() => setChildrenDrawer(true)}
               shape="circle"
               type="primary"
               ghost
@@ -155,6 +150,10 @@ const Locations = (props) => {
 
         <List
           size="large"
+          pagination={{
+            defaultPageSize: paginationSize,
+            showSizeChanger: false,
+          }}
           dataSource={selectedTiploc.filter((item) => {
             return item.DisplayName.toLowerCase().includes(
               searchText.toLowerCase()
@@ -173,6 +172,7 @@ const Locations = (props) => {
                 }}
                 defaultSelectedKeys={[]}
                 mode="vertical"
+                selectable={false}
                 items={[
                   {
                     key: item.Tiploc,
@@ -200,7 +200,7 @@ const Locations = (props) => {
         <Drawer
           title="Track New Location"
           closable={true}
-          onClose={onChildrenDrawerClose}
+          onClose={() => setChildrenDrawer(false)}
           open={childrenDrawer}
           placement={direction}
           closeIcon={<img alt="back" className="rotate-180" src={back} />}
@@ -244,15 +244,21 @@ const Locations = (props) => {
                 size="large"
                 dataSource={data.filter((item) => {
                   return (
-                    item.DisplayName.toLowerCase().includes(
+                    (item.DisplayName.toLowerCase().includes(
                       searchText.toLowerCase()
-                    ) &&
+                    ) ||
+                      item.Tiploc.toLowerCase().includes(
+                        searchText.toLowerCase()
+                      )) &&
                     !selectedTiploc.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
                 })}
-                pagination={true}
+                pagination={{
+                  defaultPageSize: paginationSize,
+                  showSizeChanger: false,
+                }}
                 renderItem={(item) => (
                   <Popconfirm
                     icon={null}
@@ -274,6 +280,10 @@ const Locations = (props) => {
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
+                pagination={{
+                  defaultPageSize: paginationSize,
+                  showSizeChanger: false,
+                }}
                 dataSource={recentlyUsed.filter((item) => {
                   return (
                     item.DisplayName.toLowerCase().includes(

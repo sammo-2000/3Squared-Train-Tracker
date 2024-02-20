@@ -9,7 +9,7 @@ import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
 
-import Settings from "./Settings";
+import Settings from "./modals/Settings";
 
 import { notification, message } from "antd";
 
@@ -24,10 +24,8 @@ function Navbar() {
       {notificationContext}
       {messageContext}
 
-      {settingsModal && <Settings setOpen={settingsModal} />}
-
       {activeDrawer === "locations" && (
-       <Locations
+        <Locations
           setActiveDraw={setActiveDrawer}
           notifications={[notificationContext, notificationApi]}
           messages={[messageContext, messageApi]}
@@ -35,6 +33,8 @@ function Navbar() {
       )}
       {activeDrawer === "trains" && <Trains setActiveDraw={setActiveDrawer} />}
       {activeDrawer === "routes" && <Routes setActiveDraw={setActiveDrawer} />}
+
+      <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
 
       <div className="">
         <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
