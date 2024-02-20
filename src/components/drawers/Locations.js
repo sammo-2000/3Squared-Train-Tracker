@@ -60,49 +60,22 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
+    console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
     if (selectedTiploc.length > 0) {
       selectedTiploc.forEach(tiploc => {
-        Cookies.set(tiploc.Tiploc, JSON.stringify(tiploc));
-        var retrievedObject = JSON.parse(Cookies.get(tiploc.Tiploc));
-        console.log(retrievedObject);
+        const cookieName = "tiploc_" + tiploc.Tiploc;
+        if (!Cookies.get(cookieName)) {
+          Cookies.set(cookieName, JSON.stringify(tiploc));
+        }
+        // var retrievedObject = JSON.parse(Cookies.get(cookieName));
       });
     }
-  });
-
-  const loadTrackedLocations = () => { 
-    const cookies = Cookies.get();
-    Object.keys(cookies).forEach(cookieName => {
-      // Check if the cookie name is a Tiploc
-      if (data.some(location => location.Tiploc.toString() === cookieName)) {
-        // Parse the cookie value and add it to trackedLocations
-        const tiploc = JSON.parse(cookies[cookieName]);
-        setSelectedTiploc(prevLocations => [...prevLocations, tiploc]);
-      }
-    });
-    console.log("Tracked locations", selectedTiploc);
-  } 
-
-  useEffect(() => {
-    if (childrenDrawer) {
-      // const cookies = Cookies.get();
-      // Object.keys(cookies).forEach(cookieName => {
-      //   // Check if the cookie name is a Tiploc
-      //   if (data.some(location => location.Tiploc.toString() === cookieName)) {
-      //     // Parse the cookie value and add it to trackedLocations
-      //     const tiploc = JSON.parse(cookies[cookieName]);
-      //     setTrackedLocations(prevLocations => [...prevLocations, tiploc]);
-      //   }
-      // });
-      // console.log("Tracked locations", trackedLocations);
-      loadTrackedLocations();
-    }
-  }, [childrenDrawer]);
+  }, [selectedTiploc]);
 
   const setTracked = (item) => {
     setChildrenDrawer(false);
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
-    // setTrackedLocations([...trackedLocations, item]);
     setSelectedTiploc([...selectedTiploc, item]);
 
     // Inform user that routes are being loaded
