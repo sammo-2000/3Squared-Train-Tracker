@@ -4,37 +4,51 @@ import { Button, Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 
+// Theme Hook
 import { useTheme } from "../hooks/ThemeHooks";
 
-const onClick = ({ key }) => {
-  message.info(`Click on item ${key}`);
-};
+// Cookies
+import Cookies from 'js-cookie';
 
+// Should remove a specfic cookie will need for tomorrow, so leaving here
+// Cookies.remove('COOKIENAME');
+
+// Removes all cookies need to add a button for clearing cookies
+// const allCookies = Cookies.get();
+
+// for (const cookieName in allCookies) {
+//   Cookies.remove(cookieName);
+// }
+
+// Map Tilelayer Selector
 const items = [
   {
-    label: "1st menu item",
+    label: "Dark Theme",
     key: "1",
-    theme: "theme1",
   },
   {
-    label: "2nd menu item",
+    label: "Light Theme",
     key: "2",
-    theme: "theme2",
   },
   {
-    label: "3rd menu item",
+    label: "Realistic Theme",
     key: "3",
-    theme: "theme3",
   },
 ];
 
-const Settings = () => {
+const Settings = (props) => {
   const { setTheme } = useTheme();
   useEffect(() => {
     setTheme(2);
   }, [setTheme]);
 
-  const [open, setOpen] = useState(false);
+  const onClick = ({ key }) => {
+    message.info(`Click on item ${key}`);
+    setTheme(key);
+    Cookies.set('theme', key);
+  };
+
+  const [open, setOpen] = useState(props.setOpen);
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
     left: 0,
@@ -70,12 +84,6 @@ const Settings = () => {
 
   return (
     <>
-      {/* <div className="absolute top-[5.5rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
-        <Settings />
-      </div> */}
-      <div className="absolute top-[25rem] left-0 flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-200 overflow-hidden divide-y-2 divide-gray-200">
-        <Button onClick={showModal}>Settings</Button>
-      </div>
       <Modal
         title={
           <div
@@ -122,7 +130,7 @@ const Settings = () => {
         >
           <a onClick={(e) => e.preventDefault()} href="#">
             <Space>
-              Hover me, Click menu item
+              Map Themes
               <DownOutlined />
             </Space>
           </a>

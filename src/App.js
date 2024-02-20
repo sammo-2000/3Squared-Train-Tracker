@@ -10,7 +10,6 @@ const App = () => {
     <>
       <Map />
       <Navbar />
-      <Settings />
     </>
   );
 };
