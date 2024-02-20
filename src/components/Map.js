@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker} from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -30,21 +30,28 @@ const Map = () => {
     iconSize: [38, 38],
   });
 
+  const [coordinates, setCoordinates] = useState([]);
+
+  // useEffect(() => {
+  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
+  //   if (selectedTiploc.length > 0) {
+  //     selectedTiploc.forEach(tiploc => {
+  //       const position = { lat: tiploc.Latitude, lng: tiploc.Longitude}
+  //       coordinates.push(position);
+  //       console.log("Coordinates", coordinates);  
+  //     });
+  //   }
+  // }, [selectedTiploc]);
+
   useEffect(() => {
     console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
     if (selectedTiploc.length > 0) {
-      selectedTiploc.forEach(tiploc => {
-        coordinates.push([tiploc.latitude, tiploc.longitude]);
-        console.log("Coordinates", coordinates);  
-        // var retrievedObject = JSON.parse(Cookies.get(cookieName));
+      const newCoordinates = selectedTiploc.map(tiploc => {
+        return { lat: tiploc.Latitude, lng: tiploc.Longitude};
       });
+      setCoordinates(newCoordinates);
     }
   }, [selectedTiploc]);
-
-  const coordinates = [
-    // [54.091617, -1.793925],
-    // [51.5074, -0.1278],
-  ]
 
   const mapThemes = {
     1: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
@@ -65,8 +72,11 @@ const Map = () => {
             accessToken={process.env.REACT_APP_MAP_API_KEY}
             url={mapThemes[theme] || 'https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}'}
           />
+          {/* {coordinates.map((coordinate, index) => (
+            <Marker key={index} position={[position.lat, position.lng]} icon={trainStationIcon} />
+          ))} */}
           {coordinates.map((coordinate, index) => (
-            <Marker key={index} position={coordinate} icon={trainStationIcon} />
+            <Marker key={index} position={[coordinate.lat, coordinate.lng]} icon={trainStationIcon} />
           ))}
         </MapContainer>
       </div>
