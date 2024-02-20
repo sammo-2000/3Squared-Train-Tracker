@@ -14,14 +14,16 @@ import {
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
 import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook";
+import { useMap } from "../../hooks/MapHook";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
 
+import { BranchesOutlined } from "@ant-design/icons";
+
 const Locations = (props) => {
   const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
-
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
@@ -29,13 +31,20 @@ const Locations = (props) => {
   const [notificationContext, notificationApi] = props.notifications;
   const [messageContext, messageApi] = props.messages;
   const [detailsModal, setDetailsModal] = useState(false);
+  const [selectedDetails, setSelectedDetails] = useState({});
 
+  const { map, setMap } = useMap();
+
+  // TODO: Add to Settings
   const direction = "left";
-  const paginationSize = 250; // add to settings (worse device = go lower) - performance presets
+  const paginationSize = 250; // worse device = go lower - performance preset
+  const defaultNormalInspectZoom = 14;
+  const defaultMapCoords = [54.091617, -1.793925];
 
   const onTrackedLocationClick = (item, e) => {
     if (e.key === "view-details") {
       setDetailsModal(true);
+      setSelectedDetails(item);
     }
 
     if (e.key === "stop-tracking") {
@@ -88,7 +97,11 @@ const Locations = (props) => {
 
   return (
     <>
-      <LocationDetails isOpen={detailsModal} setOpen={setDetailsModal} />
+      <LocationDetails
+        isOpen={detailsModal}
+        setOpen={setDetailsModal}
+        location={selectedDetails}
+      />
       <Drawer
         title="Tracked Locations"
         onClose={() => {
@@ -160,7 +173,20 @@ const Locations = (props) => {
             );
           })}
           renderItem={(item) => (
-            <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+            <List.Item
+              className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer"
+              onMouseEnter={(e) => {
+                setMap(
+                  map.setView(
+                    [item.Latitude, item.Longitude],
+                    defaultNormalInspectZoom
+                  )
+                );
+              }}
+              onMouseLeave={(e) => {
+                setMap(map.setView(defaultMapCoords, 6));
+              }}
+            >
               <Menu
                 onClick={(e) => onTrackedLocationClick(item, e)}
                 style={{
@@ -242,6 +268,7 @@ const Locations = (props) => {
             <Tabs.TabPane key={0} tab="All">
               <List
                 size="large"
+                loading={data.length === 0 ? true : false}
                 dataSource={data.filter((item) => {
                   return (
                     (item.DisplayName.toLowerCase().includes(
@@ -261,6 +288,9 @@ const Locations = (props) => {
                 }}
                 renderItem={(item) => (
                   <Popconfirm
+                    onClick={(e) => {
+                      setMap(map.setView([item.Latitude, item.Longitude], 14));
+                    }}
                     icon={null}
                     title="Track location"
                     description="Are you sure you want to track this location?"
@@ -296,6 +326,9 @@ const Locations = (props) => {
                 })}
                 renderItem={(item) => (
                   <Popconfirm
+                    onClick={(e) => {
+                      setMap(map.setView([item.Latitude, item.Longitude], 14));
+                    }}
                     icon={null}
                     title="Track location"
                     description="Are you sure you want to track this location?"

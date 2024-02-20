@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { useTheme } from "../hooks/ThemeHooks";
+import { useMap } from "../hooks/MapHook";
+
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
 
-// Cookies
-import Cookies from "js-cookie";
+const Map = (props) => {
+  const { map, setMap } = useMap();
 
-const Map = () => {
+  const zoomControls = "topleft"; // TODO: Settings
+
   const { theme: themeFromHook } = useTheme();
+  // const [map, setMap] = useState(null);
+
+  const center = props.center || [54.091617, -1.793925];
+  const zoom = props.zoom || 6;
 
   let theme;
   const themeCookie = Cookies.get("theme");
@@ -25,18 +33,30 @@ const Map = () => {
     3: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   };
 
+  // map.setView([2.091617, -1.793925], zoom);
+
+  useEffect(() => {
+    if (map) {
+      map.zoomControl.setPosition(zoomControls);
+    }
+  }, [map]);
+
   return (
     <>
       <div className="map">
         <MapContainer
-          center={[54.091617, -1.793925]}
-          zoom={6}
+          center={center}
+          zoom={zoom}
           scrollWheelZoom={true}
+          whenReady={(e) => setMap(e.target)}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             accessToken={process.env.REACT_APP_MAP_API_KEY}
-            url={mapThemes[theme] || 'https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}'}
+            url={
+              mapThemes[theme] ||
+              "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}"
+            }
           />
         </MapContainer>
       </div>

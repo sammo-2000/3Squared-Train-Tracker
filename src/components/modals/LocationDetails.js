@@ -1,10 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import Draggable from "react-draggable";
+
 import { Button, Modal, Tabs } from "antd";
 import { PushpinFilled } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
+import { useMap } from "../../hooks/MapHook";
 
-const { TabPane } = Tabs;
+import "../../css/drawer.css";
 
 const LocationDetails = (props) => {
   const [disabled, setDisabled] = useState(true);
@@ -15,10 +18,18 @@ const LocationDetails = (props) => {
     right: 0,
   });
   const draggleRef = useRef(null);
+  const location = props.location;
+  const { map, setMap } = useMap();
+
+  // TODO: Add to settings
+  const defaultSuperInspectZoom = 19;
+  const defaultNormalZoom = 6;
+  const defaultMapCoords = [54.091617, -1.793925];
 
   const handleCancel = (e) => {
     console.log(e);
     props.setOpen(false);
+    setMap(map.setView(defaultMapCoords, defaultNormalZoom));
   };
 
   const onStart = (_event, uiData) => {
@@ -36,7 +47,17 @@ const LocationDetails = (props) => {
   };
 
   return (
-    <>
+    <div
+      onMouseEnter={() => {
+        setMap(
+          map.setView(
+            [location.Latitude, location.Longitude],
+            defaultSuperInspectZoom
+          )
+        );
+        console.log("Mouse Enter");
+      }}
+    >
       <Modal
         centered
         title={
@@ -77,9 +98,70 @@ const LocationDetails = (props) => {
           </Draggable>
         )}
       >
-        a
+        <div>
+          <div className="mt-6 border-t border-gray-100">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Name
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.Name}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Display Name
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.DisplayName}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Tiploc
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.Tiploc}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Stanox
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.Stanox}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Compulsory Stop
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.Details?.CompulsoryStop ? "Yes" : "No"}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Off Network
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.Details?.OffNetwork ? "Yes" : "No"}
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  UIC
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  {location.Details?.UIC}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
       </Modal>
-    </>
+    </div>
   );
 };
 export default LocationDetails;

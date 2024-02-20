@@ -8,6 +8,7 @@ import { SelectedTiplocProvider } from "./contexts/SelectedTiplocContext.js";
 import { TrainDetailProvider } from "./contexts/TrainDetailContext.js";
 import { TiplocDetailProvider } from "./contexts/TiplocDetailContext.js";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { MapProvider } from "./contexts/MapContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,7 +17,9 @@ root.render(
       <TrainDetailProvider>
         <SelectedTiplocProvider>
           <ThemeProvider>
-            <App />
+            <MapProvider>
+              <App />
+            </MapProvider>
           </ThemeProvider>
         </SelectedTiplocProvider>
       </TrainDetailProvider>
