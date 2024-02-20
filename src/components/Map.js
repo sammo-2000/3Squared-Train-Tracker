@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { MapContainer, TileLayer } from "react-leaflet";
-import { useTheme } from "../hooks/ThemeHooks";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { useMap } from "../hooks/MapHook";
-
+import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
+import stationIcon from "../assets/icons/trainStation.png";
+
+// Hooks
+import { useTheme } from "../hooks/ThemeHooks";
+import { UseSelectedTiploc } from "../hooks/SelectedTiplocHook";
 
 const Map = (props) => {
   const { map, setMap } = useMap();
 
   const zoomControls = "topleft"; // TODO: Settings
 
+  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
   const { theme: themeFromHook } = useTheme();
   // const [map, setMap] = useState(null);
 
@@ -26,6 +31,34 @@ const Map = (props) => {
   } else {
     theme = themeFromHook;
   }
+
+  const trainStationIcon = new Icon({
+    iconUrl: stationIcon,
+    iconSize: [38, 38],
+  });
+
+  const [coordinates, setCoordinates] = useState([]);
+
+  // useEffect(() => {
+  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
+  //   if (selectedTiploc.length > 0) {
+  //     selectedTiploc.forEach(tiploc => {
+  //       const position = { lat: tiploc.Latitude, lng: tiploc.Longitude}
+  //       coordinates.push(position);
+  //       console.log("Coordinates", coordinates);  
+  //     });
+  //   }
+  // }, [selectedTiploc]);
+
+  useEffect(() => {
+    console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
+    if (selectedTiploc.length > 0) {
+      const newCoordinates = selectedTiploc.map(tiploc => {
+        return { lat: tiploc.Latitude, lng: tiploc.Longitude};
+      });
+      setCoordinates(newCoordinates);
+    }
+  }, [selectedTiploc]);
 
   const mapThemes = {
     1: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
@@ -58,6 +91,12 @@ const Map = (props) => {
               "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}"
             }
           />
+          {/* {coordinates.map((coordinate, index) => (
+            <Marker key={index} position={[position.lat, position.lng]} icon={trainStationIcon} />
+          ))} */}
+          {coordinates.map((coordinate, index) => (
+            <Marker key={index} position={[coordinate.lat, coordinate.lng]} icon={trainStationIcon} />
+          ))}
         </MapContainer>
       </div>
     </>

@@ -21,6 +21,8 @@ import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
 
 import { BranchesOutlined } from "@ant-design/icons";
+// Cookies
+import Cookies from "js-cookie";
 
 const Locations = (props) => {
   const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
@@ -56,6 +58,17 @@ const Locations = (props) => {
       });
     }
   };
+
+  useEffect(() => {
+    if (selectedTiploc.length > 0) {
+      selectedTiploc.forEach(tiploc => {
+        const cookieName = "tiploc_" + tiploc.Tiploc;
+        if (!Cookies.get(cookieName)) {
+          Cookies.set(cookieName, JSON.stringify(tiploc));
+        }
+      });
+    }
+  }, [selectedTiploc]);
 
   const setTracked = (item) => {
     setChildrenDrawer(false);
