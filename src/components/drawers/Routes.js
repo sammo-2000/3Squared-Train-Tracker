@@ -1,8 +1,8 @@
 import { Drawer, Space, Button, Input, Tabs, List, Popconfirm, notification, message } from "antd";
 import "../../css/drawer.css";
 import { useState } from "react";
-import search from "../../assets/search.svg";
-import back from "../../assets/back.svg";
+import search from "../../assets/icons/search.svg";
+import back from "../../assets/icons/back.svg";
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);

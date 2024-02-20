@@ -14,8 +14,8 @@ import {
 import "../../css/drawer.css";
 import { useState } from "react";
 
-import search from "../../assets/search.svg";
-import back from "../../assets/back.svg";
+import search from "../../assets/icons/search.svg";
+import back from "../../assets/icons/back.svg";
 
 const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -24,6 +24,8 @@ const Locations = (props) => {
   const [trackedLocations, setTrackedLocations] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
   const [messageApi, messageContext] = message.useMessage();
+
+  const direction = "left";
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -108,7 +110,7 @@ const Locations = (props) => {
           props.setActiveDraw("menu");
         }}
         open={true}
-        placement="left"
+        placement={direction}
         closeIcon={<img alt="back" src={back} />}
         bodyStyle={{ padding: 0 }}
         extra={
@@ -208,7 +210,7 @@ const Locations = (props) => {
           closable={true}
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
-          placement="left"
+          placement={direction}
           closeIcon={<img alt="back" className="rotate-180" src={back} />}
           bodyStyle={{ padding: 0 }}
         >

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import location from "../assets/location.svg";
-import route from "../assets/route.svg";
-import train from "../assets/train.svg";
-import settings from "../assets/settings.svg";
+import location from "../assets/icons/location.svg";
+import route from "../assets/icons/route.svg";
+import train from "../assets/icons/train.svg";
+import settings from "../assets/icons/settings.svg";
 
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
