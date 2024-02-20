@@ -10,10 +10,15 @@ import {
 } from "antd";
 
 import "../../css/drawer.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
+
+import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook.js";
+import { UseTiplocDetail } from "../../hooks/TiplocDetailHook.js";
+
+import { tiplocAPI } from "../../api/tiplocAPI.js";
 
 const Trains = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -21,6 +26,21 @@ const Trains = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedTrains, setTrackedTrains] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
+  const { selectedTiploc } = UseSelectedTiploc();
+  const { tiplocDetail, setTiplocDetail } = UseTiplocDetail();
+  const [emptyDetail, setEmptyDetail] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await tiplocAPI(selectedTiploc);
+      setTiplocDetail(result.reverse());
+      if (result.length > 0) {
+        setEmptyDetail(false);
+      }
+    };
+
+    fetchData();
+  }, [selectedTiploc && setTiplocDetail]);
 
   const openLoadingNotification = () => {
     notificationApi.open({
@@ -56,12 +76,14 @@ const Trains = (props) => {
 
   const setTracked = (item) => {
     // TODO: Need to make sure there isn't any duplicates
-    const isItemAlreadyTracked = recentlyUsed.some((trackedItem) => trackedItem.Headcode === item.Headcode);
+    const isItemAlreadyTracked = recentlyUsed.some(
+      (trackedItem) => trackedItem.Headcode === item.Headcode
+    );
     if (isItemAlreadyTracked) {
       duplicateTrainDetected();
       return;
     }
-    
+
     setChildrenDrawer(false);
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
@@ -79,10 +101,8 @@ const Trains = (props) => {
       StartTIPLOC: "FRMPKRS",
       EndTIPLOC: "KNGX",
       tracked: true,
-    }
-    
+    },
   ];
-
 
   return (
     <>
@@ -146,28 +166,62 @@ const Trains = (props) => {
           }}
         />
 
-        <List
-          size="large"
-          dataSource={trackedTrains.filter((item) => {
-            return item.Headcode.toLowerCase().includes(searchText.toLowerCase());
-          })}
-          renderItem={(item) => (
-            <Popconfirm
-              icon={null}
-              title="Track Train"
-              description="Are you sure you want to track this Train?"
-              onConfirm={() => setTracked(item)}
-              onCancel={null}
-              okText="Yes"
-              cancelText="No"
-            >
-              <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                <div>{item.Headcode}</div>
-                <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>
+        {emptyDetail && (
+          <List
+            size="large"
+            dataSource={trackedTrains.filter((item) => {
+              return item.Headcode.toLowerCase().includes(
+                searchText.toLowerCase()
+              );
+            })}
+            renderItem={(item) => (
+              <Popconfirm
+                icon={null}
+                title="Track Train"
+                description="Are you sure you want to track this Train?"
+                onConfirm={() => setTracked(item)}
+                onCancel={null}
+                okText="Yes"
+                cancelText="No"
+              >
+                <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                  <div>{item.Headcode}</div>
+                  <div>
+                    {item.StartTIPLOC} --------- {item.EndTIPLOC}
+                  </div>
+                </List.Item>
+              </Popconfirm>
+            )}
+          />
+        )}
+        {tiplocDetail && tiplocDetail.length > 0 && (
+          <List
+            size="large"
+            dataSource={tiplocDetail}
+            renderItem={(item) => (
+              <List.Item
+                className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
+                  item.lastReportedType === "CANCELLED"
+                    ? "bg-red-100 hover:bg-red-200"
+                    : ""
+                }
+                ${
+                  item.lastReportedType === "TERMINATED"
+                    ? "bg-yellow-100 hover:bg-yellow-200"
+                    : ""
+                }`}
+              >
+                <div className="flex flex-col gap-2">
+                  <p className="text-blue-400 text-sm">{item.headCode}</p>
+                  <p className="font-bold text-lg">
+                    {item.originLocation} - {item.destinationLocation}
+                  </p>
+                  <p className="text-gray-500">{item.lastReportedType}</p>
+                </div>
               </List.Item>
-            </Popconfirm>
-          )}
-        />
+            )}
+          />
+        )}
 
         <Drawer
           title="Track New Train"
@@ -215,9 +269,9 @@ const Trains = (props) => {
               <List
                 size="large"
                 dataSource={data.filter((item) => {
-                  return item.Headcode
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
+                  return item.Headcode.toLowerCase().includes(
+                    searchText.toLowerCase()
+                  );
                 })}
                 renderItem={(item) => (
                   <Popconfirm
@@ -231,7 +285,9 @@ const Trains = (props) => {
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
                       <div>{item.Headcode}</div>
-                      <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>
+                      <div>
+                        {item.StartTIPLOC} --------- {item.EndTIPLOC}
+                      </div>
                     </List.Item>
                   </Popconfirm>
                 )}
@@ -241,9 +297,9 @@ const Trains = (props) => {
               <List
                 size="large"
                 dataSource={recentlyUsed.filter((item) => {
-                  return item.Headcode
-                    .toLowerCase()
-                    .includes(searchText.toLowerCase());
+                  return item.Headcode.toLowerCase().includes(
+                    searchText.toLowerCase()
+                  );
                 })}
                 renderItem={(item) => (
                   <Popconfirm
@@ -259,7 +315,9 @@ const Trains = (props) => {
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
                       <div>{item.Headcode}</div>
-                      <div>{item.StartTIPLOC} --------- {item.EndTIPLOC}</div>
+                      <div>
+                        {item.StartTIPLOC} --------- {item.EndTIPLOC}
+                      </div>
                     </List.Item>
                   </Popconfirm>
                 )}
