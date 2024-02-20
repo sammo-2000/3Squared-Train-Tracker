@@ -11,16 +11,27 @@ import Routes from "./drawers/Routes";
 
 import Settings from "./Settings";
 
+import { notification, message } from "antd";
+
 function Navbar() {
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [settingsModal, setSettingsModal] = useState(false);
+  const [notificationApi, notificationContext] = notification.useNotification();
+  const [messageApi, messageContext] = message.useMessage();
 
   return (
     <div>
+      {notificationContext}
+      {messageContext}
+
       {settingsModal && <Settings setOpen={settingsModal} />}
 
       {activeDrawer === "locations" && (
-        <Locations setActiveDraw={setActiveDrawer} />
+       <Locations
+          setActiveDraw={setActiveDrawer}
+          notifications={[notificationContext, notificationApi]}
+          messages={[messageContext, messageApi]}
+        />
       )}
       {activeDrawer === "trains" && <Trains setActiveDraw={setActiveDrawer} />}
       {activeDrawer === "routes" && <Routes setActiveDraw={setActiveDrawer} />}
