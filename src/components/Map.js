@@ -4,7 +4,6 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import { useTheme } from "../hooks/ThemeHooks"; 
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
-import { map } from "leaflet";
 
 // Cookies
 import Cookies from 'js-cookie';
@@ -46,13 +45,6 @@ const Map = () => {
       useEffect(() => {
         {console.log("Current Theme: ", mapThemes[theme])}
       }, )}
-
-        <button
-          className="absolute top-[5.5rem] left-0 w-[4%] h-1/1 flex-col text-center z-[1000] m-3 rounded-lg overflow-hidden shadow-box"
-          // onClick={() => Map.([50, 20])}
-        >
-          Center
-        </button>
     </div>
   );
 };

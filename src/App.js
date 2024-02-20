@@ -1,5 +1,4 @@
 import React from "react";
-import Settings from "./components/Settings";
 
 // Component
 import Map from "./components/Map";

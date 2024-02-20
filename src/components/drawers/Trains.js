@@ -14,7 +14,6 @@ import { useState } from "react";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
-import train from "../../assets/icons/train.svg";
 
 const Trains = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
