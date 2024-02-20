@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { useTheme } from "../hooks/ThemeHooks";
 import "leaflet/dist/leaflet.css";
