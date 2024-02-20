@@ -32,10 +32,14 @@ const Trains = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await tiplocAPI(selectedTiploc);
-      setTiplocDetail(result.reverse());
-      if (result.length > 0) {
-        setEmptyDetail(false);
+      try {
+        const result = await tiplocAPI(selectedTiploc);
+        setTiplocDetail(result.reverse());
+        if (result.length > 0) {
+          setEmptyDetail(false);
+        }
+      } catch (error) {
+        console.error(error);
       }
     };
 

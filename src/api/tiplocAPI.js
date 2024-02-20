@@ -16,7 +16,7 @@ const tiplocAPI = async (selectedTiploc) => {
 
   // Call API
   const apiEndPoint = `https://traindata-stag-api.railsmart.io/api/trains/tiploc/${tiplocString}/${
-    yesterday.toISOString().split("T")[0]
+    today.toISOString().split("T")[0]
   }/${tomorrow.toISOString().split("T")[0]}`;
   const response = await fetch(apiEndPoint, {
     headers: {
