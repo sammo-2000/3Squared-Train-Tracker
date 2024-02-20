@@ -19,14 +19,14 @@ import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 
 const Locations = (props) => {
+  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
-  const [notificationApi, notificationContext] = notification.useNotification();
-  const [messageApi, messageContext] = message.useMessage();
   const [data, setData] = useState([]);
-
-  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+  const [notificationContext, notificationApi] = props.notifications;
+  const [messageContext, messageApi] = props.messages;
 
   const direction = "left";
 
@@ -69,7 +69,7 @@ const Locations = (props) => {
     });
 
     // Inform user that item was added to their 'recently used' list
-    if (recentlyUsed.length === 0) {
+    if (recentlyUsed.length === 0 && selectedTiploc.length === 0) {
       notificationApi.open({
         message: "Recently Used",
         description:
@@ -80,19 +80,20 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
-    if (data.length === 0) {
-      console.log("Loading data...");
-      import("../../assets/data/tiplocs.json").then((data) => {
-        setData(data.Tiplocs);
+    if (data.length === 0 && childrenDrawer === true) {
+      import("../../assets/data/tiplocs.json").then((newData) => {
+        setData(newData.Tiplocs);
+        messageApi.open({
+          type: "success",
+          content:
+            newData.Tiplocs.length.toLocaleString() + " locations loaded.",
+        });
       });
     }
   });
 
   return (
     <>
-      {notificationContext}
-      {messageContext}
-
       <Drawer
         title="Tracked Locations"
         onClose={() => {
