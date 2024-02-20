@@ -7,6 +7,7 @@ import "./css/tailwind.css";
 import { SelectedTiplocProvider } from "./contexts/SelectedTiplocContext.js";
 import { TrainDetailProvider } from "./contexts/TrainDetailContext.js";
 import { TiplocDetailProvider } from "./contexts/TiplocDetailContext.js";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,7 +15,9 @@ root.render(
     <TiplocDetailProvider>
       <TrainDetailProvider>
         <SelectedTiplocProvider>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
         </SelectedTiplocProvider>
       </TrainDetailProvider>
     </TiplocDetailProvider>
