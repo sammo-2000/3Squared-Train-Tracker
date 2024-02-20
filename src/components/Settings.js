@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal, Tabs} from "antd";
+import { Button, Modal, Tabs, Flex } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 
@@ -12,6 +12,7 @@ import Cookies from "js-cookie";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
 // Cookies.remove('COOKIENAME');
+
 
 const allCookies = Cookies.get();
 
@@ -58,9 +59,9 @@ const Settings = (props) => {
     right: 0,
   });
   const draggleRef = useRef(null);
-  // const showModal = () => {
-  //   setOpen(true);
-  // };
+  const showModal = () => {
+    setOpen(true);
+  };
   const handleOk = (e) => {
     console.log(e);
     setOpen(false);

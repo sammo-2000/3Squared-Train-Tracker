@@ -17,6 +17,9 @@ import { useState, useEffect } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 
+// Cookies
+import Cookies from "js-cookie";
+
 const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -28,12 +31,36 @@ const Locations = (props) => {
 
   const direction = "left";
 
+  useEffect(() => {
+    if (trackedLocations.length > 0) {
+      trackedLocations.forEach(tiploc => {
+        Cookies.set(tiploc.Tiploc, JSON.stringify(tiploc));
+        var retrievedObject = JSON.parse(Cookies.get(tiploc.Tiploc));
+        console.log(retrievedObject);
+      });
+    }
+  });
+
+  const loadTrackedLocations = () => { 
+    const cookies = Cookies.get();
+    Object.keys(cookies).forEach(cookieName => {
+      // Check if the cookie name is a Tiploc
+      if (data.some(location => location.Tiploc.toString() === cookieName)) {
+        // Parse the cookie value and add it to trackedLocations
+        const tiploc = JSON.parse(cookies[cookieName]);
+        setTrackedLocations(prevLocations => [...prevLocations, tiploc]);
+      }
+    });
+    console.log("Tracked locations", trackedLocations);
+  } 
+
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
   };
 
   const onChildrenDrawerClose = () => {
     setChildrenDrawer(false);
+    loadTrackedLocations();
   };
 
   const onTrackedLocationClick = (item, e) => {
@@ -52,12 +79,38 @@ const Locations = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (childrenDrawer) {
+      // const cookies = Cookies.get();
+      // Object.keys(cookies).forEach(cookieName => {
+      //   // Check if the cookie name is a Tiploc
+      //   if (data.some(location => location.Tiploc.toString() === cookieName)) {
+      //     // Parse the cookie value and add it to trackedLocations
+      //     const tiploc = JSON.parse(cookies[cookieName]);
+      //     setTrackedLocations(prevLocations => [...prevLocations, tiploc]);
+      //   }
+      // });
+      // console.log("Tracked locations", trackedLocations);
+    }
+  }, [childrenDrawer]);
+
   const setTracked = (item) => {
     setChildrenDrawer(false);
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
     setTrackedLocations([...trackedLocations, item]);
 
+    // const cookies = Cookies.get();
+    // Object.keys(cookies).forEach(cookieName => {
+    //   // Check if the cookie name is a Tiploc
+    //   if (data.some(location => location.Tiploc.toString() === cookieName)) {
+    //     // Parse the cookie value and add it to trackedLocations
+    //     const tiploc = JSON.parse(cookies[cookieName]);
+    //     setTrackedLocations(prevLocations => [...prevLocations, tiploc]);
+    //   }
+    //   console.log("Tracked locations", trackedLocations);
+    // });
+    
     // Inform user that routes are being loaded
     notificationApi.open({
       message: "Routes loading...",
