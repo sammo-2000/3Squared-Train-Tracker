@@ -6,13 +6,14 @@ import Navbar from "./components/Navbar";
 import TiplocCookies from "./components/TiplocCookies";
 
 // import APIUsageExample from "./APIUsageExample";
+import APIUsageExample from "./APIUsageExample";
 
 const App = () => {
 
   return (
     <>
       {/* Turn this on for testing API usage */}
-      {/* <APIUsageExample /> */}
+      <APIUsageExample />
       <Map />
       <Navbar />
       <TiplocCookies />

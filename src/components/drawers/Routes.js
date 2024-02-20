@@ -3,12 +3,15 @@ import "../../css/drawer.css";
 import { useState } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
+import {UseTrainDetail} from "../../hooks/TrainDetailHook.js"
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedRoutes, setTrackedRoutes] = useState([]);
+  const {trainDetail} = UseTrainDetail();
+  console.log(trainDetail);
   
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
