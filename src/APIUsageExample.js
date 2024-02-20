@@ -32,11 +32,11 @@ const APIUsageExample = () => {
   const [loading, setLoading] = useState(false);
 
   // Only run this once after setSelectedTiploc is loaded
-  useEffect(() => {
-    // Add the tiploc into selected tiploc
-    // Normally this should be dynamic, currently hard coded as this is example
-    setSelectedTiploc(tiploc);
-  }, [setSelectedTiploc]);
+  // useEffect(() => {
+  //   // Add the tiploc into selected tiploc
+  //   // Normally this should be dynamic, currently hard coded as this is example
+  //   setSelectedTiploc(tiploc);
+  // }, [setSelectedTiploc]);
 
   // Function to get tiploc details
   const fetchTiplocDetails = async () => {

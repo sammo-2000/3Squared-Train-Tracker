@@ -13,6 +13,7 @@ import {
 
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
+import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
@@ -21,10 +22,11 @@ const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
-  const [trackedLocations, setTrackedLocations] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
   const [messageApi, messageContext] = message.useMessage();
   const [data, setData] = useState([]);
+
+  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
 
   const direction = "left";
 
@@ -43,7 +45,7 @@ const Locations = (props) => {
     }
 
     if (e.key === "stop-tracking") {
-      setTrackedLocations(trackedLocations.filter((i) => i !== item));
+      setSelectedTiploc(selectedTiploc.filter((i) => i !== item));
 
       messageApi.open({
         type: "success",
@@ -56,7 +58,7 @@ const Locations = (props) => {
     setChildrenDrawer(false);
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
-    setTrackedLocations([...trackedLocations, item]);
+    setSelectedTiploc([...selectedTiploc, item]);
 
     // Inform user that routes are being loaded
     notificationApi.open({
@@ -152,7 +154,7 @@ const Locations = (props) => {
 
         <List
           size="large"
-          dataSource={trackedLocations.filter((item) => {
+          dataSource={selectedTiploc.filter((item) => {
             return item.DisplayName.toLowerCase().includes(
               searchText.toLowerCase()
             );
@@ -244,7 +246,7 @@ const Locations = (props) => {
                     item.DisplayName.toLowerCase().includes(
                       searchText.toLowerCase()
                     ) &&
-                    !trackedLocations.some(
+                    !selectedTiploc.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
@@ -276,7 +278,7 @@ const Locations = (props) => {
                     item.DisplayName.toLowerCase().includes(
                       searchText.toLowerCase()
                     ) &&
-                    !trackedLocations.some(
+                    !selectedTiploc.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );

@@ -12,7 +12,7 @@ const tiplocAPI = async (selectedTiploc) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   // Create array from tiploc objects with , as separator
-  const tiplocString = selectedTiploc.map((tiploc) => tiploc.tiploc).join(",");
+  const tiplocString = selectedTiploc.map((tiploc) => tiploc.Tiploc).join(",");
 
   // Call API
   const apiEndPoint = `https://traindata-stag-api.railsmart.io/api/trains/tiploc/${tiplocString}/${
