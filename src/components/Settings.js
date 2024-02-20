@@ -8,7 +8,7 @@ import { Dropdown, message, Space } from "antd";
 import { useTheme } from "../hooks/ThemeHooks";
 
 // Cookies
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
 // Cookies.remove('COOKIENAME');
@@ -45,7 +45,7 @@ const Settings = (props) => {
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
     setTheme(key);
-    Cookies.set('theme', key);
+    Cookies.set("theme", key);
   };
 
   const [open, setOpen] = useState(props.setOpen);
