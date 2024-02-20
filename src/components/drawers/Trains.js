@@ -36,16 +36,28 @@ const Trains = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await tiplocAPI(selectedTiploc);
-        setTiplocDetail(result.reverse());
-        if (result.length > 0) {
+        // All tiplocs
+        const allTiplocs = await tiplocAPI(selectedTiploc);
+
+        let _selectedTiplocs = [];
+        trainDetail.forEach((element) => {
+          _selectedTiplocs.push(element.tiploc.activationId);
+        });
+
+        const filteredTiploc = allTiplocs.filter(
+          (element) => !_selectedTiplocs.includes(element.activationId)
+        );
+
+        setTiplocDetail(filteredTiploc.reverse());
+
+        if (filteredTiploc.length > 0) {
           setEmptyDetail(false);
         }
       } catch (error) {}
     };
 
     fetchData();
-  }, [selectedTiploc && setTiplocDetail]);
+  }, [selectedTiploc && setTiplocDetail, trainDetail]);
 
   const openLoadingNotification = () => {
     notificationApi.open({
