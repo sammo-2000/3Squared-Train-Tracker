@@ -12,7 +12,7 @@ import {
 } from "antd";
 
 import "../../css/drawer.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
@@ -24,6 +24,7 @@ const Locations = (props) => {
   const [trackedLocations, setTrackedLocations] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
   const [messageApi, messageContext] = message.useMessage();
+  const [data, setData] = useState([]);
 
   const direction = "left";
 
@@ -76,28 +77,14 @@ const Locations = (props) => {
     }
   };
 
-  const data = [
-    {
-      id: "1",
-      title: "Liverpool Lime Street",
-      tiploc: "LIVRPLS",
-    },
-    {
-      id: "2",
-      title: "Sheffield Station",
-      tiploc: "SHEFLDS",
-    },
-    {
-      id: "3",
-      title: "Manchester Piccadilly",
-      tiploc: "MNCRPIC",
-    },
-    {
-      id: "4",
-      title: "London Euston",
-      tiploc: "LNDNEUS",
-    },
-  ];
+  useEffect(() => {
+    if (data.length === 0) {
+      console.log("Loading data...");
+      import("../../assets/data/tiplocs.json").then((data) => {
+        setData(data.Tiplocs);
+      });
+    }
+  });
 
   return (
     <>
@@ -166,7 +153,9 @@ const Locations = (props) => {
         <List
           size="large"
           dataSource={trackedLocations.filter((item) => {
-            return item.title.toLowerCase().includes(searchText.toLowerCase());
+            return item.DisplayName.toLowerCase().includes(
+              searchText.toLowerCase()
+            );
           })}
           renderItem={(item) => (
             <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
@@ -183,8 +172,8 @@ const Locations = (props) => {
                 mode="vertical"
                 items={[
                   {
-                    key: item.id,
-                    label: item.title,
+                    key: item.Tiploc,
+                    label: item.DisplayName,
                     defaultSelectedKeys: [],
                     children: [
                       {
@@ -252,14 +241,15 @@ const Locations = (props) => {
                 size="large"
                 dataSource={data.filter((item) => {
                   return (
-                    item.title
-                      .toLowerCase()
-                      .includes(searchText.toLowerCase()) &&
+                    item.DisplayName.toLowerCase().includes(
+                      searchText.toLowerCase()
+                    ) &&
                     !trackedLocations.some(
-                      (trackedItem) => trackedItem.id === item.id
+                      (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
                 })}
+                pagination={true}
                 renderItem={(item) => (
                   <Popconfirm
                     icon={null}
@@ -271,8 +261,8 @@ const Locations = (props) => {
                     cancelText="No"
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.tiploc}</div>
+                      <div>{item.DisplayName}</div>
+                      <div>{item.Tiploc}</div>
                     </List.Item>
                   </Popconfirm>
                 )}
@@ -283,11 +273,11 @@ const Locations = (props) => {
                 size="large"
                 dataSource={recentlyUsed.filter((item) => {
                   return (
-                    item.title
-                      .toLowerCase()
-                      .includes(searchText.toLowerCase()) &&
+                    item.DisplayName.toLowerCase().includes(
+                      searchText.toLowerCase()
+                    ) &&
                     !trackedLocations.some(
-                      (trackedItem) => trackedItem.id === item.id
+                      (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
                 })}
@@ -304,8 +294,8 @@ const Locations = (props) => {
                     cancelText="Remove from recently used"
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.tiploc}</div>
+                      <div>{item.DisplayName}</div>
+                      <div>{item.Tiploc}</div>
                     </List.Item>
                   </Popconfirm>
                 )}
