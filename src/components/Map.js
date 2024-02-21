@@ -8,7 +8,7 @@ import "../css/leaflet.css";
 import stationIcon from "../assets/icons/trainStation.png";
 
 // Hooks
-import { useTheme } from "../hooks/ThemeHooks";
+import { useSettings } from "../hooks/SettingsHook";
 import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 
 const Map = (props) => {
@@ -17,7 +17,7 @@ const Map = (props) => {
   const zoomControls = "bottomleft"; // TODO: Settings
 
   const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
-  const { theme: themeFromHook } = useTheme();
+  const { theme: themeFromHook } = useSettings();
   // const [map, setMap] = useState(null);
 
   const center = props.center || [54.091617, -1.793925];
