@@ -26,17 +26,17 @@ const tiploc = [
 
 const APIUsageExample = () => {
   // Define the context to use
-  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
+  const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
   const { tiplocDetail, setTiplocDetail } = UseRoutes();
   const { trainDetail, setTrainDetail } = UseTrackedRoutes();
   const [loading, setLoading] = useState(false);
 
-  // Only run this once after setSelectedTiploc is loaded
+  // Only run this once after setTrackedLocations is loaded
   // useEffect(() => {
   //   // Add the tiploc into selected tiploc
   //   // Normally this should be dynamic, currently hard coded as this is example
-  //   setSelectedTiploc(tiploc);
-  // }, [setSelectedTiploc]);
+  //   setTrackedLocations(tiploc);
+  // }, [setTrackedLocations]);
 
   // Function to get tiploc details
   const fetchTiplocDetails = async () => {
@@ -44,7 +44,7 @@ const APIUsageExample = () => {
     // The functions should be await as data can take some time to load
     // We toggle the loading when fetching the data so the user know it is loading trying to fix
     setLoading(true);
-    setTiplocDetail(await tiplocAPI(selectedTiploc));
+    setTiplocDetail(await tiplocAPI(trackedLocations));
     setLoading(false);
   };
   // Function to get train details
@@ -61,7 +61,7 @@ const APIUsageExample = () => {
   const logDetails = () => {
     console.log("-------------------------");
     console.log("Selected tiploc");
-    console.log(selectedTiploc);
+    console.log(trackedLocations);
     console.log("Tiploc detail");
     console.log(tiplocDetail);
     console.log("Train detail");

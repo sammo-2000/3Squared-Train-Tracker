@@ -11,26 +11,48 @@ import {
 } from "antd";
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
+
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
+
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
+import { UseRoutes } from "../../hooks/RoutesHook.js";
+import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
+
+import { tiplocAPI } from "../../api/tiplocAPI.js";
+import { detailAPI } from "../../api/detailAPI.js";
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
-  const [trackedRoutes, setTrackedRoutes] = useState([]);
-  //---------------------------------------------
-  const { trainDetail } = UseTrackedRoutes();
-  //console.log(trainDetail);
-  useEffect(() => {
-    trainDetail.forEach((element) => {
-      console.log(element.schedule[0].tiploc);
-      console.log(element.schedule[element.schedule.length - 1].tiploc);
-    });
-  }, [trainDetail]);
 
-  //-----------------------------------------------
+  const { trackedLocations } = UseTrackedLocations();
+  const [trackedRoutes, setTrackedRoutes] = UseTrackedRoutes([]);
+  const [routes, setRoutes] = UseRoutes([]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // All tiplocs
+  //       const allRoutes = await tiplocAPI(trackedLocations);
+
+  //       let _trackedLocations = [];
+  //       allRoutes.forEach((element) => {
+  //         _trackedLocations.push(element.tiploc.activationId);
+  //       });
+
+  //       const filteredRoutes = allRoutes.filter(
+  //         (element) => !_trackedLocations.includes(element.activationId)
+  //       );
+
+  //       setRoutes(filteredRoutes.reverse());
+  //     } catch (error) {}
+  //   };
+
+  //   fetchData();
+  // }, [trackedLocations]);
+
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
   };
@@ -39,50 +61,41 @@ const Routes = (props) => {
     setChildrenDrawer(false);
   };
 
-  const onTrackedRouteClick = (item, e) => {
-    if (e.key === "view-details") {
-      console.log("View details");
-      console.log(item);
-    }
+  // const onTrackedRouteClick = (item, e) => {
+  //   if (e.key === "view-details") {
+  //     console.log("View details");
+  //     console.log(item);
+  //   }
 
-    if (e.key === "stop-tracking") {
-      setTrackedRoutes(trackedRoutes.filter((i) => i !== item));
+  //   if (e.key === "stop-tracking") {
+  //     setTrackedRoutes(trackedRoutes.filter((i) => i !== item));
 
-      message.success("Route removed from tracking.");
-    }
-  };
+  //     message.success("Route removed from tracking.");
+  //   }
+  // };
 
-  const setTracked = (item) => {
-    setChildrenDrawer(false);
-    setSearchText("");
-    setRecentlyUsed([...recentlyUsed, item]);
-    setTrackedRoutes([...trackedRoutes, item]);
+  // const setTracked = (item) => {
+  //   setChildrenDrawer(false);
+  //   setSearchText("");
+  //   setRecentlyUsed([...recentlyUsed, item]);
+  //   setTrackedRoutes([...trackedRoutes, item]);
 
-    notification.open({
-      message: "Routes loading...",
-      description:
-        "Please wait while we load routes from your selected location. This may take a few seconds.",
-      duration: 5,
-    });
+  //   notification.open({
+  //     message: "Routes loading...",
+  //     description:
+  //       "Please wait while we load routes from your selected location. This may take a few seconds.",
+  //     duration: 5,
+  //   });
 
-    if (recentlyUsed.length === 0) {
-      notification.open({
-        message: "Recently Used",
-        description:
-          "A location was added to your recently used list, you can disable this in settings.",
-        duration: 5,
-      });
-    }
-  };
-
-  // Sample Data
-  const data = [
-    {
-      id: "1",
-      title: "Liverpool - Sheffield",
-      time: "14:00",
-    },
-  ];
+  //   if (recentlyUsed.length === 0) {
+  //     notification.open({
+  //       message: "Recently Used",
+  //       description:
+  //         "A location was added to your recently used list, you can disable this in settings.",
+  //       duration: 5,
+  //     });
+  //   }
+  // };
 
   return (
     <>
@@ -145,9 +158,9 @@ const Routes = (props) => {
           }}
         />
 
-        <List
+        {/* <List
           size="large"
-          dataSource={trainDetail.map((element) => ({
+          dataSource={trackedRoutes.map((element) => ({
             title: `${element.schedule[0].tiploc} --- ${
               element.schedule[element.schedule.length - 1].tiploc
             }`,
@@ -181,7 +194,7 @@ const Routes = (props) => {
               </List.Item>
             </Popconfirm>
           )}
-        />
+        /> */}
         <Drawer
           title="Track New Route"
           closable={true}
@@ -224,10 +237,10 @@ const Routes = (props) => {
               marginBottom: "0px",
             }}
           >
-            <Tabs.TabPane key={0} tab="All">
+            {/* <Tabs.TabPane key={0} tab="All">
               <List
                 size="large"
-                dataSource={trainDetail.map((element) => ({
+                dataSource={routes.map((element) => ({
                   title: `${element.schedule[0].tiploc} --- ${
                     element.schedule[element.schedule.length - 1].tiploc
                   }`,
@@ -249,8 +262,8 @@ const Routes = (props) => {
                   </Popconfirm>
                 )}
               />
-            </Tabs.TabPane>
-            <Tabs.TabPane key={1} tab="Recently Used">
+            </Tabs.TabPane> */}
+            {/* <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
                 dataSource={recentlyUsed.filter((item) => {
@@ -282,7 +295,7 @@ const Routes = (props) => {
                   </Popconfirm>
                 )}
               />
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
           </Tabs>
         </Drawer>
       </Drawer>

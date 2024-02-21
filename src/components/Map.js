@@ -16,7 +16,7 @@ const Map = (props) => {
 
   const zoomControls = "bottomleft"; // TODO: Settings
 
-  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
+  const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
   const { theme: themeFromHook } = useTheme();
   // const [map, setMap] = useState(null);
 
@@ -40,25 +40,28 @@ const Map = (props) => {
   const [coordinates, setCoordinates] = useState([]);
 
   // useEffect(() => {
-  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc);
-  //   if (selectedTiploc.length > 0) {
-  //     selectedTiploc.forEach(tiploc => {
+  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", trackedLocations);
+  //   if (trackedLocations.length > 0) {
+  //     trackedLocations.forEach(tiploc => {
   //       const position = { lat: tiploc.Latitude, lng: tiploc.Longitude}
   //       coordinates.push(position);
   //       console.log("Coordinates", coordinates);
   //     });
   //   }
-  // }, [selectedTiploc]);
+  // }, [trackedLocations]);
 
   useEffect(() => {
-    console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc);
-    if (selectedTiploc.length > 0) {
-      const newCoordinates = selectedTiploc.map((tiploc) => {
+    console.log(
+      "Selected tiploiuihwuithturiewheuiohuiyuiuic",
+      trackedLocations
+    );
+    if (trackedLocations.length > 0) {
+      const newCoordinates = trackedLocations.map((tiploc) => {
         return { lat: tiploc.Latitude, lng: tiploc.Longitude };
       });
       setCoordinates(newCoordinates);
     }
-  }, [selectedTiploc]);
+  }, [trackedLocations]);
 
   const mapThemes = {
     1: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",

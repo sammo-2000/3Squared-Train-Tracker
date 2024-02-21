@@ -24,7 +24,7 @@ import { saveCookie } from "../cookies";
 import { BranchesOutlined } from "@ant-design/icons";
 
 const Locations = (props) => {
-  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
+  const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
@@ -48,7 +48,7 @@ const Locations = (props) => {
     }
 
     if (e.key === "stop-tracking") {
-      setSelectedTiploc(selectedTiploc.filter((i) => i !== item));
+      setTrackedLocations(trackedLocations.filter((i) => i !== item));
 
       messageApi.open({
         type: "success",
@@ -58,14 +58,14 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
-    saveCookie("tiploc", selectedTiploc);
-  }, [selectedTiploc]);
+    saveCookie("tiploc", trackedLocations);
+  }, [trackedLocations]);
 
   const setTracked = (item) => {
     setChildrenDrawer(false);
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
-    setSelectedTiploc([...selectedTiploc, item]);
+    setTrackedLocations([...trackedLocations, item]);
 
     // Inform user that routes are being loaded
     notificationApi.open({
@@ -76,7 +76,7 @@ const Locations = (props) => {
     });
 
     // Inform user that item was added to their 'recently used' list
-    if (recentlyUsed.length === 0 && selectedTiploc.length === 0) {
+    if (recentlyUsed.length === 0 && trackedLocations.length === 0) {
       notificationApi.open({
         message: "Recently Used",
         description:
@@ -171,7 +171,7 @@ const Locations = (props) => {
             defaultPageSize: paginationSize,
             showSizeChanger: false,
           }}
-          dataSource={selectedTiploc.filter((item) => {
+          dataSource={trackedLocations.filter((item) => {
             return item.DisplayName.toLowerCase().includes(
               searchText.toLowerCase()
             );
@@ -283,7 +283,7 @@ const Locations = (props) => {
                       item.Tiploc.toLowerCase().includes(
                         searchText.toLowerCase()
                       )) &&
-                    !selectedTiploc.some(
+                    !trackedLocations.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
@@ -325,7 +325,7 @@ const Locations = (props) => {
                     item.DisplayName.toLowerCase().includes(
                       searchText.toLowerCase()
                     ) &&
-                    !selectedTiploc.some(
+                    !trackedLocations.some(
                       (trackedItem) => trackedItem.Tiploc === item.Tiploc
                     )
                   );
