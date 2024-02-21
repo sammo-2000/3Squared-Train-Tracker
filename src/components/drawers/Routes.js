@@ -34,7 +34,6 @@ const Routes = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(trackedLocations);
         // All routes information from the API
         const _routes = await tiplocAPI(trackedLocations);
 

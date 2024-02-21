@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Marker } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import stationIcon from "../assets/icons/trainStation.png";
 
@@ -21,7 +21,14 @@ const StationMarker = () => {
           key={location.id}
           position={[location.Latitude, location.Longitude]}
           icon={trainStationIcon}
-        />
+        >
+            <Popup>
+                <div>
+                    <h1>{location.Name}</h1>
+                    <p>{location.Description}</p>
+                </div>
+            </Popup>
+        </Marker>
       ))}
     </>
   );
