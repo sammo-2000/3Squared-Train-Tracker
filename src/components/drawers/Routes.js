@@ -137,9 +137,11 @@ const Routes = (props) => {
 
         <List
           size="large"
-          dataSource={trackedRoutes.filter((item) => {
-            return item.title.toLowerCase().includes(searchText.toLowerCase());
-          })}
+          dataSource={trainDetail.map((element) => ({
+              
+            title: `${element.schedule[0].tiploc} --- ${element.schedule[element.schedule.length - 1].tiploc}`,
+           
+          }))}
           renderItem={(item) => (
             <Popconfirm
               icon={null}
@@ -203,35 +205,30 @@ const Routes = (props) => {
             }}
           >
             <Tabs.TabPane key={0} tab="All">
-              <List
-                size="large"
-                dataSource={data.filter((item) => {
-                  return (
-                    item.title
-                      .toLowerCase()
-                      .includes(searchText.toLowerCase()) &&
-                    !trackedRoutes.some(
-                      (trackedItem) => trackedItem.id === item.id
-                    )
-                  );
-                })}
-                renderItem={(item) => (
-                  <Popconfirm
-                    icon={null}
-                    title="Track location"
-                    description="Are you sure you want to track this route??"
-                    onConfirm={() => setTracked(item)}
-                    onCancel={null}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.time}</div>
-                    </List.Item>
-                  </Popconfirm>
-                )}
-              />
+            <List
+              size="large"
+              dataSource={trainDetail.map((element) => ({
+              
+                title: `${element.schedule[0].tiploc} --- ${element.schedule[element.schedule.length - 1].tiploc}`,
+               
+              }))}
+              renderItem={(item) => (
+                <Popconfirm
+                  icon={null}
+                  title="Track Route"
+                  description="Are you sure you want to track this Route?"
+                  onConfirm={() => setTracked(item)}
+                  onCancel={null}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                    <div>{item.title}</div>
+                    <div>{item.time}</div>
+                  </List.Item>
+                </Popconfirm>
+              )}
+            />
             </Tabs.TabPane>
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
