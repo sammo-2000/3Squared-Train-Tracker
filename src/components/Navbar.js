@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 
 import logo from "../assets/icons/3squared.jpg";
-import Icon from "./Icons"
+import Icon from "./Icons";
 
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
 
 import Settings from "./modals/Settings";
+import { useSettings } from "../hooks/SettingsHook";
 
 import { notification, message } from "antd";
 
 function Navbar() {
+  const { settings, setSettings } = useSettings();
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [settingsModal, setSettingsModal] = useState(false);
   const [notificationApi, notificationContext] = notification.useNotification();
@@ -39,7 +41,11 @@ function Navbar() {
       <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
 
       <div className="">
-        <div className="absolute top-0 left-0 flex flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-100 overflow-hidden divide-x-2 divide-y-2 divide-gray-100">
+        <div
+          className={`absolute top-0 ${
+            settings.menuDirection.value === "right" ? "right-0" : "left-0"
+          } flex flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-100 overflow-hidden divide-x-2 divide-y-2 divide-gray-100`}
+        >
           <div
             key={0}
             className="flex items-center flex-col transition-color duration-200 justify-center p-4 text-gray-700"
@@ -51,7 +57,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer text-gray-700"
             onClick={() => setActiveDrawer("locations")}
           >
-            <Icon iconName="location"/>
+            <Icon iconName="location" />
             <span>Locations</span>
           </div>
           {/* <div
@@ -67,7 +73,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
             onClick={() => setActiveDrawer("routes")}
           >
-            <Icon iconName="route"/>
+            <Icon iconName="route" />
             <span>Routes</span>
           </div>
           <div
@@ -75,7 +81,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
             onClick={() => setSettingsModal(settingsModal ? false : true)}
           >
-            <Icon iconName="settings"/>
+            <Icon iconName="settings" />
             <span>Settings</span>
           </div>
         </div>
