@@ -1,9 +1,19 @@
-import { Drawer, Space, Button, Input, Tabs, List, Popconfirm, notification, message } from "antd";
+import {
+  Drawer,
+  Space,
+  Button,
+  Input,
+  Tabs,
+  List,
+  Popconfirm,
+  notification,
+  message,
+} from "antd";
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
-import {UseTrainDetail} from "../../hooks/TrainDetailHook.js"
+import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -11,16 +21,15 @@ const Routes = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedRoutes, setTrackedRoutes] = useState([]);
   //---------------------------------------------
-  const {trainDetail} = UseTrainDetail();
+  const { trainDetail } = UseTrackedRoutes();
   //console.log(trainDetail);
-    useEffect(() => {
-      trainDetail.forEach(element => { 
-        console.log(element.schedule[0].tiploc);
-        console.log(element.schedule[element.schedule.length - 1].tiploc)
-      });
-      
-    },[trainDetail]);
-  
+  useEffect(() => {
+    trainDetail.forEach((element) => {
+      console.log(element.schedule[0].tiploc);
+      console.log(element.schedule[element.schedule.length - 1].tiploc);
+    });
+  }, [trainDetail]);
+
   //-----------------------------------------------
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -51,14 +60,16 @@ const Routes = (props) => {
 
     notification.open({
       message: "Routes loading...",
-      description: "Please wait while we load routes from your selected location. This may take a few seconds.",
+      description:
+        "Please wait while we load routes from your selected location. This may take a few seconds.",
       duration: 5,
     });
 
     if (recentlyUsed.length === 0) {
       notification.open({
         message: "Recently Used",
-        description: "A location was added to your recently used list, you can disable this in settings.",
+        description:
+          "A location was added to your recently used list, you can disable this in settings.",
         duration: 5,
       });
     }
@@ -71,7 +82,6 @@ const Routes = (props) => {
       title: "Liverpool - Sheffield",
       time: "14:00",
     },
-   
   ];
 
   return (
@@ -81,7 +91,7 @@ const Routes = (props) => {
         onClose={() => {
           props.setActiveDraw("menu");
         }}
-        open={true}
+        open={props.isOpen}
         placement="left"
         closeIcon={<img alt="back" src={back} />}
         bodyStyle={{ padding: 0 }}
@@ -138,32 +148,42 @@ const Routes = (props) => {
         <List
           size="large"
           dataSource={trainDetail.map((element) => ({
-              
-            title: `${element.schedule[0].tiploc} --- ${element.schedule[element.schedule.length - 1].tiploc}`,
-           
+            title: `${element.schedule[0].tiploc} --- ${
+              element.schedule[element.schedule.length - 1].tiploc
+            }`,
+
+            startLocation: `${element.schedule[0].location}`,
+            endLocation: `${
+              element.schedule[element.schedule.length - 1].location
+            }`,
+            departure: `${element.schedule[0].departure}`,
+            arrival: `${element.schedule[element.schedule.length - 1].arrival}`,
           }))}
+          style={{ size: "200px" }}
           renderItem={(item) => (
             <Popconfirm
               icon={null}
               title="Track Route"
               description="Are you sure you want to track this Route?"
-              onConfirm={() => setTracked(item)}
+              // onConfirm={}
               onCancel={null}
               okText="Yes"
               cancelText="No"
             >
               <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                <div>{item.title}</div>
-                <div>{item.time} </div>
+                <div style={{ fontSize: "18px", display: "block" }}>
+                  <h2 style={{ fontWeight: "bold" }}>
+                    {item.startLocation} ------- {item.endLocation}
+                  </h2>
+                  <div>Departure: {item.departure}</div>
+                  <div>Arrival: {item.arrival}</div>
+                </div>
               </List.Item>
             </Popconfirm>
           )}
         />
-
-      </Drawer>
-
-      <Drawer
-          title="Track New Location"
+        <Drawer
+          title="Track New Route"
           closable={true}
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
@@ -205,30 +225,30 @@ const Routes = (props) => {
             }}
           >
             <Tabs.TabPane key={0} tab="All">
-            <List
-              size="large"
-              dataSource={trainDetail.map((element) => ({
-              
-                title: `${element.schedule[0].tiploc} --- ${element.schedule[element.schedule.length - 1].tiploc}`,
-               
-              }))}
-              renderItem={(item) => (
-                <Popconfirm
-                  icon={null}
-                  title="Track Route"
-                  description="Are you sure you want to track this Route?"
-                  onConfirm={() => setTracked(item)}
-                  onCancel={null}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                    <div>{item.title}</div>
-                    <div>{item.time}</div>
-                  </List.Item>
-                </Popconfirm>
-              )}
-            />
+              <List
+                size="large"
+                dataSource={trainDetail.map((element) => ({
+                  title: `${element.schedule[0].tiploc} --- ${
+                    element.schedule[element.schedule.length - 1].tiploc
+                  }`,
+                }))}
+                renderItem={(item) => (
+                  <Popconfirm
+                    icon={null}
+                    title="Track Route"
+                    description="Are you sure you want to track this Route?"
+                    onConfirm={() => setTracked(item)}
+                    onCancel={null}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+                      <div>{item.title}</div>
+                      <div>{item.time}</div>
+                    </List.Item>
+                  </Popconfirm>
+                )}
+              />
             </Tabs.TabPane>
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
@@ -265,6 +285,7 @@ const Routes = (props) => {
             </Tabs.TabPane>
           </Tabs>
         </Drawer>
+      </Drawer>
     </>
   );
 };
