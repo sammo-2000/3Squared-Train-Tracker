@@ -28,30 +28,43 @@ const Routes = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
 
   const { trackedLocations } = UseTrackedLocations();
-  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
   const { routes, setRoutes } = UseRoutes();
+  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // All tiplocs
-        const allRoutes = await tiplocAPI(trackedLocations);
+        console.log(trackedLocations);
+        // All routes information from the API
+        const _routes = await tiplocAPI(trackedLocations);
 
-        let _trackedLocations = [];
-        allRoutes.forEach((element) => {
-          _trackedLocations.push(element.tiploc.activationId);
+        // Exit if not array
+        if (!Array.isArray(_routes)) return;
+
+        // Keep track of tracked routes ID & operators
+        let _trackedRoutesID = [];
+        let _trackedRoutesOperators = [];
+        trackedRoutes.forEach((__trackedRoute) => {
+          _trackedRoutesID.push(__trackedRoute.tiploc.activationId);
+          _trackedRoutesOperators.push(__trackedRoute.tiploc.toc_Name);
         });
 
-        const filteredRoutes = allRoutes.filter(
-          (element) => !_trackedLocations.includes(element.activationId)
+        // Filter routes to only include those that are not already tracked
+        const _filteredRoutes = _routes.filter(
+          (route) =>
+            !_trackedRoutesID.includes(route.activationId) &&
+            !_trackedRoutesOperators.includes(route.toc_Name)
         );
 
-        setRoutes(filteredRoutes.reverse());
-      } catch (error) {}
+        // Set the routes to the filtered routes
+        setRoutes(_filteredRoutes.reverse());
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchData();
-  }, [trackedLocations]);
+  }, [trackedLocations, trackedRoutes]);
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -158,7 +171,7 @@ const Routes = (props) => {
           }}
         />
 
-        <List
+        {/* <List
           size="large"
           dataSource={trackedRoutes.map((element) => ({
             title: `${element.schedule[0].tiploc} --- ${
@@ -194,7 +207,7 @@ const Routes = (props) => {
               </List.Item>
             </Popconfirm>
           )}
-        />
+        /> */}
         <Drawer
           title="Track New Route"
           closable={true}
@@ -237,7 +250,7 @@ const Routes = (props) => {
               marginBottom: "0px",
             }}
           >
-            <Tabs.TabPane key={0} tab="All">
+            {/* <Tabs.TabPane key={0} tab="All">
               <List
                 size="large"
                 dataSource={routes.map((element) => ({
@@ -262,7 +275,7 @@ const Routes = (props) => {
                   </Popconfirm>
                 )}
               />
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
