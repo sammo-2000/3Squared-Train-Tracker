@@ -4,7 +4,7 @@ import App from "./App";
 import "./css/tailwind.css";
 
 // Hooks
-import { SelectedTiplocProvider } from "./contexts/SelectedTiplocContext.js";
+import { TrackedLocationsProvider } from "./contexts/TrackedLocationsContext.js";
 import { TrackedRoutesProvider } from "./contexts/TrackedRoutesContext.js";
 import { RoutesProvider } from "./contexts/RoutesContext.js";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -15,13 +15,13 @@ root.render(
   <React.StrictMode>
     <TrackedRoutesProvider>
       <RoutesProvider>
-        <SelectedTiplocProvider>
+        <TrackedLocationsProvider>
           <ThemeProvider>
             <MapProvider>
               <App />
             </MapProvider>
           </ThemeProvider>
-        </SelectedTiplocProvider>
+        </TrackedLocationsProvider>
       </RoutesProvider>
     </TrackedRoutesProvider>
   </React.StrictMode>

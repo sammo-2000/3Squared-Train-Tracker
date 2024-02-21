@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { UseSelectedTiploc } from "../hooks/TrackedLocationsHook";
+import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 
 const TiplocCookies = () => {
-  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
 
   const loadTrackedLocations = () => {
     const cookies = Cookies.get();

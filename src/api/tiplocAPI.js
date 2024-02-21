@@ -1,5 +1,5 @@
 // Use this function to get full details about the tiploc
-// You must pass in SelectedTiplocContext as an argument
+// You must pass in TrackedLocationsContext as an argument
 // You will get array of object that contain tiploc information
 // Save this details in RoutesContext
 

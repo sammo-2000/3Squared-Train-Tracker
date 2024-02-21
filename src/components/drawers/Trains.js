@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 
-import { UseSelectedTiploc } from "../../hooks/TrackedLocationsHook.js";
+import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
 import { UseRoutes } from "../../hooks/RoutesHook.js";
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 
@@ -28,7 +28,7 @@ const Trains = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedTrains, setTrackedTrains] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
-  const { selectedTiploc } = UseSelectedTiploc();
+  const { selectedTiploc } = UseTrackedLocations();
   const { tiplocDetail, setTiplocDetail } = UseRoutes();
   const { trainDetail, setTrainDetail } = UseTrackedRoutes();
   const [emptyDetail, setEmptyDetail] = useState(true);

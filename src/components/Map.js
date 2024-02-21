@@ -9,14 +9,14 @@ import stationIcon from "../assets/icons/trainStation.png";
 
 // Hooks
 import { useTheme } from "../hooks/ThemeHooks";
-import { UseSelectedTiploc } from "../hooks/TrackedLocationsHook";
+import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 
 const Map = (props) => {
   const { map, setMap } = useMap();
 
   const zoomControls = "bottomleft"; // TODO: Settings
 
-  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
   const { theme: themeFromHook } = useTheme();
   // const [map, setMap] = useState(null);
 

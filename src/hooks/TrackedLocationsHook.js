@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { SelectedTiplocContext } from "../contexts/SelectedTiplocContext.js";
+import { TrackedLocationsContext } from "../contexts/TrackedLocationsContext.js";
 
-export const UseSelectedTiploc = () => {
-  const context = useContext(SelectedTiplocContext);
+export const UseTrackedLocations = () => {
+  const context = useContext(TrackedLocationsContext);
 
   if (!context)
     throw new Error(
-      "UseSelectedTiploc must be used within a SelectedTiplocProvider"
+      "UseTrackedLocations must be used within a TrackedLocationsProvider"
     );
 
   return context;

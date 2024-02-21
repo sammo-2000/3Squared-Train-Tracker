@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Loading from "./components/Loading";
 
 // Import hooks to use them globally
-import { UseSelectedTiploc } from "./hooks/TrackedLocationsHook";
+import { UseTrackedLocations } from "./hooks/TrackedLocationsHook";
 import { UseRoutes } from "./hooks/RoutesHook";
 import { UseTrackedRoutes } from "./hooks/TrackedRoutesHook";
 
@@ -26,7 +26,7 @@ const tiploc = [
 
 const APIUsageExample = () => {
   // Define the context to use
-  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
   const { tiplocDetail, setTiplocDetail } = UseRoutes();
   const { trainDetail, setTrainDetail } = UseTrackedRoutes();
   const [loading, setLoading] = useState(false);
