@@ -31,19 +31,6 @@ const Storage = () => {
 
     }, [routes]);
 
-    // Write Tracked Routes
-    // useEffect(() => {
-    //     if (trackedRoutes.length > 0) {
-    //         trackedRoutes.forEach(trackedRoute => {
-    //           const cookieName = "route_" + trackedRoute.tiploc.activationId;
-    //             if (!Cookies.get(cookieName)) {
-    //             Cookies.set(cookieName, JSON.stringify(trackedRoute));
-    //           }
-    //         // console.log("Tracked Route Obj:", trackedRoute)
-    //         // console.log("Tracked Route aid:", trackedRoute.tiploc.activationId)
-    //         });
-    //     }
-    // }, [trackedRoutes]);
     useEffect(() => {
         if (trackedRoutes.length > 0) {
             trackedRoutes.forEach(trackedRoute => {
@@ -54,50 +41,6 @@ const Storage = () => {
             });
         }
     }, [trackedRoutes]);
-
-    // // Set up cookies when page first load
-    // useEffect(() => {
-
-    //     const cookies = Cookies.get();
-    //     Object.keys(cookies).forEach(cookieName => {
-
-    //         // Read Tracked Locations
-    //         if (cookieName.startsWith('tiploc_')) {
-    //             const tiploc = JSON.parse(cookies[cookieName]);
-    //             const tiplocName = cookieName.replace('tiploc_', ''); // Remove 'tiploc_' prefix
-    //             setTrackedLocations(prevLocations => {
-    //             if (!prevLocations.some(location => location.Tiploc === tiplocName)) {
-        
-    //                 return [...prevLocations, tiploc];
-    //             }
-    //             return prevLocations;
-    //             });
-    //         }
-
-    //         // Read Routes
-    //         if (cookieName.startsWith('route_')) {
-
-    //         }
-
-    //         // Read Tracked Routes
-    //         if (cookieName.startsWith('tracked_route_')) {
-    //             Object.keys(localStorage).forEach((key) => {
-    //                 if (key.startsWith('tracked_route_')) {
-    //                     const trackedRoute = JSON.parse(localStorage.getItem(key));
-    //                     const activationId = key.replace('tracked_route_', ''); // Remove 'route_' prefix
-    //                     setTrackedRoutes(prevRoutes => {
-    //                         if (!prevRoutes.some(route => route.tiploc.activationId === activationId)) {
-    //                             console.log("Tracked Route new:", trackedRoutes)
-    //                             return [...prevRoutes, trackedRoute];
-    //                         }
-    //                         return prevRoutes;
-    //                     });
-    //                 }
-    //             });
-    //         }
-    //     });
-
-    // }, [setTrackedLocations, setRoutes, setTrackedRoutes]);
 
     useEffect(() => {
         // Read Tracked Locations from cookies
@@ -122,7 +65,6 @@ const Storage = () => {
                 const activationId = key.replace('tracked_route_', ''); // Remove 'route_' prefix
                 setTrackedRoutes(prevRoutes => {
                     if (!prevRoutes.some(route => route.tiploc.activationId === activationId)) {
-                        console.log("Tracked Route new:", trackedRoutes)
                         return [...prevRoutes, trackedRoute];
                     }
                     return prevRoutes;
@@ -135,7 +77,3 @@ const Storage = () => {
 }
 
 export default Storage
-
-const loadTrackedLocations = () => { 
-
-  }
