@@ -13,7 +13,7 @@ import {
 
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
-import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook";
+import { UseSelectedTiploc } from "../../hooks/TrackedLocationsHook";
 import { useMap } from "../../hooks/MapHook";
 
 import search from "../../assets/icons/search.svg";
@@ -61,7 +61,7 @@ const Locations = (props) => {
 
   useEffect(() => {
     if (selectedTiploc.length > 0) {
-      selectedTiploc.forEach(tiploc => {
+      selectedTiploc.forEach((tiploc) => {
         const cookieName = "tiploc_" + tiploc.Tiploc;
         if (!Cookies.get(cookieName)) {
           Cookies.set(cookieName, JSON.stringify(tiploc));

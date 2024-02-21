@@ -1,39 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { UseSelectedTiploc } from "../hooks/SelectedTiplocHook";
+import { UseSelectedTiploc } from "../hooks/TrackedLocationsHook";
 
 const TiplocCookies = () => {
-    const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
 
-    const loadTrackedLocations = () => { 
-        const cookies = Cookies.get();
-        Object.keys(cookies).forEach(cookieName => {
-          if (cookieName.startsWith('tiploc_')) {
-            const tiploc = JSON.parse(cookies[cookieName]);
-            const tiplocName = cookieName.replace('tiploc_', ''); // Remove 'tiploc_' prefix
-            setSelectedTiploc(prevLocations => {
-              if (!prevLocations.some(location => location.Tiploc === tiplocName)) {
-
-                return [...prevLocations, tiploc];
-              }
-              return prevLocations;
-            });
+  const loadTrackedLocations = () => {
+    const cookies = Cookies.get();
+    Object.keys(cookies).forEach((cookieName) => {
+      if (cookieName.startsWith("tiploc_")) {
+        const tiploc = JSON.parse(cookies[cookieName]);
+        const tiplocName = cookieName.replace("tiploc_", ""); // Remove 'tiploc_' prefix
+        setSelectedTiploc((prevLocations) => {
+          if (
+            !prevLocations.some((location) => location.Tiploc === tiplocName)
+          ) {
+            return [...prevLocations, tiploc];
           }
+          return prevLocations;
         });
       }
+    });
+  };
 
-  return (
-    <>
-    {loadTrackedLocations()}
-    </>
-  );
+  return <>{loadTrackedLocations()}</>;
 };
 
+export default TiplocCookies;
 
-
-export default TiplocCookies
-
-// const loadTrackedLocations = () => { 
+// const loadTrackedLocations = () => {
 //     const cookies = Cookies.get();
 //     Object.keys(cookies).forEach(cookieName => {
 //       if (data.some(location => location.Tiploc.toString() === cookieName)) {
@@ -42,4 +37,3 @@ export default TiplocCookies
 //       }
 //     });
 //   }
-  

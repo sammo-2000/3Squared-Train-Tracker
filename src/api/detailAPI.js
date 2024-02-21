@@ -1,13 +1,13 @@
 // Use this function to get full details about the train
-// You must pass in TiplocDetailContext as an argument
+// You must pass in RoutesContext as an argument
 // You will get array of object that contain tiploc, movment and schedule information
-// Save this details in TrainDetailContext
+// Save this details in TrackedRoutesContext
 
-const detailAPI = async (TiplocDetailContext) => {
+const detailAPI = async (RoutesContext) => {
   let data = [];
 
   await Promise.all(
-    TiplocDetailContext.map(async (element) => {
+    RoutesContext.map(async (element) => {
       const movment = await getMovementData(
         element.activationId,
         element.scheduleId

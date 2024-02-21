@@ -1,9 +1,19 @@
-import { Drawer, Space, Button, Input, Tabs, List, Popconfirm, notification, message } from "antd";
+import {
+  Drawer,
+  Space,
+  Button,
+  Input,
+  Tabs,
+  List,
+  Popconfirm,
+  notification,
+  message,
+} from "antd";
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
-import {UseTrainDetail} from "../../hooks/TrainDetailHook.js"
+import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 
 const Routes = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -11,16 +21,15 @@ const Routes = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedRoutes, setTrackedRoutes] = useState([]);
   //---------------------------------------------
-  const {trainDetail} = UseTrainDetail();
+  const { trainDetail } = UseTrackedRoutes();
   //console.log(trainDetail);
-    useEffect(() => {
-      trainDetail.forEach(element => { 
-        console.log(element.schedule[0].tiploc);
-        console.log(element.schedule[element.schedule.length - 1].tiploc)
-      });
-      
-    },[trainDetail]);
-  
+  useEffect(() => {
+    trainDetail.forEach((element) => {
+      console.log(element.schedule[0].tiploc);
+      console.log(element.schedule[element.schedule.length - 1].tiploc);
+    });
+  }, [trainDetail]);
+
   //-----------------------------------------------
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -51,14 +60,16 @@ const Routes = (props) => {
 
     notification.open({
       message: "Routes loading...",
-      description: "Please wait while we load routes from your selected location. This may take a few seconds.",
+      description:
+        "Please wait while we load routes from your selected location. This may take a few seconds.",
       duration: 5,
     });
 
     if (recentlyUsed.length === 0) {
       notification.open({
         message: "Recently Used",
-        description: "A location was added to your recently used list, you can disable this in settings.",
+        description:
+          "A location was added to your recently used list, you can disable this in settings.",
         duration: 5,
       });
     }
@@ -71,7 +82,6 @@ const Routes = (props) => {
       title: "Liverpool - Sheffield",
       time: "14:00",
     },
-   
   ];
 
   return (
@@ -157,11 +167,8 @@ const Routes = (props) => {
             </Popconfirm>
           )}
         />
-
-      </Drawer>
-
-      <Drawer
-          title="Track New Location"
+        <Drawer
+          title="Track New Route"
           closable={true}
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
@@ -268,6 +275,7 @@ const Routes = (props) => {
             </Tabs.TabPane>
           </Tabs>
         </Drawer>
+      </Drawer>
     </>
   );
 };

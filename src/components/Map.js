@@ -9,12 +9,12 @@ import stationIcon from "../assets/icons/trainStation.png";
 
 // Hooks
 import { useTheme } from "../hooks/ThemeHooks";
-import { UseSelectedTiploc } from "../hooks/SelectedTiplocHook";
+import { UseSelectedTiploc } from "../hooks/TrackedLocationsHook";
 
 const Map = (props) => {
   const { map, setMap } = useMap();
 
-  const zoomControls = "topleft"; // TODO: Settings
+  const zoomControls = "bottomleft"; // TODO: Settings
 
   const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
   const { theme: themeFromHook } = useTheme();
@@ -40,21 +40,21 @@ const Map = (props) => {
   const [coordinates, setCoordinates] = useState([]);
 
   // useEffect(() => {
-  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
+  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc);
   //   if (selectedTiploc.length > 0) {
   //     selectedTiploc.forEach(tiploc => {
   //       const position = { lat: tiploc.Latitude, lng: tiploc.Longitude}
   //       coordinates.push(position);
-  //       console.log("Coordinates", coordinates);  
+  //       console.log("Coordinates", coordinates);
   //     });
   //   }
   // }, [selectedTiploc]);
 
   useEffect(() => {
-    console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
+    console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc);
     if (selectedTiploc.length > 0) {
-      const newCoordinates = selectedTiploc.map(tiploc => {
-        return { lat: tiploc.Latitude, lng: tiploc.Longitude};
+      const newCoordinates = selectedTiploc.map((tiploc) => {
+        return { lat: tiploc.Latitude, lng: tiploc.Longitude };
       });
       setCoordinates(newCoordinates);
     }
@@ -95,7 +95,11 @@ const Map = (props) => {
             <Marker key={index} position={[position.lat, position.lng]} icon={trainStationIcon} />
           ))} */}
           {coordinates.map((coordinate, index) => (
-            <Marker key={index} position={[coordinate.lat, coordinate.lng]} icon={trainStationIcon} />
+            <Marker
+              key={index}
+              position={[coordinate.lat, coordinate.lng]}
+              icon={trainStationIcon}
+            />
           ))}
         </MapContainer>
       </div>
