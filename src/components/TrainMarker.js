@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Marker } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import stationIcon from "../assets/icons/close.svg";
+import "../css/leaflet.css";
 
 // Hooks & Contexts
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
+
+const moment = require("moment");
 
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
@@ -30,6 +33,10 @@ const TrainMarker = () => {
           lastMovement.latLong.latitude,
           lastMovement.latLong.longitude,
         ],
+        activationId: element.tiploc.activationId,
+        originLocation: element.tiploc.originLocation,
+        destinationLocation: element.tiploc.destinationLocation,
+        lastReported: element.tiploc.lastReported,
       });
     });
 
@@ -38,12 +45,33 @@ const TrainMarker = () => {
 
   return (
     <>
-      {trainLocations.map((location) => (
+      {trainLocations.map((train) => (
         <Marker
-          key={location.id}
-          position={location.position}
+          key={train.id}
+          position={train.position}
           icon={trainStationIcon}
-        />
+        >
+          <Popup closeButton={false}>
+            <div className="flex flex-col gap-2">
+              <div>
+                <strong>Activation ID </strong>
+                {train.activationId}
+              </div>
+              <div>
+                <strong>Origin </strong>
+                {train.originLocation}
+              </div>
+              <div>
+                <strong>Destination </strong>
+                {train.destinationLocation}
+              </div>
+              <div>
+                <strong>Last Report </strong>
+                {moment(train.lastReported).format("h:mm A")}
+              </div>
+            </div>
+          </Popup>
+        </Marker>
       ))}
     </>
   );
