@@ -28,30 +28,43 @@ const Routes = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
 
   const { trackedLocations } = UseTrackedLocations();
-  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
   const { routes, setRoutes } = UseRoutes();
+  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // All tiplocs
-        const allRoutes = await tiplocAPI(trackedLocations);
+        console.log(trackedLocations);
+        // All routes information from the API
+        const _routes = await tiplocAPI(trackedLocations);
 
-        let _trackedLocations = [];
-        allRoutes.forEach((element) => {
-          _trackedLocations.push(element.tiploc.activationId);
+        // Exit if not array
+        if (!Array.isArray(_routes)) return;
+
+        // Keep track of tracked routes ID & operators
+        let _trackedRoutesID = [];
+        let _trackedRoutesOperators = [];
+        trackedRoutes.forEach((__trackedRoute) => {
+          _trackedRoutesID.push(__trackedRoute.tiploc.activationId);
+          _trackedRoutesOperators.push(__trackedRoute.tiploc.toc_Name);
         });
 
-        const filteredRoutes = allRoutes.filter(
-          (element) => !_trackedLocations.includes(element.activationId)
+        // Filter routes to only include those that are not already tracked
+        const _filteredRoutes = _routes.filter(
+          (route) =>
+            !_trackedRoutesID.includes(route.activationId) &&
+            !_trackedRoutesOperators.includes(route.toc_Name)
         );
 
-        setRoutes(filteredRoutes.reverse());
-      } catch (error) {}
+        // Set the routes to the filtered routes
+        setRoutes(_filteredRoutes.reverse());
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchData();
-  }, [trackedLocations]);
+  }, [trackedLocations, trackedRoutes]);
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -158,7 +171,7 @@ const Routes = (props) => {
           }}
         />
 
-        <List
+        {/* <List
           size="large"
           dataSource={trackedRoutes.map((element) => ({
             title: `${element.schedule[0].tiploc} --- ${
@@ -194,7 +207,7 @@ const Routes = (props) => {
               </List.Item>
             </Popconfirm>
           )}
-        />
+        /> */}
         <Drawer
           title="Track New Route"
           closable={true}
@@ -238,30 +251,42 @@ const Routes = (props) => {
             }}
           >
             <Tabs.TabPane key={0} tab="All">
-              <List
-                size="large"
-                dataSource={routes.map((element) => ({
-                  title: `${element.schedule[0].tiploc} --- ${
-                    element.schedule[element.schedule.length - 1].tiploc
-                  }`,
-                }))}
-                renderItem={(item) => (
-                  <Popconfirm
-                    icon={null}
-                    title="Track Route"
-                    description="Are you sure you want to track this Route?"
-                    onConfirm={() => setTracked(item)}
-                    onCancel={null}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.time}</div>
+              {routes && routes.length > 0 && (
+                <List
+                  size="large"
+                  dataSource={routes}
+                  renderItem={(item) => (
+                    <List.Item
+                      className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
+                        item.lastReportedType === "CANCELLED"
+                          ? "bg-red-100 hover:bg-red-200"
+                          : ""
+                      }
+                ${
+                  item.lastReportedType === "TERMINATED"
+                    ? "bg-yellow-100 hover:bg-yellow-200"
+                    : ""
+                }`}
+                    >
+                      <button
+                        className="flex flex-col gap-2 w-full items-start"
+                        onClick={async () => {
+                          let _trainDetail = [...routes];
+                          const _newData = await detailAPI([item]);
+                          _trainDetail = [..._trainDetail, ..._newData];
+                          await setRoutes(_trainDetail);
+                        }}
+                      >
+                        <p className="text-blue-400 text-sm">{item.headCode}</p>
+                        <p className="font-bold text-lg">
+                          {item.originLocation} - {item.destinationLocation}
+                        </p>
+                        <p className="text-gray-500">{item.lastReportedType}</p>
+                      </button>
                     </List.Item>
-                  </Popconfirm>
-                )}
-              />
+                  )}
+                />
+              )}
             </Tabs.TabPane>
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
