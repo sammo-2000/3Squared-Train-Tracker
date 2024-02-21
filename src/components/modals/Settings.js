@@ -6,6 +6,7 @@ import { Dropdown, message, Space, Input } from "antd";
 
 // Settings Hook
 import { useSettings } from "../../hooks/SettingsHook";
+import { useMap } from "../../hooks/MapHook";
 
 // Cookies
 import Cookies from "js-cookie";
@@ -119,6 +120,7 @@ const NumericInput = (props) => {
 
 const Settings = (props) => {
   const { settings, setSettings } = useSettings();
+  const { map, setMap } = useMap();
 
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
@@ -134,21 +136,71 @@ const Settings = (props) => {
   const [superZoom, setSuperZoom] = useState(settings.superZoom);
 
   useEffect(() => {
-    setSettings({
-      ...settings,
-      defaultZoom: defaultZoom,
-      inspectZoom: inspectZoom,
-      superZoom: superZoom,
-    });
-  }, [defaultZoom, inspectZoom, superZoom]);
+    if (defaultZoom > 1) {
+      setSettings({
+        ...settings,
+        defaultZoom: defaultZoom,
+      });
+
+      if (map) {
+        setMap(
+          map.setView(
+            [settings.defaultCenter.Latitude, settings.defaultCenter.Longitude],
+            defaultZoom
+          )
+        );
+      }
+    }
+  }, [defaultZoom]);
+
+  useEffect(() => {
+    if (inspectZoom > 1) {
+      setSettings({
+        ...settings,
+        inspectZoom: inspectZoom,
+      });
+      if (map) {
+        setMap(
+          map.setView(
+            [settings.defaultCenter.Latitude, settings.defaultCenter.Longitude],
+            inspectZoom
+          )
+        );
+      }
+    }
+  }, [inspectZoom]);
+
+  useEffect(() => {
+    if (superZoom > 1) {
+      setSettings({
+        ...settings,
+        superZoom: superZoom,
+      });
+      if (map) {
+        setMap(
+          map.setView(
+            [settings.defaultCenter.Latitude, settings.defaultCenter.Longitude],
+            superZoom
+          )
+        );
+      }
+    }
+  }, [superZoom]);
 
   const handleOk = (e) => {
     props.setOpen(false);
   };
 
   const handleCancel = (e) => {
-    console.log(e);
     props.setOpen(false);
+    if (map) {
+      setMap(
+        map.setView(
+          [settings.defaultCenter.Latitude, settings.defaultCenter.Longitude],
+          settings.defaultZoom
+        )
+      );
+    }
   };
   const onStart = (_event, uiData) => {
     const { clientWidth, clientHeight } = window.document.documentElement;
@@ -246,7 +298,7 @@ const Settings = (props) => {
                 <dt class="text-sm font-medium leading-6 text-gray-900">
                   Zoom Controls
                 </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd class="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Dropdown
                     menu={{
                       items: zoomControlsPositionItems,
@@ -279,7 +331,7 @@ const Settings = (props) => {
                 <dt class="text-sm font-medium leading-6 text-gray-900">
                   Default Zoom
                 </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd class="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <NumericInput
                     popPrefix="x"
                     popSuffix=" zoom, we recommend x6 to x12"
@@ -287,6 +339,12 @@ const Settings = (props) => {
                     onChange={setDefaultZoom}
                   />
                 </dd>
+                <div className="col-span-2 col-start-2">
+                  <p class="text-sm font-normal leading-6 text-gray-500">
+                    This represents the default zoom level that your map will
+                    initially display.
+                  </p>
+                </div>
               </div>
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm font-medium leading-6 text-gray-900">
@@ -300,6 +358,12 @@ const Settings = (props) => {
                     onChange={setInspectZoom}
                   />
                 </dd>
+                <div className="col-span-2 col-start-2">
+                  <p class="text-sm font-normal leading-6 text-gray-500">
+                    Provides a closer view of an object, offering a more
+                    detailed and magnified perspective for focused examination.
+                  </p>
+                </div>
               </div>
               <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt class="text-sm font-medium leading-6 text-gray-900">
@@ -313,6 +377,12 @@ const Settings = (props) => {
                     onChange={setSuperZoom}
                   />
                 </dd>
+                <div className="col-span-2 col-start-2">
+                  <p class="text-sm font-normal leading-6 text-gray-500">
+                    Provides a super close view of an object, offering a more
+                    very detailed and magnified perspective.
+                  </p>
+                </div>
               </div>
             </dl>
           </TabPane>

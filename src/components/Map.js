@@ -38,7 +38,7 @@ const Map = (props) => {
   let theme = settings.mapTheme;
 
   useEffect(() => {
-    console.log(settings);
+    // console.log(settings);
     if (map) {
       map.zoomControl.setPosition(settings.zoomControlsPosition.value);
     }

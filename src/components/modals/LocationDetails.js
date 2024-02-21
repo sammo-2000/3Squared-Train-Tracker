@@ -23,12 +23,14 @@ const LocationDetails = (props) => {
   const location = props.location;
   const { map, setMap } = useMap();
 
-  // TODO: Add to settings
-  const defaultMapCoords = [54.091617, -1.793925];
-
   const handleCancel = (e) => {
     props.setOpen(false);
-    setMap(map.setView(defaultMapCoords, settings.defaultZoom));
+    setMap(
+      map.setView(
+        [settings.defaultCenter.Latitude, settings.defaultCenter.Longitude],
+        settings.defaultZoom
+      )
+    );
   };
 
   const onStart = (_event, uiData) => {

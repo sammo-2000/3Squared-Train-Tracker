@@ -34,3 +34,9 @@
     background: rgba(0, 0, 0, 0.1)  !important;
     transition: all ease-in .2s;
   }
+
+  .ant-tabs-content-holder {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding-right: 2rem;
+  }
