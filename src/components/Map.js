@@ -39,17 +39,6 @@ const Map = (props) => {
 
   const [coordinates, setCoordinates] = useState([]);
 
-  // useEffect(() => {
-  //   console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
-  //   if (selectedTiploc.length > 0) {
-  //     selectedTiploc.forEach(tiploc => {
-  //       const position = { lat: tiploc.Latitude, lng: tiploc.Longitude}
-  //       coordinates.push(position);
-  //       console.log("Coordinates", coordinates);  
-  //     });
-  //   }
-  // }, [selectedTiploc]);
-
   useEffect(() => {
     console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc); 
     if (selectedTiploc.length > 0) {
