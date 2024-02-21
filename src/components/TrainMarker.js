@@ -51,6 +51,7 @@ const TrainMarker = () => {
           key={train.id}
           position={train.position}
           icon={trainStationIcon}
+          riseOnHover={true}
         >
           <Popup closeButton={false}>
             <div className="min-w-[250px]">

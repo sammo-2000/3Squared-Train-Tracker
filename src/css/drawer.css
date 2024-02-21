@@ -35,7 +35,7 @@
     transition: all ease-in .2s;
   }
 
-  .ant-tabs-content-holder {
+  .ant-modal-body .ant-tabs-content-holder {
     max-height: 75vh;
     overflow-y: auto;
     padding-right: 2rem;

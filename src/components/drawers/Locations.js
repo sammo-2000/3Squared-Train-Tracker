@@ -16,8 +16,9 @@ import { useState, useEffect } from "react";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 import { useMap } from "../../hooks/MapHook";
 import { useSettings } from "../../hooks/SettingsHook";
+import { findNotification } from "../../contexts/SettingsContext";
 
-import Icon from "../Icons"
+import Icon from "../Icons";
 
 import LocationDetails from "../modals/LocationDetails";
 
@@ -38,11 +39,12 @@ const Locations = (props) => {
   const { map, setMap } = useMap();
   const { settings, setSettings } = useSettings();
 
-  // TODO: Add to Settings
-  const direction = "left";
-  const paginationSize = 250; // worse device = go lower - performance preset
-
-  const defaultMapCoords = [54.091617, -1.793925];
+  const validateNotification = (notification) => {
+    return (
+      settings.notifications.includes(notification) ||
+      settings.notifications.includes("locations")
+    );
+  };
 
   const onTrackedLocationClick = (item, e) => {
     if (e.key === "view-details") {
@@ -52,12 +54,13 @@ const Locations = (props) => {
 
     if (e.key === "stop-tracking") {
       setTrackedLocations(trackedLocations.filter((i) => i !== item));
-      Cookies.remove("tiploc_" + item.Tiploc);
 
-      messageApi.open({
-        type: "success",
-        content: "Location removed from tracking.",
-      });
+      if (validateNotification("showLocationStopTrack")) {
+        messageApi.open({
+          type: "success",
+          content: "Location removed from tracking",
+        });
+      }
     }
   };
 
@@ -68,15 +71,22 @@ const Locations = (props) => {
     setTrackedLocations([...trackedLocations, item]);
 
     // Inform user that routes are being loaded
-    notificationApi.open({
-      message: "Routes loading...",
-      description:
-        "Please wait while we load routes from your selected location. This may take a few seconds.",
-      duration: 5,
-    });
+
+    if (validateNotification("showRoutesLoading")) {
+      notificationApi.open({
+        message: "Routes loading...",
+        description:
+          "Please wait while we load routes from your selected location. This may take a few seconds.",
+        duration: 5,
+      });
+    }
 
     // Inform user that item was added to their 'recently used' list
-    if (recentlyUsed.length === 0 && trackedLocations.length === 0) {
+    if (
+      validateNotification("showRecents") &&
+      recentlyUsed.length === 0 &&
+      trackedLocations.length === 0
+    ) {
       notificationApi.open({
         message: "Recently Used",
         description:
@@ -112,8 +122,8 @@ const Locations = (props) => {
           props.setActiveDraw("menu");
         }}
         open={props.isOpen}
-        placement={direction}
-        closeIcon={<Icon iconName ="back"/> }
+        placement={settings.menuDirection.value}
+        closeIcon={<Icon iconName="back" />}
         bodyStyle={{ padding: 0 }}
         extra={
           <Space>
@@ -122,7 +132,7 @@ const Locations = (props) => {
               shape="circle"
               type="primary"
               ghost
-              icon={<Icon iconName ="add"/> }
+              icon={<Icon iconName="add" />}
             ></Button>
           </Space>
         }
@@ -131,7 +141,7 @@ const Locations = (props) => {
           placeholder="Search Locations"
           allowClear
           size="large"
-          prefix={<Icon iconName ="search"/> }
+          prefix={<Icon iconName="search" />}
           onChange={(e) => setSearchText(e.target.value)}
           style={{
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -146,7 +156,7 @@ const Locations = (props) => {
         <List
           size="large"
           pagination={{
-            defaultPageSize: paginationSize,
+            defaultPageSize: settings.pagination.value,
             showSizeChanger: false,
           }}
           dataSource={trackedLocations.filter((item) => {
@@ -166,7 +176,15 @@ const Locations = (props) => {
                 );
               }}
               onMouseLeave={(e) => {
-                setMap(map.setView(defaultMapCoords, 6));
+                setMap(
+                  map.setView(
+                    [
+                      settings.defaultCenter.Latitude,
+                      settings.defaultCenter.Longitude,
+                    ],
+                    6
+                  )
+                );
               }}
             >
               <Menu
@@ -210,15 +228,15 @@ const Locations = (props) => {
           closable={true}
           onClose={() => setChildrenDrawer(false)}
           open={childrenDrawer}
-          placement={direction}
-          closeIcon={<Icon iconName ="close"/> }
+          placement={settings.menuDirection.value}
+          closeIcon={<Icon iconName="close" />}
           bodyStyle={{ padding: 0 }}
         >
           <Input
             placeholder="Search TIPLOCs"
             allowClear
             size="large"
-            prefix={<Icon iconName ="search"/> }
+            prefix={<Icon iconName="search" />}
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
@@ -258,7 +276,7 @@ const Locations = (props) => {
                   );
                 })}
                 pagination={{
-                  defaultPageSize: paginationSize,
+                  defaultPageSize: settings.pagination.value,
                   showSizeChanger: false,
                 }}
                 renderItem={(item) => (
@@ -286,7 +304,7 @@ const Locations = (props) => {
               <List
                 size="large"
                 pagination={{
-                  defaultPageSize: paginationSize,
+                  defaultPageSize: settings.pagination.value,
                   showSizeChanger: false,
                 }}
                 dataSource={recentlyUsed.filter((item) => {

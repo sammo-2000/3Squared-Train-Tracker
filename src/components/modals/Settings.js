@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal, Tabs, Typography, Tooltip } from "antd";
+import { Button, Modal, Tabs, Typography, Tooltip, TreeSelect } from "antd";
 import { SettingOutlined, DownOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space, Input } from "antd";
 
@@ -59,6 +59,67 @@ const zoomControlsPositionItems = [
     label: "Bottom Right",
     key: "4",
     value: "bottomright",
+  },
+];
+
+const paginationItems = [
+  {
+    label: "50 Items - Low Performance",
+    key: "1",
+    value: 50,
+  },
+  {
+    label: "100 Items - Medium Performance",
+    key: "2",
+    value: 100,
+  },
+  {
+    label: "250 Items - High Performance",
+    key: "3",
+    value: 250,
+  },
+];
+
+const menuDirectionItems = [
+  {
+    label: "Left Aligned",
+    key: "1",
+    value: "left",
+  },
+  {
+    label: "Right Aligned",
+    key: "2",
+    value: "right",
+  },
+];
+
+const notificationsOptions = [
+  {
+    title: "Locations",
+    value: "locations",
+    key: "0",
+    children: [
+      {
+        title: "A location added to recently used list notification",
+        value: "showRecents",
+        key: "0-0",
+      },
+      {
+        title: "Loading routes from selected location notification",
+        value: "showRoutesLoading",
+        key: "0-1",
+      },
+      {
+        title: "Locations loaded notification",
+        value: "showLocationLoaded",
+        key: "0-2",
+      },
+      {
+        title: "Location removed from tracking notification",
+        value: "showLocationStopTrack",
+        key: "0-3",
+      },
+    ],
   },
 ];
 
@@ -214,6 +275,36 @@ const Settings = (props) => {
       top: -targetRect.top + uiData.y,
       bottom: clientHeight - (targetRect.bottom - uiData.y),
     });
+  };
+
+  const getMyLocation = () => {
+    const location = window.navigator && window.navigator.geolocation;
+
+    if (location) {
+      location.getCurrentPosition(
+        (position) => {
+          setSettings({
+            ...settings,
+            defaultCenter: {
+              Longitude: position.coords.longitude,
+              Latitude: position.coords.latitude,
+            },
+          });
+          setMap(
+            map.setView(
+              [
+                settings.defaultCenter.Latitude,
+                settings.defaultCenter.Longitude,
+              ],
+              settings.superZoom
+            )
+          );
+        },
+        (error) => {
+          console.log("error", error);
+        }
+      );
+    }
   };
 
   return (
@@ -384,25 +475,148 @@ const Settings = (props) => {
                   </p>
                 </div>
               </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Default Center
+                </dt>
+                <dd class="flex gap-x-2 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Input
+                    value={settings.defaultCenter.Latitude}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        defaultCenter: {
+                          ...settings.defaultCenter,
+                          Latitude: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <Input
+                    value={settings.defaultCenter.Longitude}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        defaultCenter: {
+                          ...settings.defaultCenter,
+                          Longitude: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </dd>
+                <div className="col-span-2 col-start-2 justify-end flex">
+                  <Button onClick={getMyLocation}>Set location to local</Button>
+                </div>
+              </div>
             </dl>
           </TabPane>
-          <TabPane tab={<span>Advanced</span>} key="2">
-            <span>
-              Clear Cookies
-              <Button
-                style={{ marginLeft: "8px" }}
-                type="primary"
-                danger
-                onClick={() => {
-                  for (const cookieName in allCookies) {
-                    Cookies.remove(cookieName);
-                  }
-                  window.location.reload();
-                }}
-              >
-                Clear
-              </Button>
-            </span>
+          <TabPane tab={<span>Menus</span>} key="2">
+            <dl class="divide-y divide-gray-100">
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Pagination
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: paginationItems,
+                      selectable: true,
+                      selectedKeys: settings.pagination.key,
+                      onClick: (pagination) => {
+                        const paginationItem = paginationItems.find(
+                          (item) => item.key === pagination.key
+                        );
+
+                        message.info(`${paginationItem.label} activated`);
+                        setSettings({
+                          ...settings,
+                          pagination: paginationItem,
+                        });
+                        Cookies.set("pagination", paginationItem);
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {settings.pagination.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Alignment
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: menuDirectionItems,
+                      selectable: true,
+                      selectedKeys: settings.menuDirection.key,
+                      onClick: (menuDirection) => {
+                        const menuDirectionItem = menuDirectionItems.find(
+                          (item) => item.key === menuDirection.key
+                        );
+
+                        message.info(`${menuDirectionItem.label} activated`);
+                        setSettings({
+                          ...settings,
+                          menuDirection: menuDirectionItem,
+                        });
+                        Cookies.set("alignment", menuDirectionItem);
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {settings.menuDirection.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+            </dl>
+          </TabPane>
+          <TabPane tab={<span>Notifications</span>} key="3">
+            <TreeSelect
+              className="w-full"
+              treeData={notificationsOptions}
+              value={settings.notifications}
+              treeCheckable
+              showCheckedStrategy={TreeSelect.SHOW_PARENT}
+              placeholder="Please select notifications to enable/disable"
+              onChange={(e) => {
+                console.log(e);
+                setSettings({ ...settings, notifications: e });
+              }}
+            />
+          </TabPane>
+          <TabPane tab={<span>Advanced</span>} key="4">
+            <dl class="divide-y divide-gray-100">
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Cookies
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex justify-end">
+                  <Button
+                    style={{ marginLeft: "8px" }}
+                    danger
+                    onClick={() => {
+                      for (const cookieName in allCookies) {
+                        Cookies.remove(cookieName);
+                      }
+                      window.location.reload();
+                    }}
+                  >
+                    Reset
+                  </Button>
+                </dd>
+              </div>
+            </dl>
           </TabPane>
         </Tabs>
       </Modal>
