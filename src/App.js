@@ -6,13 +6,13 @@ import Navbar from "./components/Navbar";
 import Storage from "./components/Storage";
 
 // import APIUsageExample from "./APIUsageExample";
-import APIUsageExample from "./APIUsageExample";
+// import APIUsageExample from "./APIUsageExample";
 
 const App = () => {
   return (
     <>
       {/* Turn this on for testing API usage */}
-      <APIUsageExample />
+      {/* <APIUsageExample /> */}
       <Map />
       <Navbar />
       <Storage />
