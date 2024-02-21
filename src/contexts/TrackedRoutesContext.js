@@ -3,9 +3,9 @@ import { useState, createContext } from "react";
 export const TrackedRoutesContext = createContext();
 
 export const TrackedRoutesProvider = ({ children }) => {
-  const [trainDetail, setTrainDetail] = useState([]);
+  const [trackedRoutes, setTrackedRoutes] = useState([]);
   return (
-    <TrackedRoutesContext.Provider value={{ trainDetail, setTrainDetail }}>
+    <TrackedRoutesContext.Provider value={{ trackedRoutes, setTrackedRoutes }}>
       {children}
     </TrackedRoutesContext.Provider>
   );

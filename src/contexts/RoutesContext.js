@@ -3,9 +3,9 @@ import { useState, createContext } from "react";
 export const RoutesContext = createContext();
 
 export const RoutesProvider = ({ children }) => {
-  const [tiplocDetail, setTiplocDetail] = useState([]);
+  const [routes, setRoutes] = useState([]);
   return (
-    <RoutesContext.Provider value={{ tiplocDetail, setTiplocDetail }}>
+    <RoutesContext.Provider value={{ routes, setRoutes }}>
       {children}
     </RoutesContext.Provider>
   );

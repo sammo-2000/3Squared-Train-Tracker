@@ -28,30 +28,30 @@ const Routes = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
 
   const { trackedLocations } = UseTrackedLocations();
-  const [trackedRoutes, setTrackedRoutes] = UseTrackedRoutes([]);
-  const [routes, setRoutes] = UseRoutes([]);
+  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
+  const { routes, setRoutes } = UseRoutes();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // All tiplocs
-  //       const allRoutes = await tiplocAPI(trackedLocations);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // All tiplocs
+        const allRoutes = await tiplocAPI(trackedLocations);
 
-  //       let _trackedLocations = [];
-  //       allRoutes.forEach((element) => {
-  //         _trackedLocations.push(element.tiploc.activationId);
-  //       });
+        let _trackedLocations = [];
+        allRoutes.forEach((element) => {
+          _trackedLocations.push(element.tiploc.activationId);
+        });
 
-  //       const filteredRoutes = allRoutes.filter(
-  //         (element) => !_trackedLocations.includes(element.activationId)
-  //       );
+        const filteredRoutes = allRoutes.filter(
+          (element) => !_trackedLocations.includes(element.activationId)
+        );
 
-  //       setRoutes(filteredRoutes.reverse());
-  //     } catch (error) {}
-  //   };
+        setRoutes(filteredRoutes.reverse());
+      } catch (error) {}
+    };
 
-  //   fetchData();
-  // }, [trackedLocations]);
+    fetchData();
+  }, [trackedLocations]);
 
   const showChildrenDrawer = () => {
     setChildrenDrawer(true);
@@ -61,41 +61,41 @@ const Routes = (props) => {
     setChildrenDrawer(false);
   };
 
-  // const onTrackedRouteClick = (item, e) => {
-  //   if (e.key === "view-details") {
-  //     console.log("View details");
-  //     console.log(item);
-  //   }
+  const onTrackedRouteClick = (item, e) => {
+    if (e.key === "view-details") {
+      console.log("View details");
+      console.log(item);
+    }
 
-  //   if (e.key === "stop-tracking") {
-  //     setTrackedRoutes(trackedRoutes.filter((i) => i !== item));
+    if (e.key === "stop-tracking") {
+      setTrackedRoutes(trackedRoutes.filter((i) => i !== item));
 
-  //     message.success("Route removed from tracking.");
-  //   }
-  // };
+      message.success("Route removed from tracking.");
+    }
+  };
 
-  // const setTracked = (item) => {
-  //   setChildrenDrawer(false);
-  //   setSearchText("");
-  //   setRecentlyUsed([...recentlyUsed, item]);
-  //   setTrackedRoutes([...trackedRoutes, item]);
+  const setTracked = (item) => {
+    setChildrenDrawer(false);
+    setSearchText("");
+    setRecentlyUsed([...recentlyUsed, item]);
+    setTrackedRoutes([...trackedRoutes, item]);
 
-  //   notification.open({
-  //     message: "Routes loading...",
-  //     description:
-  //       "Please wait while we load routes from your selected location. This may take a few seconds.",
-  //     duration: 5,
-  //   });
+    notification.open({
+      message: "Routes loading...",
+      description:
+        "Please wait while we load routes from your selected location. This may take a few seconds.",
+      duration: 5,
+    });
 
-  //   if (recentlyUsed.length === 0) {
-  //     notification.open({
-  //       message: "Recently Used",
-  //       description:
-  //         "A location was added to your recently used list, you can disable this in settings.",
-  //       duration: 5,
-  //     });
-  //   }
-  // };
+    if (recentlyUsed.length === 0) {
+      notification.open({
+        message: "Recently Used",
+        description:
+          "A location was added to your recently used list, you can disable this in settings.",
+        duration: 5,
+      });
+    }
+  };
 
   return (
     <>
@@ -158,7 +158,7 @@ const Routes = (props) => {
           }}
         />
 
-        {/* <List
+        <List
           size="large"
           dataSource={trackedRoutes.map((element) => ({
             title: `${element.schedule[0].tiploc} --- ${
@@ -194,7 +194,7 @@ const Routes = (props) => {
               </List.Item>
             </Popconfirm>
           )}
-        /> */}
+        />
         <Drawer
           title="Track New Route"
           closable={true}
@@ -237,7 +237,7 @@ const Routes = (props) => {
               marginBottom: "0px",
             }}
           >
-            {/* <Tabs.TabPane key={0} tab="All">
+            <Tabs.TabPane key={0} tab="All">
               <List
                 size="large"
                 dataSource={routes.map((element) => ({
@@ -262,8 +262,8 @@ const Routes = (props) => {
                   </Popconfirm>
                 )}
               />
-            </Tabs.TabPane> */}
-            {/* <Tabs.TabPane key={1} tab="Recently Used">
+            </Tabs.TabPane>
+            <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
                 dataSource={recentlyUsed.filter((item) => {
@@ -295,7 +295,7 @@ const Routes = (props) => {
                   </Popconfirm>
                 )}
               />
-            </Tabs.TabPane> */}
+            </Tabs.TabPane>
           </Tabs>
         </Drawer>
       </Drawer>
