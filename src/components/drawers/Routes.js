@@ -250,32 +250,44 @@ const Routes = (props) => {
               marginBottom: "0px",
             }}
           >
-            {/* <Tabs.TabPane key={0} tab="All">
-              <List
-                size="large"
-                dataSource={routes.map((element) => ({
-                  title: `${element.schedule[0].tiploc} --- ${
-                    element.schedule[element.schedule.length - 1].tiploc
-                  }`,
-                }))}
-                renderItem={(item) => (
-                  <Popconfirm
-                    icon={null}
-                    title="Track Route"
-                    description="Are you sure you want to track this Route?"
-                    onConfirm={() => setTracked(item)}
-                    onCancel={null}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.time}</div>
+            <Tabs.TabPane key={0} tab="All">
+              {routes && routes.length > 0 && (
+                <List
+                  size="large"
+                  dataSource={routes}
+                  renderItem={(item) => (
+                    <List.Item
+                      className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
+                        item.lastReportedType === "CANCELLED"
+                          ? "bg-red-100 hover:bg-red-200"
+                          : ""
+                      }
+                ${
+                  item.lastReportedType === "TERMINATED"
+                    ? "bg-yellow-100 hover:bg-yellow-200"
+                    : ""
+                }`}
+                    >
+                      <button
+                        className="flex flex-col gap-2 w-full items-start"
+                        onClick={async () => {
+                          let _trainDetail = [...routes];
+                          const _newData = await detailAPI([item]);
+                          _trainDetail = [..._trainDetail, ..._newData];
+                          await setRoutes(_trainDetail);
+                        }}
+                      >
+                        <p className="text-blue-400 text-sm">{item.headCode}</p>
+                        <p className="font-bold text-lg">
+                          {item.originLocation} - {item.destinationLocation}
+                        </p>
+                        <p className="text-gray-500">{item.lastReportedType}</p>
+                      </button>
                     </List.Item>
-                  </Popconfirm>
-                )}
-              />
-            </Tabs.TabPane> */}
+                  )}
+                />
+              )}
+            </Tabs.TabPane>
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
