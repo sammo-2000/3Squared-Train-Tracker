@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Marker } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../assets/icons/close.svg";
+import stationIcon from "../assets/icons/trainIcon.png";
+import "../css/leaflet.css";
 
 // Hooks & Contexts
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 
+const moment = require("moment");
+
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
-  iconSize: [38, 38],
+  iconSize: [75, 75],
 });
 
 const TrainMarker = () => {
@@ -30,6 +33,11 @@ const TrainMarker = () => {
           lastMovement.latLong.latitude,
           lastMovement.latLong.longitude,
         ],
+        activationId: element.tiploc.activationId,
+        originLocation: element.tiploc.originLocation,
+        destinationLocation: element.tiploc.destinationLocation,
+        lastReported: element.tiploc.lastReported,
+        lastReportedType: element.tiploc.lastReportedType,
       });
     });
 
@@ -38,12 +46,33 @@ const TrainMarker = () => {
 
   return (
     <>
-      {trainLocations.map((location) => (
+      {trainLocations.map((train) => (
         <Marker
-          key={location.id}
-          position={location.position}
+          key={train.id}
+          position={train.position}
           icon={trainStationIcon}
-        />
+        >
+          <Popup closeButton={false}>
+            <div className="min-w-[250px]">
+              <strong className="text-lg text-center block">
+                {train.originLocation} - {train.destinationLocation}
+              </strong>
+              <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+              <div className="text-xs text-gray-500">
+                <strong>Activation ID </strong>
+                {train.activationId}
+              </div>
+              <div className="flex justify-between mt-4">
+                <div>
+                  <span>{train.lastReportedType}</span>
+                </div>
+                <div className="font-mono">
+                  {moment(train.lastReported).format("h:mm A")}
+                </div>
+              </div>
+            </div>
+          </Popup>
+        </Marker>
       ))}
     </>
   );

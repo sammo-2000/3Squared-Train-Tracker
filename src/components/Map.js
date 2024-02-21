@@ -5,7 +5,6 @@ import { useMap } from "../hooks/MapHook";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
-import stationIcon from "../assets/icons/trainStation.png";
 import LocationDetails from "./modals/LocationDetails";
 import TrainMarker from "./TrainMarker";
 
@@ -17,7 +16,6 @@ import StationMarker from "./StationMarker";
 const Map = (props) => {
   const { map, setMap } = useMap();
 
-  const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
   const { settings, setSettings } = useSettings();
   const [detailsModal, setDetailsModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
@@ -25,15 +23,6 @@ const Map = (props) => {
 
   const center = props.center || [54.091617, -1.793925];
   const zoom = props.zoom || 6;
-
-  // let theme;
-  // const themeCookie = Cookies.get("theme");
-
-  // if (themeCookie) {
-  //   theme = themeCookie;
-  // } else {
-  //   theme = settings.mapTheme;
-  // }
 
   let theme = settings.mapTheme;
 
