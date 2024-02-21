@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { useMap } from "../hooks/MapHook";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -54,6 +54,7 @@ const Map = (props) => {
     console.log("Selected tiploiuihwuithturiewheuiohuiyuiuic", selectedTiploc);
     if (selectedTiploc.length > 0) {
       const newCoordinates = selectedTiploc.map((tiploc) => {
+        console.log("Tiploc", tiploc);
         return { lat: tiploc.Latitude, lng: tiploc.Longitude };
       });
       setCoordinates(newCoordinates);
@@ -99,7 +100,11 @@ const Map = (props) => {
               key={index}
               position={[coordinate.lat, coordinate.lng]}
               icon={trainStationIcon}
-            />
+            >
+              <Popup>
+                <h1>{index}</h1>
+              </Popup>
+            </Marker>
           ))}
         </MapContainer>
       </div>
