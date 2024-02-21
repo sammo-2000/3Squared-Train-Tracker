@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal, Tabs } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
-import { Dropdown, message, Space } from "antd";
+import { Button, Modal, Tabs, Typography, Tooltip } from "antd";
+import { SettingOutlined, DownOutlined } from "@ant-design/icons";
+import { Dropdown, message, Space, Input } from "antd";
 
 // Settings Hook
 import { useSettings } from "../../hooks/SettingsHook";
@@ -20,34 +20,105 @@ const allCookies = Cookies.get();
 // }
 
 // Map Tilelayer Selector
-const items = [
+const themeItems = [
   {
     label: "Dark Theme",
     key: "1",
+    url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
   },
   {
     label: "Light Theme",
     key: "2",
+    url: "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}",
   },
   {
     label: "Realistic Theme",
     key: "3",
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  },
+];
+
+const zoomControlsPositionItems = [
+  {
+    label: "Top Left",
+    key: "1",
+    value: "topleft",
+  },
+  {
+    label: "Top Right",
+    key: "2",
+    value: "topright",
+  },
+  {
+    label: "Bottom Left",
+    key: "3",
+    value: "bottomleft",
+  },
+  {
+    label: "Bottom Right",
+    key: "4",
+    value: "bottomright",
   },
 ];
 
 const { TabPane } = Tabs;
 
-const Settings = (props) => {
-  const { setSettings } = useSettings();
-  useEffect(() => {
-    setSettings(2);
-  }, [setSettings]);
+const formatNumber = (value) => new Intl.NumberFormat().format(value);
 
-  const onClick = ({ key }) => {
-    message.info(`Click on item ${key}`);
-    setSettings(key);
-    Cookies.set("theme", key);
+const NumericInput = (props) => {
+  const { value, onChange, popSuffix, popPrefix } = props;
+  const handleChange = (e) => {
+    const { value: inputValue } = e.target;
+    const reg = /^-?\d*(\.\d*)?$/;
+    if (reg.test(inputValue) || inputValue === "" || inputValue === "-") {
+      onChange(inputValue);
+    }
   };
+
+  // '.' at the end or only '-' in the input box.
+  const handleBlur = () => {
+    if (value && typeof value === "string") {
+      let valueTemp = value;
+      if (value.charAt(value.length - 1) === "." || value === "-") {
+        valueTemp = value.slice(0, -1);
+      }
+      onChange(valueTemp.replace(/0*(\d+)/, "$1"));
+    }
+  };
+
+  const title = value ? (
+    <span className="numeric-input-title">
+      {popPrefix ? popPrefix : null}
+      {value !== "-" ? formatNumber(Number(value)) : "-"}
+      {popSuffix ? popSuffix : null}
+    </span>
+  ) : (
+    "Input a number"
+  );
+
+  return (
+    <Tooltip
+      trigger={["focus"]}
+      autoAdjustOverflow={true}
+      title={title}
+      placement="topLeft"
+      overlayClassName="numeric-input"
+    >
+      <Input
+        {...props}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder="Input a number"
+        maxLength={16}
+        suffix={false}
+        prefix={false}
+      />
+    </Tooltip>
+  );
+};
+
+const Settings = (props) => {
+  const { settings, setSettings } = useSettings();
 
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
@@ -57,6 +128,19 @@ const Settings = (props) => {
     right: 0,
   });
   const draggleRef = useRef(null);
+
+  const [defaultZoom, setDefaultZoom] = useState(settings.defaultZoom);
+  const [inspectZoom, setInspectZoom] = useState(settings.inspectZoom);
+  const [superZoom, setSuperZoom] = useState(settings.superZoom);
+
+  useEffect(() => {
+    setSettings({
+      ...settings,
+      defaultZoom: defaultZoom,
+      inspectZoom: inspectZoom,
+      superZoom: superZoom,
+    });
+  }, [defaultZoom, inspectZoom, superZoom]);
 
   const handleOk = (e) => {
     props.setOpen(false);
@@ -126,17 +210,111 @@ const Settings = (props) => {
         )}
       >
         <Tabs defaultActiveKey="1">
-          <TabPane tab={<span>General</span>} key="1">
-            <Dropdown
-              menu={{
-                items,
-                onClick,
-              }}
-            >
-              <a onClick={(e) => e.preventDefault()} href="#">
-                <Space>Map Themes</Space>
-              </a>
-            </Dropdown>
+          <TabPane tab={<span>Map</span>} key="1">
+            <dl class="divide-y divide-gray-100">
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Theme
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: themeItems,
+                      selectable: true,
+                      selectedKeys: settings.mapTheme.key,
+                      onClick: (theme) => {
+                        const themeItem = themeItems.find(
+                          (item) => item.key === theme.key
+                        );
+
+                        message.info(`${themeItem.label} activated`);
+                        setSettings({ ...settings, mapTheme: themeItem });
+                        Cookies.set("theme", themeItem);
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {settings.mapTheme.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Zoom Controls
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: zoomControlsPositionItems,
+                      selectable: true,
+                      selectedKeys: settings.zoomControlsPosition.key,
+                      onClick: (zoom) => {
+                        const zoomItem = zoomControlsPositionItems.find(
+                          (item) => item.key === zoom.key
+                        );
+
+                        message.info(`${zoomItem.label} activated`);
+                        setSettings({
+                          ...settings,
+                          zoomControlsPosition: zoomItem,
+                        });
+                        Cookies.set("theme", zoomItem);
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {settings.zoomControlsPosition.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Default Zoom
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <NumericInput
+                    popPrefix="x"
+                    popSuffix=" zoom, we recommend x6 to x12"
+                    value={defaultZoom}
+                    onChange={setDefaultZoom}
+                  />
+                </dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Inspect Zoom
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <NumericInput
+                    popPrefix="x"
+                    popSuffix=" zoom, we recommend x12 to x18"
+                    value={inspectZoom}
+                    onChange={setInspectZoom}
+                  />
+                </dd>
+              </div>
+              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">
+                  Super Zoom
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <NumericInput
+                    popPrefix="x"
+                    popSuffix=" zoom, we recommend x16 to x24"
+                    value={superZoom}
+                    onChange={setSuperZoom}
+                  />
+                </dd>
+              </div>
+            </dl>
           </TabPane>
           <TabPane tab={<span>Advanced</span>} key="2">
             <span>
