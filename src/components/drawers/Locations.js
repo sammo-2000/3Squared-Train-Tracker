@@ -15,6 +15,7 @@ import "../../css/drawer.css";
 import { useState, useEffect } from "react";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 import { useMap } from "../../hooks/MapHook";
+import { useSettings } from "../../hooks/SettingsHook";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
@@ -34,11 +35,12 @@ const Locations = (props) => {
   const [detailsModal, setDetailsModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
   const { map, setMap } = useMap();
+  const { settings, setSettings } = useSettings();
 
   // TODO: Add to Settings
   const direction = "left";
   const paginationSize = 250; // worse device = go lower - performance preset
-  const defaultNormalInspectZoom = 14;
+
   const defaultMapCoords = [54.091617, -1.793925];
 
   const onTrackedLocationClick = (item, e) => {
@@ -183,7 +185,7 @@ const Locations = (props) => {
                 setMap(
                   map.setView(
                     [item.Latitude, item.Longitude],
-                    defaultNormalInspectZoom
+                    settings.inspectZoom
                   )
                 );
               }}
