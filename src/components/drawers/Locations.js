@@ -20,7 +20,8 @@ import { useSettings } from "../../hooks/SettingsHook";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
-import { saveCookie } from "../cookies/saveCookies";
+
+import Cookies from "js-cookie";
 
 import { BranchesOutlined } from "@ant-design/icons";
 
@@ -51,6 +52,7 @@ const Locations = (props) => {
 
     if (e.key === "stop-tracking") {
       setTrackedLocations(trackedLocations.filter((i) => i !== item));
+      Cookies.remove("tiploc_" + item.Tiploc);
 
       messageApi.open({
         type: "success",
@@ -58,10 +60,6 @@ const Locations = (props) => {
       });
     }
   };
-
-  useEffect(() => {
-    saveCookie("tiploc", trackedLocations);
-  }, [trackedLocations]);
 
   const setTracked = (item) => {
     setChildrenDrawer(false);
