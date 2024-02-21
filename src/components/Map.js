@@ -9,7 +9,7 @@ import stationIcon from "../assets/icons/trainStation.png";
 import LocationDetails from "./modals/LocationDetails";
 
 // Hooks
-import { useTheme } from "../hooks/ThemeHooks";
+import { useSettings } from "../hooks/SettingsHook";
 import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import StationMarker from "./StationMarker";
 
@@ -19,7 +19,7 @@ const Map = (props) => {
   const zoomControls = "bottomleft"; // TODO: Settings
 
   const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
-  const { theme: themeFromHook } = useTheme();
+  const { theme: themeFromHook } = useSettings();
   const [detailsModal, setDetailsModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
   // const [map, setMap] = useState(null);
@@ -55,7 +55,6 @@ const Map = (props) => {
 
   return (
     <>
-
       <LocationDetails
         isOpen={detailsModal}
         setOpen={setDetailsModal}
