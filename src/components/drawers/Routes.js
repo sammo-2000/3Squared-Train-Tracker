@@ -151,20 +151,33 @@ const Routes = (props) => {
             title: `${element.schedule[0].tiploc} --- ${
               element.schedule[element.schedule.length - 1].tiploc
             }`,
+
+            startLocation: `${element.schedule[0].location}`,
+            endLocation: `${
+              element.schedule[element.schedule.length - 1].location
+            }`,
+            departure: `${element.schedule[0].departure}`,
+            arrival: `${element.schedule[element.schedule.length - 1].arrival}`,
           }))}
+          style={{ size: "200px" }}
           renderItem={(item) => (
             <Popconfirm
               icon={null}
               title="Track Route"
               description="Are you sure you want to track this Route?"
-              onConfirm={() => setTracked(item)}
+              // onConfirm={}
               onCancel={null}
               okText="Yes"
               cancelText="No"
             >
               <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                <div>{item.title}</div>
-                <div>{item.time} </div>
+                <div style={{ fontSize: "18px", display: "block" }}>
+                  <h2 style={{ fontWeight: "bold" }}>
+                    {item.startLocation} ------- {item.endLocation}
+                  </h2>
+                  <div>Departure: {item.departure}</div>
+                  <div>Arrival: {item.arrival}</div>
+                </div>
               </List.Item>
             </Popconfirm>
           )}
