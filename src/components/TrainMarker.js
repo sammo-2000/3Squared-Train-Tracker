@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../assets/icons/close.svg";
+import stationIcon from "../assets/icons/trainIcon.png";
 import "../css/leaflet.css";
 
 // Hooks & Contexts
@@ -11,7 +11,7 @@ const moment = require("moment");
 
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
-  iconSize: [38, 38],
+  iconSize: [75, 75],
 });
 
 const TrainMarker = () => {
