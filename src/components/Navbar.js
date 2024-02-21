@@ -25,16 +25,20 @@ function Navbar() {
       {notificationContext}
       {messageContext}
 
-      {activeDrawer === "locations" && (
-        <Locations
-          setActiveDraw={setActiveDrawer}
-          notifications={[notificationContext, notificationApi]}
-          messages={[messageContext, messageApi]}
-        />
-      )}
-      {activeDrawer === "trains" && <Trains setActiveDraw={setActiveDrawer} />}
-      {activeDrawer === "routes" && <Routes setActiveDraw={setActiveDrawer} />}
-
+      <Locations
+        isOpen={activeDrawer === "locations"}
+        setActiveDraw={setActiveDrawer}
+        notifications={[notificationContext, notificationApi]}
+        messages={[messageContext, messageApi]}
+      />
+      <Trains
+        isOpen={activeDrawer === "trains"}
+        setActiveDraw={setActiveDrawer}
+      />
+      <Routes
+        isOpen={activeDrawer === "routes"}
+        setActiveDraw={setActiveDrawer}
+      />
       <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
 
       <div className="">

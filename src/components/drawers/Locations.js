@@ -19,7 +19,7 @@ import { useMap } from "../../hooks/MapHook";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
-import { saveCookie } from "../cookies";
+import { saveCookie } from "../cookies/saveCookies";
 
 import { BranchesOutlined } from "@ant-design/icons";
 
@@ -33,7 +33,6 @@ const Locations = (props) => {
   const [messageContext, messageApi] = props.messages;
   const [detailsModal, setDetailsModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
-
   const { map, setMap } = useMap();
 
   // TODO: Add to Settings
@@ -112,7 +111,7 @@ const Locations = (props) => {
         onClose={() => {
           props.setActiveDraw("menu");
         }}
-        open={true}
+        open={props.isOpen}
         placement={direction}
         closeIcon={<img alt="back" src={back} />}
         bodyStyle={{ padding: 0 }}
@@ -251,7 +250,9 @@ const Locations = (props) => {
                 src={search}
               />
             }
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
             style={{
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
               marginTop: "-1px",

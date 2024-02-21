@@ -129,7 +129,7 @@ const Trains = (props) => {
         onClose={() => {
           props.setActiveDraw("menu");
         }}
-        open={true}
+        open={props.isOpen}
         placement="left"
         closeIcon={<img alt="back" src={back} />}
         bodyStyle={{ padding: 0 }}
