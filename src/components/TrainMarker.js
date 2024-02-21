@@ -37,6 +37,7 @@ const TrainMarker = () => {
         originLocation: element.tiploc.originLocation,
         destinationLocation: element.tiploc.destinationLocation,
         lastReported: element.tiploc.lastReported,
+        lastReportedType: element.tiploc.lastReportedType,
       });
     });
 
@@ -52,22 +53,22 @@ const TrainMarker = () => {
           icon={trainStationIcon}
         >
           <Popup closeButton={false}>
-            <div className="flex flex-col gap-2">
-              <div>
+            <div>
+              <strong className="text-lg">
+                {train.originLocation} - {train.destinationLocation}
+              </strong>
+              <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+              <div className="text-xs text-gray-500">
                 <strong>Activation ID </strong>
                 {train.activationId}
               </div>
-              <div>
-                <strong>Origin </strong>
-                {train.originLocation}
-              </div>
-              <div>
-                <strong>Destination </strong>
-                {train.destinationLocation}
-              </div>
-              <div>
-                <strong>Last Report </strong>
-                {moment(train.lastReported).format("h:mm A")}
+              <div className="flex justify-between mt-4">
+                <div>
+                  <span>{train.lastReportedType}</span>
+                </div>
+                <div className="font-mono">
+                  {moment(train.lastReported).format("h:mm A")}
+                </div>
               </div>
             </div>
           </Popup>
