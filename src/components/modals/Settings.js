@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import { Button, Modal, Tabs, Typography, Tooltip, TreeSelect } from "antd";
 import { SettingOutlined, DownOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space, Input } from "antd";
+import { NumericInput } from "../inputs/NumericInput";
 
 // Settings Hook
 import { useSettings } from "../../hooks/SettingsHook";
@@ -10,6 +11,14 @@ import { useMap } from "../../hooks/MapHook";
 
 // Cookies
 import Cookies from "js-cookie";
+
+import {
+  themeItems,
+  zoomControlsPositionItems,
+  paginationItems,
+  menuDirectionItems,
+  notificationsOptions,
+} from "../../settings/settingsOptions";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
 // Cookies.remove('COOKIENAME');
@@ -21,163 +30,8 @@ const allCookies = Cookies.get();
 // }
 
 // Map Tilelayer Selector
-const themeItems = [
-  {
-    label: "Dark Theme",
-    key: "1",
-    url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-  },
-  {
-    label: "Light Theme",
-    key: "2",
-    url: "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}",
-  },
-  {
-    label: "Realistic Theme",
-    key: "3",
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  },
-];
-
-const zoomControlsPositionItems = [
-  {
-    label: "Top Left",
-    key: "1",
-    value: "topleft",
-  },
-  {
-    label: "Top Right",
-    key: "2",
-    value: "topright",
-  },
-  {
-    label: "Bottom Left",
-    key: "3",
-    value: "bottomleft",
-  },
-  {
-    label: "Bottom Right",
-    key: "4",
-    value: "bottomright",
-  },
-];
-
-const paginationItems = [
-  {
-    label: "50 Items - Low Performance",
-    key: "1",
-    value: 50,
-  },
-  {
-    label: "100 Items - Medium Performance",
-    key: "2",
-    value: 100,
-  },
-  {
-    label: "250 Items - High Performance",
-    key: "3",
-    value: 250,
-  },
-];
-
-const menuDirectionItems = [
-  {
-    label: "Left Aligned",
-    key: "1",
-    value: "left",
-  },
-  {
-    label: "Right Aligned",
-    key: "2",
-    value: "right",
-  },
-];
-
-const notificationsOptions = [
-  {
-    title: "Locations",
-    value: "locations",
-    key: "0",
-    children: [
-      {
-        title: "A location added to recently used list notification",
-        value: "showRecents",
-        key: "0-0",
-      },
-      {
-        title: "Loading routes from selected location notification",
-        value: "showRoutesLoading",
-        key: "0-1",
-      },
-      {
-        title: "Locations loaded notification",
-        value: "showLocationLoaded",
-        key: "0-2",
-      },
-      {
-        title: "Location removed from tracking notification",
-        value: "showLocationStopTrack",
-        key: "0-3",
-      },
-    ],
-  },
-];
 
 const { TabPane } = Tabs;
-
-const formatNumber = (value) => new Intl.NumberFormat().format(value);
-
-const NumericInput = (props) => {
-  const { value, onChange, popSuffix, popPrefix } = props;
-  const handleChange = (e) => {
-    const { value: inputValue } = e.target;
-    const reg = /^-?\d*(\.\d*)?$/;
-    if (reg.test(inputValue) || inputValue === "" || inputValue === "-") {
-      onChange(inputValue);
-    }
-  };
-
-  // '.' at the end or only '-' in the input box.
-  const handleBlur = () => {
-    if (value && typeof value === "string") {
-      let valueTemp = value;
-      if (value.charAt(value.length - 1) === "." || value === "-") {
-        valueTemp = value.slice(0, -1);
-      }
-      onChange(valueTemp.replace(/0*(\d+)/, "$1"));
-    }
-  };
-
-  const title = value ? (
-    <span className="numeric-input-title">
-      {popPrefix ? popPrefix : null}
-      {value !== "-" ? formatNumber(Number(value)) : "-"}
-      {popSuffix ? popSuffix : null}
-    </span>
-  ) : (
-    "Input a number"
-  );
-
-  return (
-    <Tooltip
-      trigger={["focus"]}
-      autoAdjustOverflow={true}
-      title={title}
-      placement="topLeft"
-      overlayClassName="numeric-input"
-    >
-      <Input
-        {...props}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder="Input a number"
-        maxLength={16}
-        suffix={false}
-        prefix={false}
-      />
-    </Tooltip>
-  );
-};
 
 const Settings = (props) => {
   const { settings, setSettings } = useSettings();
