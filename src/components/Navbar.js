@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 
-import location from "../assets/icons/location.svg";
-import route from "../assets/icons/route.svg";
-import train from "../assets/icons/train.svg";
-import settings from "../assets/icons/settings.svg";
 import logo from "../assets/icons/3squared.jpg";
+import Icon from "./Icons"
 
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
@@ -54,7 +51,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer text-gray-700"
             onClick={() => setActiveDrawer("locations")}
           >
-            <img style={{ width: "2rem" }} src={location} alt={`Icon ${0}`} />
+            <Icon iconName="location"/>
             <span>Locations</span>
           </div>
           {/* <div
@@ -70,7 +67,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
             onClick={() => setActiveDrawer("routes")}
           >
-            <img style={{ width: "2rem" }} src={route} alt={`Icon ${1}`} />
+            <Icon iconName="route"/>
             <span>Routes</span>
           </div>
           <div
@@ -78,7 +75,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
             onClick={() => setSettingsModal(settingsModal ? false : true)}
           >
-            <img style={{ width: "2rem" }} src={settings} alt={`Icon ${1}`} />
+            <Icon iconName="settings"/>
             <span>Settings</span>
           </div>
         </div>
