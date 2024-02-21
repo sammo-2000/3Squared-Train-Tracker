@@ -27,8 +27,8 @@ const tiploc = [
 const APIUsageExample = () => {
   // Define the context to use
   const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
-  const { tiplocDetail, setTiplocDetail } = UseRoutes();
-  const { trainDetail, setTrainDetail } = UseTrackedRoutes();
+  const { routes, setRoutes } = UseRoutes();
+  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
   const [loading, setLoading] = useState(false);
 
   // Only run this once after setTrackedLocations is loaded
@@ -44,7 +44,7 @@ const APIUsageExample = () => {
     // The functions should be await as data can take some time to load
     // We toggle the loading when fetching the data so the user know it is loading trying to fix
     setLoading(true);
-    setTiplocDetail(await tiplocAPI(trackedLocations));
+    setRoutes(await tiplocAPI(trackedLocations));
     setLoading(false);
   };
   // Function to get train details
@@ -53,7 +53,7 @@ const APIUsageExample = () => {
     // The functions should be await as data can take some time to load
     // We toggle the loading when fetching the data so the user know it is loading trying to fix
     setLoading(true);
-    setTrainDetail(await detailAPI(tiplocDetail));
+    setTrackedRoutes(await detailAPI(trackedLocations));
     setLoading(false);
   };
 
@@ -63,9 +63,9 @@ const APIUsageExample = () => {
     console.log("Selected tiploc");
     console.log(trackedLocations);
     console.log("Tiploc detail");
-    console.log(tiplocDetail);
+    console.log(routes);
     console.log("Train detail");
-    console.log(trainDetail);
+    console.log(trackedRoutes);
   };
 
   // We return loading component when loading is true otherwise what ever we want to return
@@ -73,7 +73,10 @@ const APIUsageExample = () => {
     <Loading />
   ) : (
     <>
-      <button className="bg-black text-white m-5 p-5" onClick={logDetails}>
+      <button
+        className="bg-black pl-[50px] text-white m-5 p-5"
+        onClick={logDetails}
+      >
         Log Details
       </button>
       <button
