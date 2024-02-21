@@ -6,10 +6,12 @@ import { Button, Modal, Tabs } from "antd";
 import { PushpinFilled } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 import { useMap } from "../../hooks/MapHook";
+import { useSettings } from "../../hooks/SettingsHook";
 
 import "../../css/drawer.css";
 
 const LocationDetails = (props) => {
+  const { settings, setSettings } = useSettings();
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
     left: 0,
@@ -22,14 +24,11 @@ const LocationDetails = (props) => {
   const { map, setMap } = useMap();
 
   // TODO: Add to settings
-  const defaultSuperInspectZoom = 19;
-  const defaultNormalZoom = 6;
   const defaultMapCoords = [54.091617, -1.793925];
 
   const handleCancel = (e) => {
-    console.log(e);
     props.setOpen(false);
-    setMap(map.setView(defaultMapCoords, defaultNormalZoom));
+    setMap(map.setView(defaultMapCoords, settings.defaultZoom));
   };
 
   const onStart = (_event, uiData) => {
@@ -52,10 +51,9 @@ const LocationDetails = (props) => {
         setMap(
           map.setView(
             [location.Latitude, location.Longitude],
-            defaultSuperInspectZoom
+            settings.superZoom
           )
         );
-        console.log("Mouse Enter");
       }}
     >
       <Modal
