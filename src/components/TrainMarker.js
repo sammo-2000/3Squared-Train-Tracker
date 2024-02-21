@@ -53,8 +53,8 @@ const TrainMarker = () => {
           icon={trainStationIcon}
         >
           <Popup closeButton={false}>
-            <div>
-              <strong className="text-lg">
+            <div className="min-w-[250px]">
+              <strong className="text-lg text-center block">
                 {train.originLocation} - {train.destinationLocation}
               </strong>
               <div className="w-full h-[1px] bg-gray-400 my-1"></div>

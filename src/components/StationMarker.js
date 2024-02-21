@@ -22,12 +22,18 @@ const StationMarker = () => {
           position={[location.Latitude, location.Longitude]}
           icon={trainStationIcon}
         >
-            <Popup>
-            <div>
-                <h1 className='text-center' style={{ marginBottom: '2px' }}><strong>{location.Name}</strong></h1>
-                <p className='text-center' style={{ marginTop: '0px' }}><strong>Tiploc:</strong> {location.Tiploc}</p>
+          <Popup>
+            <div className="min-w-[250px]">
+              <strong className="text-lg text-center block">
+                {location.Name}
+              </strong>
+              <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+              <div className="text-xs text-gray-500">
+                <strong>Tiploc </strong>
+                {location.Tiploc}
+              </div>
             </div>
-            </Popup>
+          </Popup>
         </Marker>
       ))}
     </>

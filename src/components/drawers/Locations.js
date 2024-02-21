@@ -17,8 +17,8 @@ import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 import { useMap } from "../../hooks/MapHook";
 import { useSettings } from "../../hooks/SettingsHook";
 
-import search from "../../assets/icons/search.svg";
-import back from "../../assets/icons/back.svg";
+import Icon from "../Icons"
+
 import LocationDetails from "../modals/LocationDetails";
 
 import Cookies from "js-cookie";
@@ -113,7 +113,7 @@ const Locations = (props) => {
         }}
         open={props.isOpen}
         placement={direction}
-        closeIcon={<img alt="back" src={back} />}
+        closeIcon={<Icon iconName ="back"/> }
         bodyStyle={{ padding: 0 }}
         extra={
           <Space>
@@ -122,20 +122,7 @@ const Locations = (props) => {
               shape="circle"
               type="primary"
               ghost
-              icon={
-                <>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.5rem"
-                    height="1.5rem"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    viewBox="0 -960 960 960"
-                  >
-                    <path d="M450.001-450.001h-200q-12.75 0-21.375-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.625-8.615 21.375-8.615h200v-200q0-12.75 8.628-21.375 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.625 8.615 21.375v200h200q12.75 0 21.375 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.625 8.615-21.375 8.615h-200v200q0 12.75-8.628 21.375-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.625-8.615-21.375v-200Z" />
-                  </svg>
-                </>
-              }
+              icon={<Icon iconName ="add"/> }
             ></Button>
           </Space>
         }
@@ -144,16 +131,7 @@ const Locations = (props) => {
           placeholder="Search Locations"
           allowClear
           size="large"
-          prefix={
-            <img
-              style={{
-                padding: "0px 0.5rem",
-                opacity: "50%",
-              }}
-              alt="search"
-              src={search}
-            />
-          }
+          prefix={<Icon iconName ="search"/> }
           onChange={(e) => setSearchText(e.target.value)}
           style={{
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -233,23 +211,14 @@ const Locations = (props) => {
           onClose={() => setChildrenDrawer(false)}
           open={childrenDrawer}
           placement={direction}
-          closeIcon={<img alt="back" className="rotate-180" src={back} />}
+          closeIcon={<Icon iconName ="close"/> }
           bodyStyle={{ padding: 0 }}
         >
           <Input
             placeholder="Search TIPLOCs"
             allowClear
             size="large"
-            prefix={
-              <img
-                style={{
-                  padding: "0px 0.5rem",
-                  opacity: "50%",
-                }}
-                alt="search"
-                src={search}
-              />
-            }
+            prefix={<Icon iconName ="search"/> }
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
