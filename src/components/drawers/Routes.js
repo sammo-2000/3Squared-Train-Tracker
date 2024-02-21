@@ -289,39 +289,6 @@ const Routes = (props) => {
                 />
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane key={1} tab="Recently Used">
-              <List
-                size="large"
-                dataSource={recentlyUsed.filter((item) => {
-                  return (
-                    item.title
-                      .toLowerCase()
-                      .includes(searchText.toLowerCase()) &&
-                    !trackedRoutes.some(
-                      (trackedItem) => trackedItem.id === item.id
-                    )
-                  );
-                })}
-                renderItem={(item) => (
-                  <Popconfirm
-                    icon={null}
-                    title="Track location"
-                    description="Are you sure you want to track this route?"
-                    onConfirm={() => setTracked(item)}
-                    onCancel={() =>
-                      setRecentlyUsed(recentlyUsed.filter((i) => i !== item))
-                    }
-                    okText="Yes"
-                    cancelText="Remove from recently used"
-                  >
-                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.time}</div>
-                    </List.Item>
-                  </Popconfirm>
-                )}
-              />
-            </Tabs.TabPane>
           </Tabs>
         </Drawer>
       </Drawer>

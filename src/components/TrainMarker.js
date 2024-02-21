@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Marker } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../assets/icons/train.svg";
+import stationIcon from "../assets/icons/close.svg";
+import "../css/leaflet.css";
 
 // Hooks & Contexts
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
+
+const moment = require("moment");
 
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
@@ -12,13 +15,13 @@ const trainStationIcon = new Icon({
 });
 
 const TrainMarker = () => {
-  const { trainDetail } = UseTrackedRoutes();
+  const { trackedRoutes } = UseTrackedRoutes();
   const [trainLocations, setTrainLocations] = useState([]);
 
   useEffect(() => {
     const updatedTrainLocations = [];
 
-    trainDetail.forEach((element) => {
+    trackedRoutes.forEach((element) => {
       // Check if the train is cancelled or has no movement reports
       if (element.tiploc.cancelled || element.movment.length === 0) return;
 
@@ -30,20 +33,46 @@ const TrainMarker = () => {
           lastMovement.latLong.latitude,
           lastMovement.latLong.longitude,
         ],
+        activationId: element.tiploc.activationId,
+        originLocation: element.tiploc.originLocation,
+        destinationLocation: element.tiploc.destinationLocation,
+        lastReported: element.tiploc.lastReported,
+        lastReportedType: element.tiploc.lastReportedType,
       });
     });
 
     setTrainLocations(updatedTrainLocations);
-  }, [trainDetail]);
+  }, [trackedRoutes]);
 
   return (
     <>
-      {trainLocations.map((location) => (
+      {trainLocations.map((train) => (
         <Marker
-          key={location.id}
-          position={location.position}
+          key={train.id}
+          position={train.position}
           icon={trainStationIcon}
-        />
+        >
+          <Popup closeButton={false}>
+            <div>
+              <strong className="text-lg">
+                {train.originLocation} - {train.destinationLocation}
+              </strong>
+              <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+              <div className="text-xs text-gray-500">
+                <strong>Activation ID </strong>
+                {train.activationId}
+              </div>
+              <div className="flex justify-between mt-4">
+                <div>
+                  <span>{train.lastReportedType}</span>
+                </div>
+                <div className="font-mono">
+                  {moment(train.lastReported).format("h:mm A")}
+                </div>
+              </div>
+            </div>
+          </Popup>
+        </Marker>
       ))}
     </>
   );

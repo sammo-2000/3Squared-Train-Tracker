@@ -24,7 +24,6 @@ const StationMarker = () => {
         >
             <Popup>
             <div>
-                {console.log(location)}
                 <h1 className='text-center' style={{ marginBottom: '2px' }}><strong>{location.Name}</strong></h1>
                 <p className='text-center' style={{ marginTop: '0px' }}><strong>Tiploc:</strong> {location.Tiploc}</p>
             </div>
