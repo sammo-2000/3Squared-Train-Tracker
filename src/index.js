@@ -7,7 +7,7 @@ import "./css/tailwind.css";
 import { TrackedLocationsProvider } from "./contexts/TrackedLocationsContext.js";
 import { TrackedRoutesProvider } from "./contexts/TrackedRoutesContext.js";
 import { RoutesProvider } from "./contexts/RoutesContext.js";
-import { ThemeProvider } from "./contexts/ThemeContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import { MapProvider } from "./contexts/MapContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -16,11 +16,11 @@ root.render(
     <TrackedRoutesProvider>
       <RoutesProvider>
         <TrackedLocationsProvider>
-          <ThemeProvider>
+          <SettingsProvider>
             <MapProvider>
               <App />
             </MapProvider>
-          </ThemeProvider>
+          </SettingsProvider>
         </TrackedLocationsProvider>
       </RoutesProvider>
     </TrackedRoutesProvider>

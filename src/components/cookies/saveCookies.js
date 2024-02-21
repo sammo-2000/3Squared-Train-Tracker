@@ -11,7 +11,7 @@ export function saveCookie(type, data)
         if (data.length > 0) {
             data.forEach(tiploc => {
               const cookieName = "tiploc_" + tiploc.Tiploc;
-              if (!Storage.get(cookieName)) {
+                if (!Storage.get(cookieName)) {
                 Storage.set(cookieName, JSON.stringify(tiploc));
               }
             });

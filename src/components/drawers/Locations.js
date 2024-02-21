@@ -21,6 +21,8 @@ import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
 import { saveCookie } from "../cookies/saveCookies";
 
+import Cookies from "js-cookie";
+
 import { BranchesOutlined } from "@ant-design/icons";
 
 const Locations = (props) => {
@@ -49,6 +51,7 @@ const Locations = (props) => {
 
     if (e.key === "stop-tracking") {
       setTrackedLocations(trackedLocations.filter((i) => i !== item));
+      Cookies.remove("tiploc_" + item.Tiploc);
 
       messageApi.open({
         type: "success",
