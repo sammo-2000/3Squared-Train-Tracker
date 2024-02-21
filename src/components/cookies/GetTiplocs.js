@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 
 const GetTiplocs = () => {
-    const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
+    const { setTrackedLocations } = UseTrackedLocations();
 
     const loadTrackedLocations = () => { 
         const cookies = Cookies.get();
@@ -11,7 +11,7 @@ const GetTiplocs = () => {
           if (cookieName.startsWith('tiploc_')) {
             const tiploc = JSON.parse(cookies[cookieName]);
             const tiplocName = cookieName.replace('tiploc_', ''); // Remove 'tiploc_' prefix
-            setSelectedTiploc(prevLocations => {
+            setTrackedLocations(prevLocations => {
               if (!prevLocations.some(location => location.Tiploc === tiplocName)) {
 
                 return [...prevLocations, tiploc];
