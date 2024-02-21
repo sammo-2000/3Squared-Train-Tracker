@@ -15,7 +15,7 @@ const App = () => {
       {/* <APIUsageExample /> */}
       <Map />
       <Navbar />
-      <GetTiplocs />
+      {/* <GetTiplocs /> */}
     </>
   );
 };

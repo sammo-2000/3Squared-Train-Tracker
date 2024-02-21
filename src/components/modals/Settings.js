@@ -113,6 +113,7 @@ const Settings = (props) => {
         open={props.isOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={null}
         modalRender={(modal) => (
           <Draggable
             disabled={disabled}
