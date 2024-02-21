@@ -4,8 +4,8 @@ import { Button, Modal, Tabs } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 
-// Theme Hook
-import { useTheme } from "../../hooks/ThemeHooks";
+// Settings Hook
+import { useSettings } from "../../hooks/SettingsHook";
 
 // Cookies
 import Cookies from "js-cookie";
@@ -38,14 +38,14 @@ const items = [
 const { TabPane } = Tabs;
 
 const Settings = (props) => {
-  const { setTheme } = useTheme();
+  const { setSettings } = useSettings();
   useEffect(() => {
-    setTheme(2);
-  }, [setTheme]);
+    setSettings(2);
+  }, [setSettings]);
 
   const onClick = ({ key }) => {
     message.info(`Click on item ${key}`);
-    setTheme(key);
+    setSettings(key);
     Cookies.set("theme", key);
   };
 

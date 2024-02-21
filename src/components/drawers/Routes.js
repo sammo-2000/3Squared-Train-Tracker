@@ -34,7 +34,6 @@ const Routes = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(trackedLocations);
         // All routes information from the API
         const _routes = await tiplocAPI(trackedLocations);
 
@@ -42,18 +41,22 @@ const Routes = (props) => {
         if (!Array.isArray(_routes)) return;
 
         // Keep track of tracked routes ID & operators
-        let _trackedRoutesID = [];
-        let _trackedRoutesOperators = [];
+        let _trackedRoutes = [];
         trackedRoutes.forEach((__trackedRoute) => {
-          _trackedRoutesID.push(__trackedRoute.tiploc.activationId);
-          _trackedRoutesOperators.push(__trackedRoute.tiploc.toc_Name);
+          _trackedRoutes.push({
+            ID: __trackedRoute.tiploc.activationId,
+            operator: __trackedRoute.tiploc.toc_Name,
+          });
         });
 
         // Filter routes to only include those that are not already tracked
         const _filteredRoutes = _routes.filter(
           (route) =>
-            !_trackedRoutesID.includes(route.activationId) &&
-            !_trackedRoutesOperators.includes(route.toc_Name)
+            !_trackedRoutes.some(
+              (trackedRoute) =>
+                trackedRoute.ID === route.activationId &&
+                trackedRoute.operator === route.toc_Name
+            )
         );
 
         // Set the routes to the filtered routes
@@ -76,8 +79,6 @@ const Routes = (props) => {
 
   const onTrackedRouteClick = (item, e) => {
     if (e.key === "view-details") {
-      console.log("View details");
-      console.log(item);
     }
 
     if (e.key === "stop-tracking") {
@@ -171,43 +172,58 @@ const Routes = (props) => {
           }}
         />
 
-        {/* <List
+        <List
           size="large"
-          dataSource={trackedRoutes.map((element) => ({
-            title: `${element.schedule[0].tiploc} --- ${
-              element.schedule[element.schedule.length - 1].tiploc
-            }`,
-
-            startLocation: `${element.schedule[0].location}`,
-            endLocation: `${
-              element.schedule[element.schedule.length - 1].location
-            }`,
-            departure: `${element.schedule[0].departure}`,
-            arrival: `${element.schedule[element.schedule.length - 1].arrival}`,
-          }))}
+          dataSource={trackedRoutes}
           style={{ size: "200px" }}
           renderItem={(item) => (
             <Popconfirm
               icon={null}
-              title="Track Route"
-              description="Are you sure you want to track this Route?"
-              // onConfirm={}
+              title="Untrack Route"
+              description="Are you sure you want to untrack this route?"
+              onConfirm={async () => {
+                let _trackedRoutes = [...trackedRoutes];
+                const _itemToRemove = item;
+                _trackedRoutes = _trackedRoutes.filter(
+                  (route) => route !== _itemToRemove
+                );
+                await setTrackedRoutes(_trackedRoutes);
+              }}
               onCancel={null}
-              okText="Yes"
-              cancelText="No"
+              okText="Confirm"
+              cancelText="Cancel"
             >
-              <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                <div style={{ fontSize: "18px", display: "block" }}>
-                  <h2 style={{ fontWeight: "bold" }}>
-                    {item.startLocation} ------- {item.endLocation}
-                  </h2>
-                  <div>Departure: {item.departure}</div>
-                  <div>Arrival: {item.arrival}</div>
-                </div>
+              <List.Item
+                className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
+                  item.tiploc.lastReportedType === "CANCELLED"
+                    ? "bg-red-100 hover:bg-red-200"
+                    : ""
+                }
+                ${
+                  item.tiploc.lastReportedType === "TERMINATED"
+                    ? "bg-yellow-100 hover:bg-yellow-200"
+                    : ""
+                }`}
+              >
+                <button className="flex flex-col gap-1 w-full items-start">
+                  <p className="text-blue-400 text-sm">
+                    {item.tiploc.headCode}
+                  </p>
+                  <p className="text-blue-600 text-sm">
+                    {item.tiploc.toc_Name}
+                  </p>
+                  <p className="font-bold text-lg my-2">
+                    {item.tiploc.originLocation} -{" "}
+                    {item.tiploc.destinationLocation}
+                  </p>
+                  <p className="text-gray-500">
+                    {item.tiploc.lastReportedType}
+                  </p>
+                </button>
               </List.Item>
             </Popconfirm>
           )}
-        /> */}
+        />
         <Drawer
           title="Track New Route"
           closable={true}
@@ -250,32 +266,59 @@ const Routes = (props) => {
               marginBottom: "0px",
             }}
           >
-            {/* <Tabs.TabPane key={0} tab="All">
-              <List
-                size="large"
-                dataSource={routes.map((element) => ({
-                  title: `${element.schedule[0].tiploc} --- ${
-                    element.schedule[element.schedule.length - 1].tiploc
-                  }`,
-                }))}
-                renderItem={(item) => (
-                  <Popconfirm
-                    icon={null}
-                    title="Track Route"
-                    description="Are you sure you want to track this Route?"
-                    onConfirm={() => setTracked(item)}
-                    onCancel={null}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.title}</div>
-                      <div>{item.time}</div>
-                    </List.Item>
-                  </Popconfirm>
-                )}
-              />
-            </Tabs.TabPane> */}
+            <Tabs.TabPane key={0} tab="All">
+              {routes && routes.length > 0 && (
+                <List
+                  size="large"
+                  dataSource={routes}
+                  style={{ size: "200px" }}
+                  renderItem={(item) => (
+                    <Popconfirm
+                      icon={null}
+                      title="Track Route"
+                      description="Are you sure you want to track this route?"
+                      onConfirm={async () => {
+                        let _trackedRoutes = [...trackedRoutes];
+                        const _newData = await detailAPI([item]);
+                        _trackedRoutes = [..._trackedRoutes, ..._newData];
+                        await setTrackedRoutes(_trackedRoutes);
+                      }}
+                      onCancel={null}
+                      okText="Confirm"
+                      cancelText="Cancel"
+                    >
+                      <List.Item
+                        className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
+                          item.lastReportedType === "CANCELLED"
+                            ? "bg-red-100 hover:bg-red-200"
+                            : ""
+                        }
+                          ${
+                            item.lastReportedType === "TERMINATED"
+                              ? "bg-yellow-100 hover:bg-yellow-200"
+                              : ""
+                          }`}
+                      >
+                        <button className="flex flex-col gap-1 w-full items-start">
+                          <p className="text-blue-400 text-sm">
+                            {item.headCode}
+                          </p>
+                          <p className="text-blue-600 text-sm">
+                            {item.toc_Name}
+                          </p>
+                          <p className="font-bold text-lg my-2">
+                            {item.originLocation} - {item.destinationLocation}
+                          </p>
+                          <p className="text-gray-500">
+                            {item.lastReportedType}
+                          </p>
+                        </button>
+                      </List.Item>
+                    </Popconfirm>
+                  )}
+                />
+              )}
+            </Tabs.TabPane>
             <Tabs.TabPane key={1} tab="Recently Used">
               <List
                 size="large"
