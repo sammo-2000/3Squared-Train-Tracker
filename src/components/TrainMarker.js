@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Marker } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../assets/icons/train.svg";
+import stationIcon from "../assets/icons/close.svg";
 
 // Hooks & Contexts
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
@@ -12,13 +12,13 @@ const trainStationIcon = new Icon({
 });
 
 const TrainMarker = () => {
-  const { trainDetail } = UseTrackedRoutes();
+  const { trackedRoutes } = UseTrackedRoutes();
   const [trainLocations, setTrainLocations] = useState([]);
 
   useEffect(() => {
     const updatedTrainLocations = [];
 
-    trainDetail.forEach((element) => {
+    trackedRoutes.forEach((element) => {
       // Check if the train is cancelled or has no movement reports
       if (element.tiploc.cancelled || element.movment.length === 0) return;
 
@@ -34,7 +34,7 @@ const TrainMarker = () => {
     });
 
     setTrainLocations(updatedTrainLocations);
-  }, [trainDetail]);
+  }, [trackedRoutes]);
 
   return (
     <>

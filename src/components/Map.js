@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
 import stationIcon from "../assets/icons/trainStation.png";
 import LocationDetails from "./modals/LocationDetails";
+import TrainMarker from "./TrainMarker";
 
 // Hooks
 import { useSettings } from "../hooks/SettingsHook";
@@ -77,6 +78,7 @@ const Map = (props) => {
             }
           />
           <StationMarker />
+          <TrainMarker />
         </MapContainer>
       </div>
     </>
