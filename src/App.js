@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // Component
 import Map from "./components/Map";
 import Navbar from "./components/Navbar";
-import TiplocCookies from "./components/TiplocCookies";
+import GetTiplocs from "./components/cookies/GetTiplocs";
 
 // import APIUsageExample from "./APIUsageExample";
 import APIUsageExample from "./APIUsageExample";
@@ -16,7 +16,7 @@ const App = () => {
       <APIUsageExample />
       <Map />
       <Navbar />
-      <TiplocCookies />
+      <GetTiplocs />
     </>
   );
 };

@@ -19,7 +19,7 @@ import { useMap } from "../../hooks/MapHook";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
-import { saveCookie } from '../cookies';
+import { saveCookie } from "../cookies/saveCookies";
 
 import { BranchesOutlined } from "@ant-design/icons";
 
