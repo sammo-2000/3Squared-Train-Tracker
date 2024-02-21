@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 
-import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook.js";
-import { UseTiplocDetail } from "../../hooks/TiplocDetailHook.js";
-import { UseTrainDetail } from "../../hooks/TrainDetailHook.js";
+import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
+import { UseRoutes } from "../../hooks/RoutesHook.js";
+import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 
 import { tiplocAPI } from "../../api/tiplocAPI.js";
 import { detailAPI } from "../../api/detailAPI.js";
@@ -28,9 +28,9 @@ const Trains = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedTrains, setTrackedTrains] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
-  const { selectedTiploc } = UseSelectedTiploc();
-  const { tiplocDetail, setTiplocDetail } = UseTiplocDetail();
-  const { trainDetail, setTrainDetail } = UseTrainDetail();
+  const { selectedTiploc } = UseTrackedLocations();
+  const { tiplocDetail, setTiplocDetail } = UseRoutes();
+  const { trainDetail, setTrainDetail } = UseTrackedRoutes();
   const [emptyDetail, setEmptyDetail] = useState(true);
 
   useEffect(() => {
@@ -347,6 +347,9 @@ const Trains = (props) => {
                   </Popconfirm>
                 )}
               />
+            </Tabs.TabPane>
+            <Tabs.TabPane key={2} tab="From tracked trains">
+              ...
             </Tabs.TabPane>
           </Tabs>
         </Drawer>

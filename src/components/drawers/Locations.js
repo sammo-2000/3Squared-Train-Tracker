@@ -13,19 +13,18 @@ import {
 
 import "../../css/drawer.css";
 import { useState, useEffect } from "react";
-import { UseSelectedTiploc } from "../../hooks/SelectedTiplocHook";
+import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 import { useMap } from "../../hooks/MapHook";
 
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
+import { saveCookie } from "../cookies";
 
 import { BranchesOutlined } from "@ant-design/icons";
-// Cookies
-import Cookies from "js-cookie";
 
 const Locations = (props) => {
-  const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
+  const { selectedTiploc, setSelectedTiploc } = UseTrackedLocations();
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
@@ -60,14 +59,7 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
-    if (selectedTiploc.length > 0) {
-      selectedTiploc.forEach(tiploc => {
-        const cookieName = "tiploc_" + tiploc.Tiploc;
-        if (!Cookies.get(cookieName)) {
-          Cookies.set(cookieName, JSON.stringify(tiploc));
-        }
-      });
-    }
+    saveCookie("tiploc", selectedTiploc);
   }, [selectedTiploc]);
 
   const setTracked = (item) => {
