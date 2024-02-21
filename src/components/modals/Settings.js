@@ -57,13 +57,11 @@ const Settings = (props) => {
     right: 0,
   });
   const draggleRef = useRef(null);
-  // const showModal = () => {
-  //   setOpen(true);
-  // };
+
   const handleOk = (e) => {
-    console.log(e);
     props.setOpen(false);
   };
+
   const handleCancel = (e) => {
     console.log(e);
     props.setOpen(false);

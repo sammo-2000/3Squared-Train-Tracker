@@ -19,10 +19,9 @@ import { useMap } from "../../hooks/MapHook";
 import search from "../../assets/icons/search.svg";
 import back from "../../assets/icons/back.svg";
 import LocationDetails from "../modals/LocationDetails";
+import { saveCookie } from '../cookies';
 
 import { BranchesOutlined } from "@ant-design/icons";
-// Cookies
-import Cookies from "js-cookie";
 
 const Locations = (props) => {
   const { selectedTiploc, setSelectedTiploc } = UseSelectedTiploc();
@@ -60,14 +59,7 @@ const Locations = (props) => {
   };
 
   useEffect(() => {
-    if (selectedTiploc.length > 0) {
-      selectedTiploc.forEach((tiploc) => {
-        const cookieName = "tiploc_" + tiploc.Tiploc;
-        if (!Cookies.get(cookieName)) {
-          Cookies.set(cookieName, JSON.stringify(tiploc));
-        }
-      });
-    }
+    saveCookie("tiploc", selectedTiploc);
   }, [selectedTiploc]);
 
   const setTracked = (item) => {
