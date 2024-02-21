@@ -3,10 +3,10 @@ import { useState, createContext } from "react";
 export const TrackedLocationsContext = createContext();
 
 export const TrackedLocationsProvider = ({ children }) => {
-  const [selectedTiploc, setSelectedTiploc] = useState([]);
+  const [trackedLocations, setTrackedLocations] = useState([]);
   return (
     <TrackedLocationsContext.Provider
-      value={{ selectedTiploc, setSelectedTiploc }}
+      value={{ trackedLocations, setTrackedLocations }}
     >
       {children}
     </TrackedLocationsContext.Provider>

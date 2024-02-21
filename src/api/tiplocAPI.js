@@ -3,7 +3,7 @@
 // You will get array of object that contain tiploc information
 // Save this details in RoutesContext
 
-const tiplocAPI = async (selectedTiploc) => {
+const tiplocAPI = async (trackedLocations) => {
   // Set default dates
   const today = new Date();
   const yesterday = new Date(today);
@@ -12,7 +12,9 @@ const tiplocAPI = async (selectedTiploc) => {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   // Create array from tiploc objects with , as separator
-  const tiplocString = selectedTiploc.map((tiploc) => tiploc.Tiploc).join(",");
+  const tiplocString = trackedLocations
+    .map((tiploc) => tiploc.Tiploc)
+    .join(",");
 
   // Call API
   const apiEndPoint = `https://traindata-stag-api.railsmart.io/api/trains/tiploc/${tiplocString}/${

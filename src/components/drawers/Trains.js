@@ -28,7 +28,7 @@ const Trains = (props) => {
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const [trackedTrains, setTrackedTrains] = useState([]);
   const [notificationApi, notificationContext] = notification.useNotification();
-  const { selectedTiploc } = UseTrackedLocations();
+  const { trackedLocations } = UseTrackedLocations();
   const { tiplocDetail, setTiplocDetail } = UseRoutes();
   const { trainDetail, setTrainDetail } = UseTrackedRoutes();
   const [emptyDetail, setEmptyDetail] = useState(true);
@@ -37,15 +37,15 @@ const Trains = (props) => {
     const fetchData = async () => {
       try {
         // All tiplocs
-        const allTiplocs = await tiplocAPI(selectedTiploc);
+        const allTiplocs = await tiplocAPI(trackedLocations);
 
-        let _selectedTiplocs = [];
+        let _trackedLocationss = [];
         trainDetail.forEach((element) => {
-          _selectedTiplocs.push(element.tiploc.activationId);
+          _trackedLocationss.push(element.tiploc.activationId);
         });
 
         const filteredTiploc = allTiplocs.filter(
-          (element) => !_selectedTiplocs.includes(element.activationId)
+          (element) => !_trackedLocationss.includes(element.activationId)
         );
 
         setTiplocDetail(filteredTiploc.reverse());
@@ -57,7 +57,7 @@ const Trains = (props) => {
     };
 
     fetchData();
-  }, [selectedTiploc && setTiplocDetail, trainDetail]);
+  }, [trackedLocations && setTiplocDetail, trainDetail]);
 
   const openLoadingNotification = () => {
     notificationApi.open({
@@ -123,7 +123,6 @@ const Trains = (props) => {
 
   return (
     <>
-      {notificationContext}
       <Drawer
         title="Tracked Trains"
         onClose={() => {
