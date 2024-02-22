@@ -86,7 +86,7 @@ const Storage = () => {
         );
 
         if (!exists) {
-          console.log(trackedRoute);
+          // console.log(trackedRoute);
           _trackedRoutes.push(trackedRoute);
           _trackedRoutesID.push({
             ID: activationId,

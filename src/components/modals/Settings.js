@@ -59,7 +59,7 @@ const Settings = (props) => {
         defaultZoom: defaultZoom,
       });
 
-      console.log("settings", settings);
+      // console.log("settings", settings);
 
       if (map) {
         setMap(
@@ -507,7 +507,7 @@ const Settings = (props) => {
               showCheckedStrategy={TreeSelect.SHOW_PARENT}
               placeholder="Please select notifications to enable/disable"
               onChange={(e) => {
-                console.log(e);
+                // console.log(e);
                 setSettings({ ...settings, notifications: e });
               }}
             />
