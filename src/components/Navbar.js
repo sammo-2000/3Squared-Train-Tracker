@@ -42,7 +42,7 @@ function Navbar() {
       <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
       
         <div className="">
-          <Draggable>
+          <Draggable bounds="body" grid={[1, 1]}>
           <div
             className={`absolute top-0 ${
               settings.menuDirection.value === "right" ? "right-0" : "left-0"
