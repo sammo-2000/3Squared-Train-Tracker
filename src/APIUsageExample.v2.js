@@ -26,16 +26,39 @@ const APIUsageExample = () => {
     );
 
     const data = await response.json();
-    console.log(data);
+    return data.routes[0].legs[0].steps; // get first route, and first leg
+  };
+
+  const filterApi = async () => {
+    const steps = await callApi();
+
+    if (Array.isArray(steps) && steps !== null) {
+      const locations = steps.map((step) => step.maneuver.location);
+      return locations;
+    }
+    return [];
+  };
+
+  const plotPoints = async () => {
+    return (points = await filterApi());
   };
 
   return (
     <div className="flex justify-end">
-      <button className="bg-black text-white m-5 p-5" onClick={() => callApi()}>
+      <button
+        className="bg-black text-white m-5 p-5"
+        onClick={() => filterApi()}
+      >
         Plot routes
       </button>
     </div>
   );
+};
+
+export const giveMePlots = () => {
+  console.log(APIUsageExample.plotPoints());
+
+  //return APIUsageExample.plotPoints();
 };
 
 export default APIUsageExample;

@@ -59,6 +59,8 @@ const Settings = (props) => {
         defaultZoom: defaultZoom,
       });
 
+      console.log("settings", settings);
+
       if (map) {
         setMap(
           map.setView(

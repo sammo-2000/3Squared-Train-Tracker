@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  PolyLine,
+} from "react-leaflet";
 import { FloatButton } from "antd";
 import { AimOutlined } from "@ant-design/icons";
 import { useMap } from "../hooks/MapHook";
@@ -14,6 +20,8 @@ import TrainMarker from "./TrainMarker";
 import { useSettings } from "../hooks/SettingsHook";
 import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import StationMarker from "./StationMarker";
+
+import { giveMePlots } from "../APIUsageExample.v2";
 
 const Map = (props) => {
   const { map, setMap } = useMap();
@@ -92,6 +100,7 @@ const Map = (props) => {
           ;
           <StationMarker />
           <TrainMarker />
+          <PolyLine positions={giveMePlots} />
         </MapContainer>
       </div>
     </>
