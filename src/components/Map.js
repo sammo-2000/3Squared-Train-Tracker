@@ -100,7 +100,7 @@ const Map = (props) => {
           ;
           <StationMarker />
           <TrainMarker />
-          <PolyLine positions={giveMePlots} />
+          {/* <PolyLine positions={giveMePlots} /> */}
         </MapContainer>
       </div>
     </>
