@@ -42,7 +42,7 @@ function Navbar() {
       <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
       
         <div className="">
-          <Draggable bounds="body" grid={[1, 1]}>
+          <Draggable bounds="body" grid={[1, 1]} >
           <div
             className={`absolute top-0 ${
               settings.menuDirection.value === "right" ? "right-0" : "left-0"
@@ -52,7 +52,7 @@ function Navbar() {
               key={0}
               className="flex items-center flex-col transition-color duration-200 justify-center p-4 text-gray-700"
               >
-              <img style={{ width: "7rem" }} src={logo} alt={`Icon ${0}`} />
+              <img style={{ width: "7rem", pointerEvents: 'none' }} src={logo} alt={`Icon ${0}`}/>
             </div>
             <div
               key={1}
