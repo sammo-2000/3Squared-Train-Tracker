@@ -59,7 +59,6 @@ const Map = (props) => {
               "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}"
             }
           />
-
           {rails.url != null && (
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -67,11 +66,28 @@ const Map = (props) => {
               url={rails.url}
             />
           )}
-          <FloatButton icon ={<AimOutlined />}
-            onClick={() => setMap(map.setView([ settings.defaultCenter.Latitude, settings.defaultCenter.Longitude, ], 6))}
-            style={{ zIndex: '1000', position: 'absolute', right: '50%', bottom: '10px' }}
-            
-          />;
+          <FloatButton
+            icon={<AimOutlined />}
+            onClick={() =>
+              setMap(
+                map.setView(
+                  [
+                    settings.defaultCenter.Latitude,
+                    settings.defaultCenter.Longitude,
+                  ],
+                  6
+                )
+              )
+            }
+            style={{
+              zIndex: "1000",
+              position: "absolute",
+              right: "50%",
+              bottom: "10px",
+              backgroundColor: "white",
+            }}
+          />
+          ;
           <StationMarker />
           <TrainMarker />
         </MapContainer>
