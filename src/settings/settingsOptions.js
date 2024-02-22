@@ -2,7 +2,7 @@ export const defaultSettings = {
   defaultZoom: 6,
   inspectZoom: 12,
   superZoom: 16,
-  defaultCenter: { Latitude: 53.8008, Longitude: -1.5491 },
+  defaultCenter: { Latitude: 53.859007, Longitude: -2.893418 },
   zoomControlsPosition: {
     label: "Bottom Left",
     key: "3",

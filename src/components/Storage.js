@@ -34,7 +34,7 @@ const Storage = () => {
     useEffect(() => {
         if (trackedRoutes.length > 0) {
             trackedRoutes.forEach(trackedRoute => {
-                const storageKey = "tracked_route_" + trackedRoute.tiploc.activationId;
+                const storageKey = "tracked_route_" + trackedRoute.tiploc.activationId + "," + trackedRoute.tiploc.toc_Name;
                 if (!localStorage.getItem(storageKey)) {
                     localStorage.setItem(storageKey, JSON.stringify(trackedRoute));
                 }

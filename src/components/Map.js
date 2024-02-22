@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { FloatButton } from "antd";
+import { AimOutlined } from "@ant-design/icons";
 import { useMap } from "../hooks/MapHook";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -65,7 +67,11 @@ const Map = (props) => {
               url={rails.url}
             />
           )}
-
+          <FloatButton icon ={<AimOutlined />}
+            onClick={() => setMap(map.setView([ settings.defaultCenter.Latitude, settings.defaultCenter.Longitude, ], 6))}
+            style={{ zIndex: '1000', position: 'absolute', right: '50%', bottom: '10px' }}
+            
+          />;
           <StationMarker />
           <TrainMarker />
         </MapContainer>
