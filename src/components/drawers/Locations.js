@@ -54,6 +54,7 @@ const Locations = (props) => {
 
     if (e.key === "stop-tracking") {
       setTrackedLocations(trackedLocations.filter((i) => i !== item));
+      Cookies.remove("tiploc_" + item.Tiploc);
 
       if (validateNotification("showLocationStopTrack")) {
         messageApi.open({
