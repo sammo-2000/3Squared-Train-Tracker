@@ -65,7 +65,7 @@ function Navbar() {
             className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
             onClick={() => setActiveDrawer("trains")}
           >
-            <img style={{ width: "2rem" }} src={train} alt={`Icon ${1}`} />
+            <Icon iconName = "train"/>
             <span>Trains</span>
           </div> */}
           <div
