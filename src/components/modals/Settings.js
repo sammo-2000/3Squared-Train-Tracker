@@ -19,6 +19,7 @@ import {
   menuDirectionItems,
   notificationsOptions,
   menuAutoCloseItems,
+  railsItems,
 } from "../../settings/settingsOptions";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
@@ -234,6 +235,36 @@ const Settings = (props) => {
                     <Typography.Link>
                       <Space>
                         {settings.mapTheme.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Rails
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: railsItems,
+                      selectable: true,
+                      selectedKeys: settings.rails.key,
+                      onClick: (rails) => {
+                        const railItem = railsItems.find(
+                          (item) => item.key === rails.key
+                        );
+
+                        message.info(`${railItem.label} activated`);
+                        setSettings({ ...settings, rails: railItem });
+                        Cookies.set("theme", railItem);
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {settings.rails.label}
                         <DownOutlined />
                       </Space>
                     </Typography.Link>

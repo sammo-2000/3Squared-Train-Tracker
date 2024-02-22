@@ -25,6 +25,7 @@ const Map = (props) => {
   const zoom = props.zoom || 6;
 
   let theme = settings.mapTheme;
+  let rails = settings.rails;
 
   useEffect(() => {
     // console.log(settings);
@@ -56,6 +57,15 @@ const Map = (props) => {
               "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token={accessToken}"
             }
           />
+
+          {rails.url != null && (
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              accessToken={process.env.REACT_APP_MAP_API_KEY}
+              url={rails.url}
+            />
+          )}
+
           <StationMarker />
           <TrainMarker />
         </MapContainer>

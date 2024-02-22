@@ -34,6 +34,11 @@ export const defaultSettings = {
     key: "1",
     value: true,
   },
+  rails: {
+    label: "Standard",
+    key: "1",
+    url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+  },
 };
 
 export const menuAutoCloseItems = [
@@ -65,10 +70,43 @@ export const themeItems = [
     key: "3",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   },
+  // {
+  //   label: "Just Tracks", // https://www.openrailwaymap.org/
+  //   key: "4",
+  //   url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+  // },
+];
+
+export const railsItems = [
   {
-    label: "Just Tracks", // https://www.openrailwaymap.org/
-    key: "4",
+    label: "Hide Rails",
+    key: "0",
+    url: "",
+  },
+  {
+    label: "Standard", // https://www.openrailwaymap.org/
+    key: "1",
     url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+  },
+  {
+    label: "Signals",
+    key: "2",
+    url: "http://{s}.tiles.openrailwaymap.org/signals/{z}/{x}/{y}.png",
+  },
+  {
+    label: "Electrified",
+    key: "3",
+    url: "http://{s}.tiles.openrailwaymap.org/electrification/{z}/{x}/{y}.png",
+  },
+  {
+    label: "Max Speed",
+    key: "4",
+    url: "http://{s}.tiles.openrailwaymap.org/maxspeed/{z}/{x}/{y}.png",
+  },
+  {
+    label: "Gauge",
+    key: "5",
+    url: "http://{s}.tiles.openrailwaymap.org/gauge/{z}/{x}/{y}.png",
   },
 ];
 
