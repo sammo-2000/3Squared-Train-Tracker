@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar";
 import Storage from "./components/Storage";
 
 // import APIUsageExample from "./APIUsageExample";
-// import APIUsageExample from "./APIUsageExample";
 
 const App = () => {
   return (
