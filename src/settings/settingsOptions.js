@@ -65,6 +65,11 @@ export const themeItems = [
     key: "3",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   },
+  {
+    label: "Just Tracks", // https://www.openrailwaymap.org/
+    key: "4",
+    url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+  },
 ];
 
 export const zoomControlsPositionItems = [
