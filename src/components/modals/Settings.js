@@ -514,7 +514,7 @@ const Settings = (props) => {
             <dl className="divide-y divide-gray-100">
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Cookies
+                  Cache
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex justify-end">
                   <Button
@@ -523,6 +523,9 @@ const Settings = (props) => {
                     onClick={() => {
                       for (const cookieName in allCookies) {
                         Cookies.remove(cookieName);
+                      }
+                      for (const item in localStorage) {
+                        localStorage.removeItem(item);
                       }
                       window.location.reload();
                     }}
