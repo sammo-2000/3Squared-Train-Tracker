@@ -5,6 +5,7 @@ import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseRoutes } from "../hooks/RoutesHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 import { useSettings } from "../hooks/SettingsHook";
+import { defaultSettings } from "../settings/settingsOptions";
 
 // js-cookie
 import Cookies from "js-cookie";
@@ -18,9 +19,16 @@ const Storage = () => {
   // Read settings from localStorage
   useEffect(() => {
     const newSettings = localStorage.getItem("settings");
-    console.log("newSettings:", newSettings);
     setSettings(JSON.parse(newSettings));
   }, [setSettings]);
+
+  useEffect(() => {
+    const newSettings = localStorage.getItem("settings");
+    if (newSettings === null) {
+      console.log("Default settings loaded");
+      setSettings(defaultSettings); // Set Default Settings
+    }
+  }, []);
 
   // Write Settings
   useEffect(() => {
