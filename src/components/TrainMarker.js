@@ -33,6 +33,7 @@ const TrainMarker = () => {
           lastMovement.latLong.latitude,
           lastMovement.latLong.longitude,
         ],
+        toc_Name: element.tiploc.toc_Name,
         activationId: element.tiploc.activationId,
         originLocation: element.tiploc.originLocation,
         destinationLocation: element.tiploc.destinationLocation,
@@ -48,7 +49,7 @@ const TrainMarker = () => {
     <>
       {trainLocations.map((train) => (
         <Marker
-          key={train.id}
+          key={train.id + train.toc_Name}
           position={train.position}
           icon={trainStationIcon}
           riseOnHover={true}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // We import loading to display loading when data is being fetched from the API
 import Loading from "./components/Loading";
@@ -11,18 +11,6 @@ import { UseTrackedRoutes } from "./hooks/TrackedRoutesHook";
 // Import API to use them in functions
 import { tiplocAPI } from "./api/tiplocAPI";
 import { detailAPI } from "./api/detailAPI";
-
-// This is hard coded for now as we don't have dynamic data to give
-const tiploc = [
-  {
-    name: "Leeds",
-    tiploc: "LEEDS",
-  },
-  {
-    name: "York",
-    tiploc: "YORK",
-  },
-];
 
 const APIUsageExample = () => {
   // Define the context to use

@@ -119,7 +119,7 @@ const Routes = (props) => {
         }}
         open={props.isOpen}
         placement="left"
-        closeIcon={<Icon iconName ="back"/>}
+        closeIcon={<Icon iconName="back" />}
         bodyStyle={{ padding: 0 }}
         extra={
           <Space>
@@ -128,7 +128,7 @@ const Routes = (props) => {
               shape="circle"
               type="primary"
               ghost
-              icon ={<Icon iconName = "add"/>}
+              icon={<Icon iconName="add" />}
             ></Button>
           </Space>
         }
@@ -137,9 +137,7 @@ const Routes = (props) => {
           placeholder="Search Route"
           allowClear
           size="large"
-          prefix={
-            <Icon iconName ="search"/>
-          }
+          prefix={<Icon iconName="search" />}
           onChange={(e) => setSearchText(e.target.value)}
           style={{
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -150,7 +148,6 @@ const Routes = (props) => {
             padding: "1rem 1rem",
           }}
         />
-
         <List
           size="large"
           dataSource={trackedRoutes}
@@ -161,6 +158,7 @@ const Routes = (props) => {
               title="Untrack Route"
               description="Are you sure you want to untrack this route?"
               onConfirm={async () => {
+                localStorage.clear();
                 let _trackedRoutes = [...trackedRoutes];
                 const _itemToRemove = item;
                 _trackedRoutes = _trackedRoutes.filter(
@@ -209,14 +207,14 @@ const Routes = (props) => {
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
           placement="left"
-          closeIcon={<Icon iconName ="close"/>}
+          closeIcon={<Icon iconName="close" />}
           bodyStyle={{ padding: 0 }}
         >
           <Input
             placeholder="Search Routes"
             allowClear
             size="large"
-            prefix={<Icon iconName ="search"/> }
+            prefix={<Icon iconName="search" />}
             onChange={(e) => setSearchText(e.target.value)}
             style={{
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -248,6 +246,7 @@ const Routes = (props) => {
                       title="Track Route"
                       description="Are you sure you want to track this route?"
                       onConfirm={async () => {
+                        localStorage.clear();
                         let _trackedRoutes = [...trackedRoutes];
                         const _newData = await detailAPI([item]);
                         _trackedRoutes = [..._trackedRoutes, ..._newData];
