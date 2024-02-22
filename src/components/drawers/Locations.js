@@ -65,7 +65,10 @@ const Locations = (props) => {
   };
 
   const setTracked = (item) => {
-    setChildrenDrawer(false);
+    if (settings.menuAutoClose.value === true) {
+      setChildrenDrawer(false);
+    }
+
     setSearchText("");
     setRecentlyUsed([...recentlyUsed, item]);
     setTrackedLocations([...trackedLocations, item]);

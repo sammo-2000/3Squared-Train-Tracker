@@ -29,7 +29,25 @@ export const defaultSettings = {
     "showLocationLoaded",
     "showLocationStopTrack",
   ],
+  menuAutoClose: {
+    label: "Always",
+    key: "1",
+    value: true,
+  },
 };
+
+export const menuAutoCloseItems = [
+  {
+    label: "Always",
+    key: "1",
+    value: true,
+  },
+  {
+    label: "Never",
+    key: "2",
+    value: false,
+  },
+];
 
 export const themeItems = [
   {

@@ -18,6 +18,7 @@ import {
   paginationItems,
   menuDirectionItems,
   notificationsOptions,
+  menuAutoCloseItems,
 } from "../../settings/settingsOptions";
 
 // Should remove a specfic cookie will need for tomorrow, so leaving here
@@ -208,12 +209,12 @@ const Settings = (props) => {
       >
         <Tabs defaultActiveKey="1">
           <TabPane tab={<span>Map</span>} key="1">
-            <dl class="divide-y divide-gray-100">
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Theme
                 </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Dropdown
                     menu={{
                       items: themeItems,
@@ -239,11 +240,11 @@ const Settings = (props) => {
                   </Dropdown>
                 </dd>
               </div>
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Zoom Controls
                 </dt>
-                <dd class="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Dropdown
                     menu={{
                       items: zoomControlsPositionItems,
@@ -272,68 +273,64 @@ const Settings = (props) => {
                   </Dropdown>
                 </dd>
               </div>
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
-                  Default Zoom
-                </dt>
-                <dd class="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <NumericInput
-                    popPrefix="x"
-                    popSuffix=" zoom, we recommend x6 to x12"
-                    value={defaultZoom}
-                    onChange={setDefaultZoom}
-                  />
-                </dd>
-                <div className="col-span-2 col-start-2">
-                  <p class="text-sm font-normal leading-6 text-gray-500">
-                    This represents the default zoom level that your map will
-                    initially display.
-                  </p>
-                </div>
+              <div className="py-6 ">
+                <Tabs tabPosition="left" defaultActiveKey="a">
+                  <TabPane tab={<span>Default Zoom</span>} key="a">
+                    <div className="text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      <NumericInput
+                        popPrefix="x"
+                        popSuffix=" zoom, we recommend x6 to x12"
+                        value={defaultZoom}
+                        onChange={setDefaultZoom}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-sm font-normal leading-6 text-gray-500">
+                        This represents the default zoom level that your map
+                        will initially display.
+                      </p>
+                    </div>
+                  </TabPane>
+                  <TabPane tab={<span>Inspect Zoom</span>} key="b">
+                    <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      <NumericInput
+                        popPrefix="x"
+                        popSuffix=" zoom, we recommend x12 to x18"
+                        value={inspectZoom}
+                        onChange={setInspectZoom}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-sm font-normal leading-6 text-gray-500">
+                        Provides a closer view of an object, offering a more
+                        detailed and magnified perspective for focused
+                        examination.
+                      </p>
+                    </div>
+                  </TabPane>
+                  <TabPane tab={<span>Super Zoom</span>} key="c">
+                    <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                      <NumericInput
+                        popPrefix="x"
+                        popSuffix=" zoom, we recommend x16 to x24"
+                        value={superZoom}
+                        onChange={setSuperZoom}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <p className="text-sm font-normal leading-6 text-gray-500">
+                        Provides a super close view of an object, offering a
+                        more very detailed and magnified perspective.
+                      </p>
+                    </div>
+                  </TabPane>
+                </Tabs>
               </div>
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
-                  Inspect Zoom
-                </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <NumericInput
-                    popPrefix="x"
-                    popSuffix=" zoom, we recommend x12 to x18"
-                    value={inspectZoom}
-                    onChange={setInspectZoom}
-                  />
-                </dd>
-                <div className="col-span-2 col-start-2">
-                  <p class="text-sm font-normal leading-6 text-gray-500">
-                    Provides a closer view of an object, offering a more
-                    detailed and magnified perspective for focused examination.
-                  </p>
-                </div>
-              </div>
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
-                  Super Zoom
-                </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <NumericInput
-                    popPrefix="x"
-                    popSuffix=" zoom, we recommend x16 to x24"
-                    value={superZoom}
-                    onChange={setSuperZoom}
-                  />
-                </dd>
-                <div className="col-span-2 col-start-2">
-                  <p class="text-sm font-normal leading-6 text-gray-500">
-                    Provides a super close view of an object, offering a more
-                    very detailed and magnified perspective.
-                  </p>
-                </div>
-              </div>
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Default Center
                 </dt>
-                <dd class="flex gap-x-2 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd className="flex gap-x-2 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Input
                     value={settings.defaultCenter.Latitude}
                     onChange={(e) =>
@@ -366,12 +363,12 @@ const Settings = (props) => {
             </dl>
           </TabPane>
           <TabPane tab={<span>Menus</span>} key="2">
-            <dl class="divide-y divide-gray-100">
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Pagination
                 </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Dropdown
                     menu={{
                       items: paginationItems,
@@ -400,11 +397,11 @@ const Settings = (props) => {
                   </Dropdown>
                 </dd>
               </div>
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Alignment
                 </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Dropdown
                     menu={{
                       items: menuDirectionItems,
@@ -433,6 +430,39 @@ const Settings = (props) => {
                   </Dropdown>
                 </dd>
               </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Auto Close
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: menuAutoCloseItems,
+                      selectable: true,
+                      selectedKeys: settings.menuAutoClose.key,
+                      onClick: (menuAutoClose) => {
+                        const menuAutoCloseItem = menuAutoCloseItems.find(
+                          (item) => item.key === menuAutoClose.key
+                        );
+
+                        message.info(`${menuAutoClose.label} activated`);
+                        setSettings({
+                          ...settings,
+                          menuAutoClose: menuAutoCloseItem,
+                        });
+                        Cookies.set("alignment", menuAutoCloseItem);
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {settings.menuAutoClose.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
             </dl>
           </TabPane>
           <TabPane tab={<span>Notifications</span>} key="3">
@@ -450,12 +480,12 @@ const Settings = (props) => {
             />
           </TabPane>
           <TabPane tab={<span>Advanced</span>} key="4">
-            <dl class="divide-y divide-gray-100">
-              <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                <dt class="text-sm font-medium leading-6 text-gray-900">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
                   Cookies
                 </dt>
-                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex justify-end">
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex justify-end">
                   <Button
                     style={{ marginLeft: "8px" }}
                     danger

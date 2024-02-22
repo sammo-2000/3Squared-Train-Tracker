@@ -40,3 +40,11 @@
     overflow-y: auto;
     padding-right: 2rem;
   }
+
+  .modal-content {
+    transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
+  }
+
+  .modal-content.height-transition {
+    height: auto !important; /* Use !important to override the inline style */
+  }
