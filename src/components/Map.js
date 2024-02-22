@@ -85,6 +85,8 @@ const Map = (props) => {
               right: "50%",
               bottom: "10px",
               backgroundColor: "white",
+              border: "2px",
+              borderColor: "gray-100",
             }}
           />
           ;
