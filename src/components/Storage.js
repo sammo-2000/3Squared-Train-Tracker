@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 // Import hooks to use them globally
 import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseRoutes } from "../hooks/RoutesHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 import { useSettings } from "../hooks/SettingsHook";
+import { defaultSettings } from "../settings/settingsOptions";
 
 // js-cookie
 import Cookies from "js-cookie";
@@ -14,6 +15,28 @@ const Storage = () => {
   const { routes, setRoutes } = UseRoutes();
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
   const { settings, setSettings } = useSettings();
+
+  // Read settings from localStorage
+  useEffect(() => {
+    const newSettings = localStorage.getItem("settings");
+    setSettings(JSON.parse(newSettings));
+  }, [setSettings]);
+
+  useEffect(() => {
+    const newSettings = localStorage.getItem("settings");
+    if (newSettings === null) {
+      console.log("Default settings loaded");
+      setSettings(defaultSettings); // Set Default Settings
+    }
+  }, []);
+
+  // Write Settings
+  useEffect(() => {
+    const delayedfunction = () => {
+      localStorage.setItem("settings", JSON.stringify(settings));
+    };
+    setTimeout(delayedfunction, 1000);
+  }, [settings, setSettings]);
 
   // Write Tracked Locations
   useEffect(() => {
@@ -44,13 +67,6 @@ const Storage = () => {
       });
     }
   }, [trackedRoutes]);
-
-  // Write Settings
-  useEffect(() => {
-    if (settings.length > 0) {
-      localStorage.setItem("settings", JSON.stringify(settings));
-    }
-  }, [settings]);
 
   useEffect(() => {
     // Read Tracked Locations from cookies
@@ -98,11 +114,6 @@ const Storage = () => {
 
     setTrackedRoutes(_trackedRoutes);
   }, [setTrackedLocations, setTrackedRoutes]);
-
-  // Read settings from localStorage
-  useEffect(() => {
-    localStorage.setItem("settings", JSON.stringify(settings));
-  }, []);
 
   return <></>;
 };

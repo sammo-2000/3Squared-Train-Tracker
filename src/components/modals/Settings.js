@@ -22,14 +22,7 @@ import {
   railsItems,
 } from "../../settings/settingsOptions";
 
-// Should remove a specfic cookie will need for tomorrow, so leaving here
-// Cookies.remove('COOKIENAME');
-
 const allCookies = Cookies.get();
-
-// for (const cookieName in allCookies) {
-//   Cookies.remove(cookieName);
-// }
 
 // Map Tilelayer Selector
 
@@ -105,6 +98,12 @@ const Settings = (props) => {
       }
     }
   }, [superZoom]);
+
+  useEffect(() => {
+    if (settings === null) {
+      console.log("Component has mounted");
+    }
+  }, [settings]);
 
   const handleOk = (e) => {
     props.setOpen(false);
@@ -529,7 +528,9 @@ const Settings = (props) => {
                       for (const item in localStorage) {
                         localStorage.removeItem(item);
                       }
-                      window.location.reload();
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 2000);
                     }}
                   >
                     Reset
