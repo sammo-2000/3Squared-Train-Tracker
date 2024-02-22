@@ -12,8 +12,7 @@ import {
 import "../../css/drawer.css";
 import { useEffect, useState } from "react";
 
-import search from "../../assets/icons/search.svg";
-import back from "../../assets/icons/back.svg";
+import Icon from "../Icons.js";
 
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
 import { UseRoutes } from "../../hooks/RoutesHook.js";
@@ -130,7 +129,7 @@ const Trains = (props) => {
         }}
         open={props.isOpen}
         placement="left"
-        closeIcon={<img alt="back" src={back} />}
+        closeIcon={<Icon iconName ="back"/>}
         bodyStyle={{ padding: 0 }}
         extra={
           <Space>
@@ -139,20 +138,7 @@ const Trains = (props) => {
               shape="circle"
               type="primary"
               ghost
-              icon={
-                <>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.5rem"
-                    height="1.5rem"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    viewBox="0 -960 960 960"
-                  >
-                    <path d="M450.001-450.001h-200q-12.75 0-21.375-8.628-8.625-8.629-8.625-21.384 0-12.756 8.625-21.371 8.625-8.615 21.375-8.615h200v-200q0-12.75 8.628-21.375 8.629-8.625 21.384-8.625 12.756 0 21.371 8.625 8.615 8.625 8.615 21.375v200h200q12.75 0 21.375 8.628 8.625 8.629 8.625 21.384 0 12.756-8.625 21.371-8.625 8.615-21.375 8.615h-200v200q0 12.75-8.628 21.375-8.629 8.625-21.384 8.625-12.756 0-21.371-8.625-8.615-8.625-8.615-21.375v-200Z" />
-                  </svg>
-                </>
-              }
+              icon={<Icon iconName= "add"/>}
             ></Button>
           </Space>
         }
@@ -161,16 +147,7 @@ const Trains = (props) => {
           placeholder="Search Headcode"
           allowClear
           size="large"
-          prefix={
-            <img
-              style={{
-                padding: "0px 0.5rem",
-                opacity: "50%",
-              }}
-              alt="search"
-              src={search}
-            />
-          }
+          prefix={<Icon iconName="search"/>}
           onChange={(e) => setSearchText(e.target.value)}
           style={{
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -253,23 +230,14 @@ const Trains = (props) => {
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
           placement="left"
-          closeIcon={<img alt="back" className="rotate-180" src={back} />}
+          closeIcon={<Icon iconName="back"/>}
           bodyStyle={{ padding: 0 }}
         >
           <Input
             placeholder="Search Headcodes"
             allowClear
             size="large"
-            prefix={
-              <img
-                style={{
-                  padding: "0px 0.5rem",
-                  opacity: "50%",
-                }}
-                alt="search"
-                src={search}
-              />
-            }
+            prefix={<Icon iconName="search"/>}
             onChange={(e) => setSearchText(e.target.value)}
             style={{
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",

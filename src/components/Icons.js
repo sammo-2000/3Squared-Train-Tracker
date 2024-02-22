@@ -1,4 +1,3 @@
-import { svg } from "leaflet";
 import React from "react";
 
 //<Icon iconName =""/> 
