@@ -37,7 +37,8 @@ export const defaultSettings = {
   rails: {
     label: "Hide Rails",
     key: "0",
-    url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+    url: "",
+    // http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png
   },
 };
 
