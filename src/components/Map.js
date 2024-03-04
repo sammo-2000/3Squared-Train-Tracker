@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Polyline,
-  Circle,
-} from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import { FloatButton } from "antd";
 import { AimOutlined } from "@ant-design/icons";
 import { useMap } from "../hooks/MapHook";
-import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
 import LocationDetails from "./modals/LocationDetails";
@@ -24,8 +15,8 @@ import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 import StationMarker from "./StationMarker";
 
-// icons
-import stationIcon from "../assets/icons/trainStation.png";
+// Components
+import setRouteOnMap from "./SetRouteOnMap";
 
 const Map = (props) => {
   const { map, setMap } = useMap();
@@ -45,15 +36,22 @@ const Map = (props) => {
 
   const [plotPointsState, setPlotPointsState] = useState([]);
 
+  const setRouteComponent = () =>
+    plotPointsState.map((train) => {
+      if (!train.isSelected) {
+        return setRouteOnMap(train);
+      }
+      return null; // or any other fallback if needed
+    });
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await plotPoints(trackedRoutes);
       if (data.length > 0) {
         await setPlotPointsState(data);
-        console.log("My data");
-        console.log(data);
       }
     };
+    // s
     fetchData();
   }, [setPlotPointsState, trackedRoutes]);
 
@@ -120,7 +118,13 @@ const Map = (props) => {
           ;
           <StationMarker />
           <TrainMarker />
-          {plotPointsState.length !== 0 ? (
+          {plotPointsState.length !== 0 ? setRouteComponent() : null}
+          {/* {plotPointsState.length !== 0
+            ? plotPointsState.map((route, index) => {
+                setRouteOnMap(route);
+              })
+            : null} */}
+          {/* {plotPointsState.length !== 0 ? (
             <Polyline
               center={center}
               pathOptions={{
@@ -144,7 +148,7 @@ const Map = (props) => {
                 />
               ))}
             </>
-          ) : null}
+          ) : null} */}
         </MapContainer>
       </div>
     </>
