@@ -1,35 +1,60 @@
-import {
-  Drawer,
-  Space,
-  Button,
-  Input,
-  Tabs,
-  List,
-  Popconfirm,
-  notification,
-  message,
-} from "antd";
-import "../../css/drawer.css";
+// ------------------- Outside Components -------------------
 import { useState, useEffect } from "react";
+import { Drawer, Space, Button, List } from "antd";
 
+// ------------------- Our Components -------------------
+import MyInput from "./routes/Input.js";
+import MyPopupConfirm from "./routes/PopupConfirm.js";
+import { getBackgroundColor, getHoverStyles } from "./routes/ListItemStyle.js";
+import MyListItem from "./routes/ListItem.js";
+
+// ------------------- Hooks Import -------------------
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 import { UseRoutes } from "../../hooks/RoutesHook.js";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
 
+// ------------------- API -------------------
 import { tiplocAPI } from "../../api/tiplocAPI.js";
 import { detailAPI } from "../../api/detailAPI.js";
 
+// ------------------- CSS -------------------
+import "../../css/drawer.css";
 import Icon from "../Icons.js";
 
 const Routes = (props) => {
+  // ------------------- useStates -------------------
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [recentlyUsed, setRecentlyUsed] = useState([]);
 
+  // ------------------- Hooks -------------------
   const { trackedLocations } = UseTrackedLocations();
   const { routes, setRoutes } = UseRoutes();
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
+  // ------------------- Functions -------------------
+  // Stop tracking a route
+  const stopTracking = async (item) => {
+    localStorage.clear();
+    let _trackedRoutes = [...trackedRoutes];
+    const _itemToRemove = item;
+    _trackedRoutes = _trackedRoutes.filter((route) => route !== _itemToRemove);
+    await setTrackedRoutes(_trackedRoutes);
+  };
+
+  // Start tracking a route
+  const startTracking = async (item) => {
+    localStorage.clear();
+    let _trackedRoutes = [...trackedRoutes];
+    const _newData = await detailAPI([item]);
+    _trackedRoutes = [..._trackedRoutes, ..._newData];
+    await setTrackedRoutes(_trackedRoutes);
+  };
+
+  // Open and close second drawer
+  const showChildrenDrawer = () => setChildrenDrawer(true);
+  const onChildrenDrawerClose = () => setChildrenDrawer(false);
+
+  // ------------------- UseEffects -------------------
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -68,59 +93,25 @@ const Routes = (props) => {
     fetchData();
   }, [trackedLocations, trackedRoutes]);
 
-  const showChildrenDrawer = () => {
-    setChildrenDrawer(true);
-  };
-
-  const onChildrenDrawerClose = () => {
-    setChildrenDrawer(false);
-  };
-
-  const onTrackedRouteClick = (item, e) => {
-    if (e.key === "view-details") {
-    }
-
-    if (e.key === "stop-tracking") {
-      setTrackedRoutes(trackedRoutes.filter((i) => i !== item));
-
-      message.success("Route removed from tracking.");
-    }
-  };
-
-  const setTracked = (item) => {
-    setChildrenDrawer(false);
-    setSearchText("");
-    setRecentlyUsed([...recentlyUsed, item]);
-    setTrackedRoutes([...trackedRoutes, item]);
-
-    notification.open({
-      message: "Routes loading...",
-      description:
-        "Please wait while we load routes from your selected location. This may take a few seconds.",
-      duration: 5,
-    });
-
-    if (recentlyUsed.length === 0) {
-      notification.open({
-        message: "Recently Used",
-        description:
-          "A location was added to your recently used list, you can disable this in settings.",
-        duration: 5,
-      });
-    }
-  };
+  // ------------------- Local veriables -------------------
+  // This are to set common styles for both drawers at once
+  const placement = "left";
+  const closeIcon = <Icon iconName="close" />;
+  const listStyle = { size: "200px" };
+  const drawerStyle = { padding: 0 };
 
   return (
     <>
+      {/* First menu drawer */}
       <Drawer
         title="Tracked Routes"
         onClose={() => {
           props.setActiveDraw("menu");
         }}
         open={props.isOpen}
-        placement="left"
-        closeIcon={<Icon iconName="back" />}
-        bodyStyle={{ padding: 0 }}
+        placement={placement}
+        closeIcon={closeIcon}
+        bodyStyle={drawerStyle}
         extra={
           <Space>
             <Button
@@ -133,163 +124,69 @@ const Routes = (props) => {
           </Space>
         }
       >
-        <Input
-          placeholder="Search Route"
-          allowClear
-          size="large"
-          prefix={<Icon iconName="search" />}
-          onChange={(e) => setSearchText(e.target.value)}
-          style={{
-            borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
-            marginTop: "-1px",
-            borderRight: "none",
-            borderLeft: "none",
-            borderRadius: "0",
-            padding: "1rem 1rem",
-          }}
-        />
+        {/* Search box on first menu */}
+        <MyInput onChange={(e) => setSearchText(e.target.value)} />
 
+        {/* List routes on first menu */}
         <List
           size="large"
           dataSource={trackedRoutes}
-          style={{ size: "200px" }}
+          style={listStyle}
           renderItem={(item) => (
-            <Popconfirm
-              icon={null}
-              title="Untrack Route"
-              description="Are you sure you want to untrack this route?"
+            <MyPopupConfirm
+              title="Stop Tracking"
+              description="Are you sure you want to stop tracking this route?"
               onConfirm={async () => {
-                localStorage.clear();
-                let _trackedRoutes = [...trackedRoutes];
-                const _itemToRemove = item;
-                _trackedRoutes = _trackedRoutes.filter(
-                  (route) => route !== _itemToRemove
-                );
-                await setTrackedRoutes(_trackedRoutes);
+                await stopTracking(item);
               }}
-              onCancel={null}
-              okText="Confirm"
-              cancelText="Cancel"
             >
               <List.Item
-                className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
-                  item.tiploc.lastReportedType === "CANCELLED"
-                    ? "bg-red-100 hover:bg-red-200"
-                    : ""
-                }
-                ${
-                  item.tiploc.lastReportedType === "TERMINATED"
-                    ? "bg-yellow-100 hover:bg-yellow-200"
-                    : ""
-                }`}
+                className={`${getHoverStyles()} ${getBackgroundColor(
+                  item.tiploc.lastReportedType
+                )}`}
               >
-                <button className="flex flex-col gap-1 w-full items-start">
-                  <p className="text-blue-400 text-sm">
-                    {item.tiploc.headCode}
-                  </p>
-                  <p className="text-blue-600 text-sm">
-                    {item.tiploc.toc_Name}
-                  </p>
-                  <p className="font-bold text-lg my-2">
-                    {item.tiploc.originLocation} -{" "}
-                    {item.tiploc.destinationLocation}
-                  </p>
-                  <p className="text-gray-500">
-                    {item.tiploc.lastReportedType}
-                  </p>
-                </button>
+                <MyListItem item={item.tiploc} />
               </List.Item>
-            </Popconfirm>
+            </MyPopupConfirm>
           )}
         />
+        {/* Second menu drawer */}
         <Drawer
           title="Track New Route"
           closable={true}
           onClose={onChildrenDrawerClose}
           open={childrenDrawer}
-          placement="left"
-          closeIcon={<Icon iconName="close" />}
-          bodyStyle={{ padding: 0 }}
+          placement={placement}
+          closeIcon={closeIcon}
+          bodyStyle={drawerStyle}
         >
-          <Input
-            placeholder="Search Routes"
-            allowClear
-            size="large"
-            prefix={<Icon iconName="search" />}
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{
-              borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
-              marginTop: "-1px",
-              borderRight: "none",
-              borderLeft: "none",
-              borderRadius: "0",
-              padding: "1rem 1rem",
-            }}
-          />
+          {/* Search box on second menu */}
+          <MyInput onChange={(e) => setSearchText(e.target.value)} />
 
-          <Tabs
-            defaultActiveKey="0"
-            tabBarStyle={{
-              padding: ".5rem 2rem 0px 2rem",
-              fontWeight: "500",
-              marginBottom: "0px",
-            }}
-          >
-            <Tabs.TabPane key={0} tab="All">
-              {routes && routes.length > 0 && (
-                <List
-                  size="large"
-                  dataSource={routes}
-                  style={{ size: "200px" }}
-                  renderItem={(item) => (
-                    <Popconfirm
-                      icon={null}
-                      title="Track Route"
-                      description="Are you sure you want to track this route?"
-                      onConfirm={async () => {
-                        localStorage.clear();
-                        let _trackedRoutes = [...trackedRoutes];
-                        const _newData = await detailAPI([item]);
-                        _trackedRoutes = [..._trackedRoutes, ..._newData];
-                        await setTrackedRoutes(_trackedRoutes);
-                      }}
-                      onCancel={null}
-                      okText="Confirm"
-                      cancelText="Cancel"
-                    >
-                      <List.Item
-                        className={`hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer ${
-                          item.lastReportedType === "CANCELLED"
-                            ? "bg-red-100 hover:bg-red-200"
-                            : ""
-                        }
-                          ${
-                            item.lastReportedType === "TERMINATED"
-                              ? "bg-yellow-100 hover:bg-yellow-200"
-                              : ""
-                          }`}
-                      >
-                        <button className="flex flex-col gap-1 w-full items-start">
-                          <p className="text-blue-400 text-sm">
-                            {item.headCode}
-                          </p>
-                          <p className="text-blue-600 text-sm">
-                            {item.toc_Name}
-                          </p>
-                          <p className="font-bold text-lg my-2">
-                            {item.originLocation} - {item.destinationLocation}
-                          </p>
-                          <p className="text-gray-500">
-                            {item.lastReportedType}
-                          </p>
-                        </button>
-                      </List.Item>
-                    </Popconfirm>
-                  )}
-                />
+          {routes && routes.length > 0 && (
+            <List
+              size="large"
+              dataSource={routes}
+              style={listStyle}
+              renderItem={(item) => (
+                <MyPopupConfirm
+                  title="Track Route"
+                  description="Are you sure you want to track this route?"
+                  onConfirm={async () => {
+                    await startTracking(item);
+                  }}
+                >
+                  <List.Item
+                    className={`${getHoverStyles()} ${getBackgroundColor(
+                      item.lastReportedType
+                    )}`}
+                  >
+                    <MyListItem item={item} />
+                  </List.Item>
+                </MyPopupConfirm>
               )}
-            </Tabs.TabPane>
-          </Tabs>
+            />
+          )}
         </Drawer>
       </Drawer>
     </>
