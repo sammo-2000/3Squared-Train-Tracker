@@ -210,7 +210,79 @@ const Settings = (props) => {
         )}
       >
         <Tabs defaultActiveKey="1">
-          <TabPane tab={<span>Map</span>} key="1">
+          <TabPane tab={<span>About</span>} key="1">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  About
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  National Map for the Rail Network in the UK, providing a
+                  schematic representation of routes, stops, and the progress of
+                  trains. The map will utilize data from the 3Squared Train Data
+                  API, offering information such as coordinates for locations on
+                  the rail network and the schedule for each train's journey.
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Tour
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Button onClick={() => {}} disabled>
+                    Begin Tour (Coming Soon)
+                  </Button>
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Version
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Tooltip title="Version 1.0.0">
+                    <Typography.Link>v1.2.0</Typography.Link>
+                  </Tooltip>
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Developed By
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-col gap-y-2">
+                  <div className="flex gap-x-2">
+                    <Tooltip title="Author: John Doe">
+                      <Typography.Link>Ethan Morrison</Typography.Link>
+                    </Tooltip>
+                    <Tooltip title="Author: John Doe">
+                      <Typography.Link>Joe Grierson</Typography.Link>
+                    </Tooltip>
+                    <Tooltip title="Author: John Doe">
+                      <Typography.Link>Sam Knowles</Typography.Link>
+                    </Tooltip>
+                  </div>
+                  <div className="flex gap-x-2">
+                    <Tooltip title="Author: John Doe">
+                      <Typography.Link>Matthew Richards</Typography.Link>
+                    </Tooltip>
+                    <Tooltip title="Author: John Doe">
+                      <Typography.Link>Ayman Sammo</Typography.Link>
+                    </Tooltip>
+                  </div>
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  License
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Tooltip title="MIT License">
+                    <Typography.Link>MIT License</Typography.Link>
+                  </Tooltip>
+                </dd>
+              </div>
+            </dl>
+          </TabPane>
+          <TabPane tab={<span>Map</span>} key="2">
             <dl className="divide-y divide-gray-100">
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
@@ -394,7 +466,7 @@ const Settings = (props) => {
               </div>
             </dl>
           </TabPane>
-          <TabPane tab={<span>Menus</span>} key="2">
+          <TabPane tab={<span>Menus</span>} key="3">
             <dl className="divide-y divide-gray-100">
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
@@ -497,7 +569,7 @@ const Settings = (props) => {
               </div>
             </dl>
           </TabPane>
-          <TabPane tab={<span>Notifications</span>} key="3">
+          <TabPane tab={<span>Notifications</span>} key="4">
             <TreeSelect
               className="w-full"
               treeData={notificationsOptions}
@@ -511,7 +583,7 @@ const Settings = (props) => {
               }}
             />
           </TabPane>
-          <TabPane tab={<span>Advanced</span>} key="4">
+          <TabPane tab={<span>Advanced</span>} key="5">
             <dl className="divide-y divide-gray-100">
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">

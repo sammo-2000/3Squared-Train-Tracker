@@ -1,32 +1,42 @@
-// ------------------- Outside Components -------------------
+// ------------------- External Libraries -------------------
 import { useState, useEffect } from "react";
 import { Drawer, Space, Button, List } from "antd";
 
-// ------------------- Our Components -------------------
+// ------------------- Internal Components -------------------
 import MyInput from "./routes/Input.js";
 import MyPopupConfirm from "./routes/PopupConfirm.js";
-import { getBackgroundColor, getHoverStyles } from "./routes/ListItemStyle.js";
 import MyListItem from "./routes/ListItem.js";
+import Search from "./routes/SearchFunction.js";
 
-// ------------------- Hooks Import -------------------
+// ------------------- Style Utilities -------------------
+import { getBackgroundColor, getHoverStyles } from "./routes/ListItemStyle.js";
+
+// ------------------- Custom Hooks -------------------
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 import { UseRoutes } from "../../hooks/RoutesHook.js";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
 
-// ------------------- API -------------------
+// ------------------- API Functions -------------------
 import { tiplocAPI } from "../../api/tiplocAPI.js";
 import { detailAPI } from "../../api/detailAPI.js";
 
-// ------------------- CSS -------------------
+// ------------------- CSS Styles -------------------
 import "../../css/drawer.css";
+
+// ------------------- Icons -------------------
 import Icon from "../Icons.js";
 
 const Routes = (props) => {
-  // ------------------- useStates -------------------
+  // ------------------- useState -------------------
   const [childrenDrawer, setChildrenDrawer] = useState(false);
+  // Routes
   const [searchText, setSearchText] = useState("");
+  const [searchedRoutes, setSearchedRoutes] = useState([]);
+  // Track Routes
+  const [trackedSearchText, setTrackedSearchText] = useState("");
+  const [trackedSearchedRoutes, setTrackedSearchedRoutes] = useState([]);
 
-  // ------------------- Hooks -------------------
+  // ------------------- Custom Hooks -------------------
   const { trackedLocations } = UseTrackedLocations();
   const { routes, setRoutes } = UseRoutes();
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
@@ -54,7 +64,17 @@ const Routes = (props) => {
   const showChildrenDrawer = () => setChildrenDrawer(true);
   const onChildrenDrawerClose = () => setChildrenDrawer(false);
 
-  // ------------------- UseEffects -------------------
+  // ------------------- useEffects -------------------
+  // Search filter for routes
+  useEffect(() => {
+    setSearchedRoutes(Search(searchText, routes, false));
+  }, [searchText]);
+
+  // Search filter for tracked routes
+  useEffect(() => {
+    setTrackedSearchedRoutes(Search(trackedSearchText, trackedRoutes, true));
+  }, [trackedSearchText]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -93,7 +113,7 @@ const Routes = (props) => {
     fetchData();
   }, [trackedLocations, trackedRoutes]);
 
-  // ------------------- Local veriables -------------------
+  // ------------------- Local Variables -------------------
   // This are to set common styles for both drawers at once
   const placement = "left";
   const closeIcon = <Icon iconName="close" />;
@@ -125,12 +145,12 @@ const Routes = (props) => {
         }
       >
         {/* Search box on first menu */}
-        <MyInput onChange={(e) => setSearchText(e.target.value)} />
+        <MyInput onChange={(e) => setTrackedSearchText(e.target.value)} />
 
         {/* List routes on first menu */}
         <List
           size="large"
-          dataSource={trackedRoutes}
+          dataSource={trackedSearchedRoutes || trackedRoutes}
           style={listStyle}
           renderItem={(item) => (
             <MyPopupConfirm
@@ -166,7 +186,7 @@ const Routes = (props) => {
           {routes && routes.length > 0 && (
             <List
               size="large"
-              dataSource={routes}
+              dataSource={searchedRoutes || routes}
               style={listStyle}
               renderItem={(item) => (
                 <MyPopupConfirm
