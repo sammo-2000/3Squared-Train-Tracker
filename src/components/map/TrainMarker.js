@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, CircleMarker } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../assets/icons/trainIcon.png";
-import "../css/leaflet.css";
+import stationIcon from "../../assets/icons/train.jpg";
+import "../../css/leaflet.css";
 
 // Hooks & Contexts
-import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
+import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook";
 
 const moment = require("moment");
 
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
-  iconSize: [75, 75],
+  iconSize: [10, 67],
 });
 
 const TrainMarker = () => {
@@ -48,33 +48,42 @@ const TrainMarker = () => {
   return (
     <>
       {trainLocations.map((train) => (
-        <Marker
-          key={train.id + train.toc_Name}
-          position={train.position}
-          icon={trainStationIcon}
-          riseOnHover={true}
-        >
-          <Popup closeButton={false}>
-            <div className="min-w-[250px]">
-              <strong className="text-lg text-center block">
-                {train.originLocation} - {train.destinationLocation}
-              </strong>
-              <div className="w-full h-[1px] bg-gray-400 my-1"></div>
-              <div className="text-xs text-gray-500">
-                <strong>Activation ID </strong>
-                {train.activationId}
-              </div>
-              <div className="flex justify-between mt-4">
-                <div>
-                  <span>{train.lastReportedType}</span>
+        <div>
+          <CircleMarker
+            center={train.position}
+            pathOptions={{ color: "blue" }}
+            radius={18}
+          >
+            <Popup>zoom</Popup>
+          </CircleMarker>
+          <Marker
+            key={train.id + train.toc_Name}
+            position={train.position}
+            icon={trainStationIcon}
+            riseOnHover={true}
+          >
+            <Popup closeButton={false}>
+              <div className="min-w-[250px]">
+                <strong className="text-lg text-center block">
+                  {train.originLocation} - {train.destinationLocation}
+                </strong>
+                <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+                <div className="text-xs text-gray-500">
+                  <strong>Activation ID </strong>
+                  {train.activationId}
                 </div>
-                <div className="font-mono">
-                  {moment(train.lastReported).format("h:mm A")}
+                <div className="flex justify-between mt-4">
+                  <div>
+                    <span>{train.lastReportedType}</span>
+                  </div>
+                  <div className="font-mono">
+                    {moment(train.lastReported).format("h:mm A")}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Popup>
-        </Marker>
+            </Popup>
+          </Marker>
+        </div>
       ))}
     </>
   );

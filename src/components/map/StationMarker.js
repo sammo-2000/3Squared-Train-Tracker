@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../assets/icons/trainStation.png";
+import stationIcon from "../../assets/icons/location-pin.png";
 
 // Hooks & Contexts
-import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
+import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
-  iconSize: [38, 38],
+  iconSize: [26, 26],
 });
 
 const StationMarker = () => {
