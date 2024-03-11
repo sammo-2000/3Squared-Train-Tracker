@@ -4,12 +4,9 @@ import React, { useRef, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Draggable from "react-draggable";
 
-import { Button, List, Modal, Tabs } from "antd";
-import { PushpinFilled } from "@ant-design/icons";
-import { Dropdown, message, Space } from "antd";
+import { Modal, Switch } from "antd";
 import { useSettings } from "../../hooks/SettingsHook";
 
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 import {
   getBackgroundColor,
   getHoverStyles,
@@ -29,53 +26,6 @@ function ViewRoutes(props) {
   });
   const draggleRef = useRef(null);
   const location = props.location;
-
-  const items = [
-    {
-      key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-      icon: <SmileOutlined />,
-      disabled: true,
-    },
-    {
-      key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "4",
-      danger: true,
-      label: "a danger item",
-    },
-  ];
 
   // Filter routes based on the currently selected tiploc
   let fromFilteredRoutes = routes.filter((route) => {
@@ -126,6 +76,7 @@ function ViewRoutes(props) {
             // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
             onFocus={() => {}}
             onBlur={() => {}}
+            heiight={10}
             // end
           >
             <span>Location Details</span>
@@ -156,7 +107,7 @@ function ViewRoutes(props) {
           {filteredType === "from"
             ? fromFilteredRoutes.map((route, index) => (
                 <div
-                  className={`${getHoverStyles()} ${getBackgroundColor()}`}
+                  className={`${getHoverStyles()} ${getBackgroundColor()} p-3`}
                   key={index}
                 >
                   <ListItem item={route} />
@@ -164,7 +115,7 @@ function ViewRoutes(props) {
               ))
             : toFilteredRoutes.map((route, index) => (
                 <div
-                  className={`${getHoverStyles()} ${getBackgroundColor()}`}
+                  className={`${getHoverStyles()} ${getBackgroundColor()} p-3`}
                   key={index}
                 >
                   <ListItem item={route} />
