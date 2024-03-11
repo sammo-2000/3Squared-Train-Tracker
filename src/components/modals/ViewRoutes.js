@@ -4,12 +4,17 @@ import React, { useRef, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Draggable from "react-draggable";
 
-import { Button, Modal, Tabs } from "antd";
+import { Button, List, Modal, Tabs } from "antd";
 import { PushpinFilled } from "@ant-design/icons";
 import { Dropdown, message, Space } from "antd";
 import { useSettings } from "../../hooks/SettingsHook";
 
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  getBackgroundColor,
+  getHoverStyles,
+} from "../../components/drawers/routes/ListItemStyle.js";
+import ListItem from "../../components/drawers/routes/ListItem.js";
 
 function ViewRoutes(props) {
   const { settings, setSettings } = useSettings();
@@ -150,10 +155,20 @@ function ViewRoutes(props) {
           </button>
           {filteredType === "from"
             ? fromFilteredRoutes.map((route, index) => (
-                <div key={index}> Origin Tiploc: {route.originTiploc}</div>
+                <div
+                  className={`${getHoverStyles()} ${getBackgroundColor()}`}
+                  key={index}
+                >
+                  <ListItem item={route} />
+                </div>
               ))
             : toFilteredRoutes.map((route, index) => (
-                <div key={index}> Destination Tiploc: {route.originTiploc}</div>
+                <div
+                  className={`${getHoverStyles()} ${getBackgroundColor()}`}
+                  key={index}
+                >
+                  <ListItem item={route} />
+                </div>
               ))}
         </div>
       </Modal>
