@@ -28,7 +28,6 @@ const Map = (props) => {
   const { settings, setSettings } = useSettings();
   const [detailsModal, setDetailsModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
-  // const [map, setMap] = useState(null);
 
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
@@ -120,9 +119,9 @@ const Map = (props) => {
             }}
           />
           ;
-          <MarkerClusterGroup>
+          <TrainMarker />
+          <MarkerClusterGroup chunkedLoading>
             <StationMarker />
-            <TrainMarker />
             <StartEndMarkers />
             <TIPLOCMarkers />
           </MarkerClusterGroup>
