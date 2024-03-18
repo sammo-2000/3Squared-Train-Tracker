@@ -110,7 +110,11 @@ const TrainDetailTimer = ({ route, schedule }) => {
           <span
             className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
           >
-            {timeDifferent} mintues late
+            {timeDifferent == 0
+              ? "On Time"
+              : isLate === "Yes"
+              ? `${Math.abs(timeDifferent)} mintues late`
+              : `${Math.abs(timeDifferent)} mintues early`}
           </span>
         </span>
       )}
