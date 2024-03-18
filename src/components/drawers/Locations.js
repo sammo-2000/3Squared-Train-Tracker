@@ -22,7 +22,6 @@ import { findNotification } from "../../contexts/SettingsContext";
 import Icon from "../Icons";
 
 import LocationDetails from "../modals/LocationDetails";
-import ViewRoutes from "../modals/ViewRoutes";
 
 import Cookies from "js-cookie";
 
@@ -39,8 +38,6 @@ const Locations = (props) => {
   const [notificationContext, notificationApi] = props.notifications;
   const [messageContext, messageApi] = props.messages;
   const [detailsModal, setDetailsModal] = useState(false);
-  const [ViewRoutesModal, setViewRoutesModal] = useState(false);
-  const [searchFilterModal, setSearchFilterModal] = useState(false);
   const [selectedDetails, setSelectedDetails] = useState({});
   const { map, setMap } = useMap();
   const { settings, setSettings } = useSettings();
@@ -59,8 +56,9 @@ const Locations = (props) => {
     }
 
     if (e.key === "view-routes") {
-      setViewRoutesModal(true);
-      setSelectedDetails(item);
+      // Close the drawer
+      Cookies.set("openDrawer", item.Tiploc);
+      props.setActiveDraw("routes");
     }
 
     if (e.key === "stop-tracking") {
@@ -154,11 +152,6 @@ const Locations = (props) => {
       <LocationDetails
         isOpen={detailsModal}
         setOpen={setDetailsModal}
-        location={selectedDetails}
-      />
-      <ViewRoutes
-        isOpen={ViewRoutesModal}
-        setOpen={setViewRoutesModal}
         location={selectedDetails}
       />
       <Drawer

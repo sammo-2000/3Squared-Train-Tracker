@@ -26,6 +26,9 @@ import "../../css/drawer.css";
 // ------------------- Icons -------------------
 import Icon from "../Icons.js";
 
+// ------------------- Cookies -------------------
+import Cookies from "js-cookie";
+
 const Routes = (props) => {
   // ------------------- useState -------------------
   const [childrenDrawer, setChildrenDrawer] = useState(false);
@@ -61,14 +64,26 @@ const Routes = (props) => {
   };
 
   // Open and close second drawer
-  const showChildrenDrawer = () => setChildrenDrawer(true);
-  const onChildrenDrawerClose = () => setChildrenDrawer(false);
+  const openCloseChildrenDrawer = () => setChildrenDrawer(!childrenDrawer);
 
   // ------------------- useEffects -------------------
   // Search filter for routes
   useEffect(() => {
     setSearchedRoutes(Search(searchText, routes, false));
   }, [searchText]);
+
+  // Open child drawer when cookie is set to true
+  useEffect(
+    () => {
+      const location = Cookies.get("openDrawer");
+      if (!location) return;
+      Cookies.remove("openDrawer");
+      setChildrenDrawer(true);
+      setSearchText("from:" + location.toString().toLocaleLowerCase());
+    },
+    [Cookies.get("openDrawer")],
+    setSearchText
+  );
 
   // Search filter for tracked routes
   useEffect(() => {
@@ -113,13 +128,6 @@ const Routes = (props) => {
     fetchData();
   }, [trackedLocations, trackedRoutes]);
 
-  // ------------------- Local Variables -------------------
-  // This are to set common styles for both drawers at once
-  const placement = "left";
-  const closeIcon = <Icon iconName="close" />;
-  const listStyle = { size: "200px" };
-  const drawerStyle = { padding: 0 };
-
   return (
     <>
       {/* First menu drawer */}
@@ -129,13 +137,13 @@ const Routes = (props) => {
           props.setActiveDraw("menu");
         }}
         open={props.isOpen}
-        placement={placement}
-        closeIcon={closeIcon}
-        bodyStyle={drawerStyle}
+        placement={"left"}
+        closeIcon={<Icon iconName="close" />}
+        bodyStyle={{ padding: 0 }}
         extra={
           <Space>
             <Button
-              onClick={showChildrenDrawer}
+              onClick={openCloseChildrenDrawer}
               shape="circle"
               type="primary"
               ghost
@@ -145,13 +153,16 @@ const Routes = (props) => {
         }
       >
         {/* Search box on first menu */}
-        <MyInput onChange={(e) => setTrackedSearchText(e.target.value)} />
+        <MyInput
+          value={trackedSearchText || ""}
+          onChange={(e) => setTrackedSearchText(e.target.value)}
+        />
 
         {/* List routes on first menu */}
         <List
           size="large"
           dataSource={trackedSearchedRoutes || trackedRoutes}
-          style={listStyle}
+          style={{ size: "200px" }}
           renderItem={(item) => (
             <MyPopupConfirm
               title="Stop Tracking"
@@ -174,20 +185,23 @@ const Routes = (props) => {
         <Drawer
           title="Track New Route"
           closable={true}
-          onClose={onChildrenDrawerClose}
+          onClose={openCloseChildrenDrawer}
           open={childrenDrawer}
-          placement={placement}
-          closeIcon={closeIcon}
-          bodyStyle={drawerStyle}
+          placement={"left"}
+          closeIcon={<Icon iconName="close" />}
+          bodyStyle={{ padding: 0 }}
         >
           {/* Search box on second menu */}
-          <MyInput onChange={(e) => setSearchText(e.target.value)} />
+          <MyInput
+            value={searchText || ""}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
 
           {routes && routes.length > 0 && (
             <List
               size="large"
               dataSource={searchedRoutes || routes}
-              style={listStyle}
+              style={{ size: "200px" }}
               renderItem={(item) => (
                 <MyPopupConfirm
                   title="Track Route"

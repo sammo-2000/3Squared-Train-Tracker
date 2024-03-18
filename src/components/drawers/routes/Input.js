@@ -2,7 +2,7 @@ import React from "react";
 import { Input } from "antd";
 import Icon from "../../Icons.js";
 
-const MyInput = ({ placeholder, onChange, icon, size, style }) => {
+const MyInput = ({ placeholder, onChange, icon, size, style, value }) => {
   return (
     <Input
       placeholder={placeholder || "Search Routes"}
@@ -10,6 +10,7 @@ const MyInput = ({ placeholder, onChange, icon, size, style }) => {
       size={size || "large"}
       prefix={icon || <Icon iconName="search" />}
       onChange={onChange}
+      value={value}
       style={
         style || {
           borderBottom: "1px solid rgba(5, 5, 5, 0.06)",

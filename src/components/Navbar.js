@@ -7,6 +7,7 @@ import Icon from "./Icons";
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
+import Tracker from "./drawers/Tracker";
 
 import Settings from "./modals/Settings";
 import { useSettings } from "../hooks/SettingsHook";
@@ -39,6 +40,12 @@ function Navbar() {
         isOpen={activeDrawer === "routes"}
         setActiveDraw={setActiveDrawer}
       />
+
+      <Tracker
+        isOpen={activeDrawer === "tracker"}
+        setActiveDraw={setActiveDrawer}
+      />
+
       <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
 
       <div className="">
@@ -76,6 +83,14 @@ function Navbar() {
             </div>
             <div
               key={4}
+              className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
+              onClick={() => setActiveDrawer("tracker")}
+            >
+              <Icon iconName="route" />
+              <span>Route Tracker</span>
+            </div>
+            <div
+              key={5}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
               onClick={() => setSettingsModal(settingsModal ? false : true)}
             >

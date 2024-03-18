@@ -2,7 +2,7 @@ export const defaultSettings = {
   defaultZoom: 6,
   inspectZoom: 12,
   superZoom: 16,
-  defaultCenter: { Latitude: 53.859007, Longitude: -2.893418 },
+  defaultCenter: { Latitude: 54.45088, Longitude: -2.41332 },
   zoomControlsPosition: {
     label: "Bottom Left",
     key: "3",
@@ -37,7 +37,9 @@ export const defaultSettings = {
   rails: {
     label: "Hide Rails",
     key: "0",
-    url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+    // Null at start to make it hidden when first load
+    url: "",
+    // url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
   },
 };
 
