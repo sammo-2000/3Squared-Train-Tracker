@@ -9,6 +9,7 @@ import {
   notification,
   Menu,
   message,
+  Tag,
 } from "antd";
 
 import "../../css/drawer.css";
@@ -26,11 +27,14 @@ import Cookies from "js-cookie";
 
 import { BranchesOutlined } from "@ant-design/icons";
 
+import SearchFilter from "./../modals/SearchFilter";
+
 const Locations = (props) => {
   const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
+  const [searchFilterModal, setSearchFilterModal] = useState(false);
   const [data, setData] = useState([]);
   const [notificationContext, notificationApi] = props.notifications;
   const [messageContext, messageApi] = props.messages;
@@ -119,6 +123,31 @@ const Locations = (props) => {
     }
   });
 
+  const beginSearch = (value) => {
+    setSearchText(value);
+
+    // TODO: Implement search functionality
+  };
+
+  const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the earth in km
+    const dLat = deg2rad(lat2 - lat1); // deg2rad below
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return Math.round(d * 10) / 10;
+  };
+
+  const deg2rad = (deg) => {
+    return deg * (Math.PI / 180);
+  };
+
   return (
     <>
       <LocationDetails
@@ -147,6 +176,11 @@ const Locations = (props) => {
           </Space>
         }
       >
+        <SearchFilter
+          isOpen={searchFilterModal}
+          setOpen={setSearchFilterModal}
+          defaultKey="1"
+        />
         <Input
           placeholder="Search Locations"
           allowClear
@@ -251,9 +285,9 @@ const Locations = (props) => {
             placeholder="Search TIPLOCs"
             allowClear
             size="large"
-            prefix={<Icon iconName="search" />}
+            prefix={<Icon className="px-1" iconName="search" />}
             onChange={(e) => {
-              setSearchText(e.target.value);
+              beginSearch(e.target.value);
             }}
             style={{
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -263,6 +297,18 @@ const Locations = (props) => {
               borderRadius: "0",
               padding: "1rem 1rem",
             }}
+            value={searchText}
+            suffix={
+              <Button
+                onClick={() =>
+                  setSearchFilterModal(searchFilterModal ? false : true)
+                }
+                type="text"
+                className="px-1"
+              >
+                <Icon iconName="filter" />
+              </Button>
+            }
           />
 
           <Tabs
@@ -273,23 +319,45 @@ const Locations = (props) => {
               marginBottom: "0px",
             }}
           >
-            <Tabs.TabPane key={0} tab="All">
+            <Tabs.TabPane key={0} tab={searchText !== "" ? "Filtered" : "All"}>
               <List
                 size="large"
                 loading={data.length === 0 ? true : false}
-                dataSource={data.filter((item) => {
-                  return (
-                    (item.DisplayName.toLowerCase().includes(
-                      searchText.toLowerCase()
-                    ) ||
-                      item.Tiploc.toLowerCase().includes(
+                dataSource={data
+                  .filter((item) => {
+                    console.log(item.Details.TPS_StationType);
+                    return (
+                      (item.DisplayName.toLowerCase().includes(
                         searchText.toLowerCase()
-                      )) &&
-                    !trackedLocations.some(
-                      (trackedItem) => trackedItem.Tiploc === item.Tiploc
-                    )
-                  );
-                })}
+                      ) ||
+                        item.Tiploc.toLowerCase().includes(
+                          searchText.toLowerCase()
+                        )) &&
+                      !trackedLocations.some(
+                        (trackedItem) => trackedItem.Tiploc === item.Tiploc
+                      )
+                    );
+                  })
+                  .sort((a, b) => {
+                    const aMatches = Array.from(a.Tiploc.toLowerCase()).filter(
+                      (char) => searchText.toLowerCase().includes(char)
+                    ).length;
+                    const bMatches = Array.from(b.Tiploc.toLowerCase()).filter(
+                      (char) => searchText.toLowerCase().includes(char)
+                    ).length;
+
+                    const aLengthDifference = Math.abs(
+                      a.Tiploc.length - searchText.length
+                    );
+                    const bLengthDifference = Math.abs(
+                      b.Tiploc.length - searchText.length
+                    );
+
+                    const aScore = aMatches - aLengthDifference;
+                    const bScore = bMatches - bLengthDifference;
+
+                    return bScore - aScore; // sort in descending order of score
+                  })}
                 pagination={{
                   defaultPageSize: settings.pagination.value,
                   showSizeChanger: false,
@@ -308,8 +376,38 @@ const Locations = (props) => {
                     cancelText="No"
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div>{item.DisplayName}</div>
-                      <div>{item.Tiploc}</div>
+                      <div class="block">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-800 ">
+                          {item.Name}
+                        </h3>
+                        <p class="mt-1 text-gray-600 dark:text-gray-400">
+                          {item.Tiploc} -{" "}
+                          {getDistanceFromLatLonInKm(
+                            settings.defaultCenter.Latitude,
+                            settings.defaultCenter.Longitude,
+                            item.Latitude,
+                            item.Longitude
+                          )}{" "}
+                          km Away
+                        </p>
+                        <div className="flex gap-x-1 mt-2">
+                          {item.Stanox !== null ? (
+                            <Tag className="font-semibold text-gray-600">
+                              #{item.Stanox}
+                            </Tag>
+                          ) : null}
+                          {item.Details.OffNetwork !== "" &&
+                          item.Details.OffNetwork === false ? (
+                            <Tag className="font-semibold" color="success">
+                              Online
+                            </Tag>
+                          ) : (
+                            <Tag className="font-semibold" color="warning">
+                              Offline?
+                            </Tag>
+                          )}
+                        </div>
+                      </div>
                     </List.Item>
                   </Popconfirm>
                 )}
