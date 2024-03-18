@@ -28,7 +28,7 @@ const Map = (props) => {
 
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
-  const center = props.center || [54.091617, -1.793925];
+  const center = props.center || [54.45088, -2.41332];
   const zoom = props.zoom || 6;
 
   let theme = settings.mapTheme;

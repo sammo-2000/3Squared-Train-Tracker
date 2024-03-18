@@ -8,7 +8,6 @@ const SetRouteOnMap = (route) => {
     color: newColor(),
     outline: "black",
     outlineWidth: "2px",
-    outlineStyle: "solid",
   };
 
   // variable to store the route
