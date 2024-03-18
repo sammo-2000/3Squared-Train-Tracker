@@ -8,6 +8,7 @@ import "../css/leaflet.css";
 import LocationDetails from "./modals/LocationDetails";
 import TrainMarker from "./map/TrainMarker";
 import { plotPoints } from "../api/routePlottingAPI";
+import MarkerClusterGroup from "react-leaflet-cluster";
 
 // Hooks
 import { useSettings } from "../hooks/SettingsHook";
@@ -119,10 +120,12 @@ const Map = (props) => {
             }}
           />
           ;
-          <StationMarker />
-          <TrainMarker />
-          <StartEndMarkers />
-          <TIPLOCMarkers />
+          <MarkerClusterGroup>
+            <StationMarker />
+            <TrainMarker />
+            <StartEndMarkers />
+            <TIPLOCMarkers />
+          </MarkerClusterGroup>
           {plotPointsState.length !== 0 ? setRouteComponent() : null}
           {/* {plotPointsState.length !== 0
             ? plotPointsState.map((route, index) => {
