@@ -19,7 +19,7 @@ const StartMarker = () => {
       {trackedRoutes.map((route) =>
         route.schedule.map((schedule) => (
           <>
-            {console.log(schedule)}
+            {/* {console.log(schedule)} */}
             <Marker
               key={route.tiploc.activationId + "_" + schedule.pass}
               position={[schedule.latLong.latitude, schedule.latLong.longitude]}

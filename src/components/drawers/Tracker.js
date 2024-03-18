@@ -43,7 +43,8 @@ const Tracker = (props) => {
   // ------------------- Custom Hooks -------------------
   const { trackedLocations } = UseTrackedLocations();
   const { routes, setRoutes } = UseRoutes();
-  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
+  const { trackedRoutes } = UseTrackedRoutes();
+  const [trainLocations, setTrainLocations] = useState([]);
 
   // ------------------- Functions -------------------
 
@@ -52,6 +53,12 @@ const Tracker = (props) => {
     console.log("Selected Option", selectedOption);
   }, [selectedOption]);
 
+  useEffect(() => {
+    const updatedTrainLocations = [];
+
+    setTrainLocations(updatedTrainLocations);
+  }, [trackedRoutes]);
+
   // ------------------- Local Variables -------------------
   // This are to set common styles for both drawers at once
   const placement = "left";
@@ -59,6 +66,29 @@ const Tracker = (props) => {
   const listStyle = { size: "200px" };
   const drawerStyle = { padding: 0 };
   const description = "This is a description.";
+
+  let lastReportedTiploc;
+  if (
+    selectedOption &&
+    selectedOption.movment &&
+    selectedOption.movment.length > 0
+  ) {
+    lastReportedTiploc =
+      selectedOption.movment[selectedOption.movment.length - 1];
+  }
+
+  let lastReportedTiplocIndex;
+  if (
+    selectedOption &&
+    selectedOption.movment &&
+    selectedOption.movment.length > 0
+  ) {
+    lastReportedTiploc =
+      selectedOption.movment[selectedOption.movment.length - 1];
+    lastReportedTiplocIndex = selectedOption.movment.findIndex(
+      (movment) => movment === lastReportedTiploc
+    );
+  }
 
   return (
     <>
@@ -111,16 +141,30 @@ const Tracker = (props) => {
         {selectedOption ? (
           <Steps
             direction="vertical"
-            current={1}
+            current={lastReportedTiplocIndex || 0}
             className="custom-dot-size custom-step-distance"
           >
-            {selectedOption.schedule.map((scheduleItem, index) => (
-              <Steps.Step
-                key={index}
-                title={scheduleItem.tiploc}
-                description={scheduleItem.location}
-              />
-            ))}
+            {selectedOption.schedule.map((scheduleItem, index) => {
+              let description = (
+                <>
+                  {scheduleItem.location}
+                  <br />
+                  {"EST Arrival: " +
+                    (typeof scheduleItem.pass === "string"
+                      ? scheduleItem.pass.slice(0, 2) +
+                        ":" +
+                        scheduleItem.pass.slice(2)
+                      : "")}
+                </>
+              );
+              return (
+                <Steps.Step
+                  key={index}
+                  title={scheduleItem.tiploc}
+                  description={description}
+                />
+              );
+            })}
           </Steps>
         ) : (
           <p>Please select a route to view its steps.</p>
