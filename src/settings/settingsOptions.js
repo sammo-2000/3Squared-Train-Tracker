@@ -70,11 +70,16 @@ export const themeItems = [
     key: "3",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   },
-  // {
-  //   label: "Just Tracks", // https://www.openrailwaymap.org/
-  //   key: "4",
-  //   url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
-  // },
+  {
+    label: "Clean Light Theme",
+    key: "4",
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  },
+  {
+    label: "Clean Dark Theme",
+    key: "5",
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  },
 ];
 
 export const railsItems = [

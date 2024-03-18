@@ -14,10 +14,11 @@ import { useSettings } from "../hooks/SettingsHook";
 import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 import StationMarker from "./map/StationMarker";
-import StartMarker from "./map/StartMarker";
+import StartEndMarkers from "./map/StartEndMarkers";
+import TIPLOCMarkers from "./map/TIPLOCMarkers";
 
 // Components
-import setRouteOnMap from "./SetRouteOnMap";
+import setRouteOnMap from "./map/SetRouteOnMap";
 import { Circle } from "react-leaflet";
 
 const Map = (props) => {
@@ -120,7 +121,8 @@ const Map = (props) => {
           ;
           <StationMarker />
           <TrainMarker />
-          <StartMarker />
+          <StartEndMarkers />
+          <TIPLOCMarkers />
           {plotPointsState.length !== 0 ? setRouteComponent() : null}
           {/* {plotPointsState.length !== 0
             ? plotPointsState.map((route, index) => {

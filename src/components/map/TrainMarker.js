@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Marker, Popup, CircleMarker } from "react-leaflet";
+import { Marker, Popup, CircleMarker, ImageOverlay } from "react-leaflet";
 import { Icon } from "leaflet";
-import stationIcon from "../../assets/icons/train.jpg";
+import stationIcon from "../../assets/icons/train.svg";
 import "../../css/leaflet.css";
 
 // Hooks & Contexts
@@ -12,6 +12,7 @@ const moment = require("moment");
 const trainStationIcon = new Icon({
   iconUrl: stationIcon,
   iconSize: [10, 67],
+  style: { color: "red" },
 });
 
 const TrainMarker = () => {
@@ -51,11 +52,14 @@ const TrainMarker = () => {
         <div>
           <CircleMarker
             center={train.position}
-            pathOptions={{ color: "blue" }}
-            radius={18}
-          >
-            <Popup>zoom</Popup>
-          </CircleMarker>
+            radius={15}
+            color="#4da6ff"
+            fillColor="#2492ff"
+            fillOpacity={1}
+            stroke={true}
+            weight={2}
+            className="shadow-xl pulse"
+          ></CircleMarker>
           <Marker
             key={train.id + train.toc_Name}
             position={train.position}

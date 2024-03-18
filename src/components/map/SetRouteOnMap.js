@@ -7,12 +7,13 @@ const SetRouteOnMap = (route) => {
   const lineOptions = {
     color: newColor(),
     outline: "black",
-    outlineWidth: "4px",
+    weight: 4,
     outlineStyle: "solid",
     clickable: true,
     lineJoin: "round",
     lineCap: "round",
-    smoothFactor: 2,
+    smoothFactor: 0,
+    noClip: true,
   };
 
   // variable to store the route
