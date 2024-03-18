@@ -53,7 +53,7 @@ function Navbar() {
           <div
             className={`absolute top-0 ${
               settings.menuDirection.value === "right" ? "right-0" : "left-0"
-            } flex flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-100 overflow-hidden divide-x-2 divide-y-2 divide-gray-100`}
+            } flex flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-100 overflow-hidden divide-x-2 divide-y-2 divide-gray-100 shadow-xl `}
           >
             <div
               key={0}

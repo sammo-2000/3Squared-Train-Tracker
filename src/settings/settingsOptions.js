@@ -2,7 +2,7 @@ export const defaultSettings = {
   defaultZoom: 6,
   inspectZoom: 12,
   superZoom: 16,
-  defaultCenter: { Latitude: 53.859007, Longitude: -2.893418 },
+  defaultCenter: { Latitude: 54.45088, Longitude: -2.41332 },
   zoomControlsPosition: {
     label: "Bottom Left",
     key: "3",
@@ -37,7 +37,9 @@ export const defaultSettings = {
   rails: {
     label: "Hide Rails",
     key: "0",
-    url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
+    // Null at start to make it hidden when first load
+    url: "",
+    // url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
   },
 };
 
@@ -70,11 +72,16 @@ export const themeItems = [
     key: "3",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   },
-  // {
-  //   label: "Just Tracks", // https://www.openrailwaymap.org/
-  //   key: "4",
-  //   url: "http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png",
-  // },
+  {
+    label: "Clean Light Theme",
+    key: "4",
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  },
+  {
+    label: "Clean Dark Theme",
+    key: "5",
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  },
 ];
 
 export const railsItems = [

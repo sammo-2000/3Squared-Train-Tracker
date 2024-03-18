@@ -6,3 +6,35 @@
 .leaflet-popup-close-button {
   display: none;
 }
+
+
+
+.pulse::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  border-radius: inherit;
+  opacity: 0.2;
+  color: ' ';
+
+  pointer-events: none;
+  box-shadow: 0 0 0 0 #2492ff;
+  box-shadow: 0 0 0 0 #2492ff;
+  animation: fadeEffect 2s infinite, waveEffect 0.4s infinite;
+}
+
+@keyframes waveEffect {
+  100% {
+    box-shadow: 0 0 0 #2492ff;
+    box-shadow: 0 0 0 3px #2492ff;
+  }
+}
+
+@keyframes fadeEffect {
+  100% {
+    opacity: 0;
+  }
+}
