@@ -41,8 +41,6 @@ const Tracker = (props) => {
   const [trackedSearchedRoutes, setTrackedSearchedRoutes] = useState([]);
 
   // ------------------- Custom Hooks -------------------
-  const { trackedLocations } = UseTrackedLocations();
-  const { routes, setRoutes } = UseRoutes();
   const { trackedRoutes } = UseTrackedRoutes();
   const [trainLocations, setTrainLocations] = useState([]);
 
@@ -63,9 +61,7 @@ const Tracker = (props) => {
   // This are to set common styles for both drawers at once
   const placement = "left";
   const closeIcon = <Icon iconName="close" />;
-  const listStyle = { size: "200px" };
   const drawerStyle = { padding: 0 };
-  const description = "This is a description.";
 
   let lastReportedTiploc;
   if (
@@ -103,39 +99,46 @@ const Tracker = (props) => {
         closeIcon={closeIcon}
         bodyStyle={drawerStyle}
       >
-        {/* Selection Method */}
-
         {/* Dropdown for tracked routes */}
-        <Select
-          showSearch
-          style={{ width: 200 }}
-          placeholder="Select a tracked route"
-          optionFilterProp="children"
-          onChange={(value) => {
-            const selectedRoute = trackedRoutes.find(
-              (route) =>
-                route.tiploc.originTiploc +
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="Select a tracked route"
+            optionFilterProp="children"
+            onChange={(value) => {
+              const selectedRoute = trackedRoutes.find(
+                (route) =>
+                  route.tiploc.originTiploc +
+                    "-" +
+                    route.tiploc.destinationTiploc ===
+                  value
+              );
+              setSelectedOption(selectedRoute);
+            }}
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {trackedRoutes.map((route, index) => (
+              <Option
+                key={index}
+                value={
+                  route.tiploc.originTiploc +
                   "-" +
-                  route.tiploc.destinationTiploc ===
-                value
-            );
-            setSelectedOption(selectedRoute);
-          }}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          {trackedRoutes.map((route, index) => (
-            <Option
-              key={index}
-              value={
-                route.tiploc.originTiploc + "-" + route.tiploc.destinationTiploc
-              }
-            >
-              {route.tiploc.originTiploc + "-" + route.tiploc.destinationTiploc}
-            </Option>
-          ))}
-        </Select>
+                  route.tiploc.destinationTiploc
+                }
+              >
+                {index +
+                  1 +
+                  ". " +
+                  route.tiploc.originTiploc +
+                  "-" +
+                  route.tiploc.destinationTiploc}
+              </Option>
+            ))}
+          </Select>
+        </div>
 
         {/* Route Tracker */}
         {selectedOption ? (
@@ -147,7 +150,7 @@ const Tracker = (props) => {
             {selectedOption.schedule.map((scheduleItem, index) => {
               let description = (
                 <>
-                  {scheduleItem.location}
+                  {scheduleItem.tiploc}
                   <br />
                   {"EST Arrival: " +
                     (typeof scheduleItem.pass === "string"
@@ -160,14 +163,16 @@ const Tracker = (props) => {
               return (
                 <Steps.Step
                   key={index}
-                  title={scheduleItem.tiploc}
+                  title={scheduleItem.location}
                   description={description}
                 />
               );
             })}
           </Steps>
         ) : (
-          <p>Please select a route to view its steps.</p>
+          <p className="text-center">
+            Please select a route to view its steps.
+          </p>
         )}
       </Drawer>
     </>

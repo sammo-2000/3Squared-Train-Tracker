@@ -1,11 +1,12 @@
 /* Adjust the size of the step dots */
 .custom-dot-size .ant-steps-item-icon {
   /* @apply w-16 h-16; */
+  @apply mr-2 !important;
 }
 
 /* Adjust the space between steps */
 .custom-step-distance .ant-steps-item {
-  @apply mb-24;
+  @apply mb-14;
 }
 
 /* Adjust the line height */
@@ -13,11 +14,17 @@
   > .ant-steps-item
   > .ant-steps-item-container
   > .ant-steps-item-tail {
-  height: 240% !important;
+  height: 163% !important;
 }
 
 /* Adjust the margin of the steps container */
 :where(.css-dev-only-do-not-override-1rqnfsa).ant-steps {
   margin: 4rem !important;
   margin-top: 1rem !important;
+}
+
+:where(.css-dev-only-do-not-override-1rqnfsa).ant-steps
+  .ant-steps-item-container {
+  outline: red;
+  width: 70%;
 }
