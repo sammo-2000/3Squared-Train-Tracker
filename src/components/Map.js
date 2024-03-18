@@ -119,32 +119,13 @@ const Map = (props) => {
             }}
           />
           ;
-          <TrainMarker />
           <MarkerClusterGroup chunkedLoading>
             <StationMarker />
             <StartEndMarkers />
             <TIPLOCMarkers />
           </MarkerClusterGroup>
+          <TrainMarker />
           {plotPointsState.length !== 0 ? setRouteComponent() : null}
-          {/* {plotPointsState.length !== 0
-            ? plotPointsState.map((route, index) => {
-                setRouteOnMap(route);
-              })
-            : null} */}
-          {/* {plotPointsState.length !== 0 ? (
-            <Polyline
-              center={center}
-              pathOptions={{
-                color: "green",
-                outline: "black",
-                outlineWidth: "2px",
-                outlineStyle: "solid",
-              }}
-              positions={plotPointsState.map((subArray) =>
-                subArray.slice().reverse()
-              )}
-            />
-              ) : null */}
         </MapContainer>
       </div>
     </>
