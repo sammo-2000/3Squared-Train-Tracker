@@ -21,6 +21,7 @@ const Tracker = (props) => {
   // ------------------- useState -------------------
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [selectedValue, setSelectedValue] = useState();
+
   // Routes
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -228,8 +229,14 @@ const Tracker = (props) => {
       >
         {/* Dropdown for tracked routes */}
         <div
-          style={{ display: "flex", justifyContent: "center", marginTop: "5%" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginTop: "5%",
+          }}
         >
+          <p className="text-center font-bold mb-1">Available Routes</p>
           <Select
             showSearch
             style={{ width: 200 }}
@@ -297,7 +304,7 @@ const Tracker = (props) => {
             })}
           </Steps>
         ) : (
-          <p className="text-center">
+          <p className="text-center mt-2 text-gray-400">
             Please select a route to view its steps.
           </p>
         )}
