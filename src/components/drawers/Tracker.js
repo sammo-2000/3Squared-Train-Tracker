@@ -58,7 +58,7 @@ const Tracker = (props) => {
     let isLate = false;
     let timeDifferent = null;
 
-    selectedOption.movment.map((movment) => {
+    route.movment.map((movment) => {
       if (movment.tiploc === schedule.tiploc) {
         expectedArrival = movment.plannedArrival || null;
         expectedDeparture = new Date(movment.plannedDeparture) || null;
@@ -74,6 +74,7 @@ const Tracker = (props) => {
 
     return (
       <div className="flex flex-col gap-1">
+        {/* Show Planned Details */}
         <span className="text-xl">Planned</span>
         <span>Just Passing By: {passingByOnly}</span>
         {expectedPass && <span>Expected Pass: {expectedPass}</span>}
@@ -83,20 +84,30 @@ const Tracker = (props) => {
         {expectedDeparture && (
           <span>Expected Departure: {EasyTime(expectedDeparture)}</span>
         )}
-        <span className="text-xl">Actual</span>
+
+        {/* Show Acutal Time */}
+        {actualArrival || actualDeparture ? (
+          <span className="text-xl">Actual</span>
+        ) : null}
         {actualArrival && (
           <span>Actual Arrival: {EasyTime(actualArrival)}</span>
         )}
         {actualDeparture && (
           <span>Actual Departure: {EasyTime(actualDeparture)}</span>
         )}
-        <span className="text-xl">Status</span>
+
+        {/* Show Status */}
+        {isPass || isLate || timeDifferent ? (
+          <span className="text-xl">Status</span>
+        ) : null}
         {isPass && <span>Passed: {isPass}</span>}
         {isLate && <span>Late: {isLate}</span>}
         {timeDifferent && (
           <span>
             Time Different:{" "}
-            <span className={isLate ? "text-red-500" : "text-green-500"}>
+            <span
+              className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
+            >
               {timeDifferent} mintues late
             </span>
           </span>
@@ -116,7 +127,7 @@ const Tracker = (props) => {
     let isLate = false;
     let timeDifferent = null;
 
-    selectedOption.movment.map((movment) => {
+    route.movment.map((movment) => {
       if (movment.tiploc === schedule.tiploc) {
         expectedArrival = movment.plannedArrival || null;
         expectedDeparture = new Date(movment.plannedDeparture) || null;
@@ -132,20 +143,31 @@ const Tracker = (props) => {
 
     return (
       <div className="flex flex-col gap-1">
-        <span className="text-xl">Departure & Arrival Times</span>
+        {/* Show Acutal Time */}
+        {actualArrival || actualDeparture ? (
+          <span className="text-xl">Actual</span>
+        ) : null}
         {actualArrival && (
           <span>Actual Arrival: {EasyTime(actualArrival)}</span>
         )}
         {actualDeparture && (
           <span>Actual Departure: {EasyTime(actualDeparture)}</span>
         )}
-        <span className="text-xl">Status</span>
+
+        {/* Show Status */}
+        {isPass || isLate || timeDifferent ? (
+          <span className="text-xl">Status</span>
+        ) : (
+          <span className="text-x1">No information could be found...</span>
+        )}
         {isPass && <span>Passed: {isPass}</span>}
         {isLate && <span>Late: {isLate}</span>}
         {timeDifferent && (
           <span>
             Time Different:{" "}
-            <span className={isLate ? "text-red-500" : "text-green-500"}>
+            <span
+              className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
+            >
               {timeDifferent} mintues late
             </span>
           </span>
@@ -153,6 +175,55 @@ const Tracker = (props) => {
       </div>
     );
   };
+
+  // const TrainDetailTimerPassed = ({ route, schedule }) => {
+  //   let passingByOnly = schedule.pass ? "Yes" : "No";
+  //   let expectedPass = schedule.pass || null;
+  //   let expectedDeparture = null;
+  //   let expectedArrival = null;
+  //   let actualArrival = null;
+  //   let actualDeparture = null;
+  //   let isPass = false;
+  //   let isLate = false;
+  //   let timeDifferent = null;
+
+  //   selectedOption.movment.map((movment) => {
+  //     if (movment.tiploc === schedule.tiploc) {
+  //       expectedArrival = movment.plannedArrival || null;
+  //       expectedDeparture = new Date(movment.plannedDeparture) || null;
+  //       actualArrival = movment.actualArrival || null;
+  //       actualDeparture = new Date(movment.actualDeparture) || null;
+  //       isPass = actualArrival && actualDeparture ? "Yes" : "No";
+  //       isLate = actualDeparture - expectedDeparture > 0 ? "Yes" : "No";
+  //       timeDifferent =
+  //         moment(actualDeparture).diff(moment(expectedDeparture), "minutes") ||
+  //         "0";
+  //     }
+  //   });
+
+  //   return (
+  //     <div className="flex flex-col gap-1">
+  //       <span className="text-xl">Departure & Arrival Times</span>
+  //       {actualArrival && (
+  //         <span>Actual Arrival: {EasyTime(actualArrival)}</span>
+  //       )}
+  //       {actualDeparture && (
+  //         <span>Actual Departure: {EasyTime(actualDeparture)}</span>
+  //       )}
+  //       <span className="text-xl">Status</span>
+  //       {isPass && <span>Passed: {isPass}</span>}
+  //       {isLate && <span>Late: {isLate}</span>}
+  //       {timeDifferent && (
+  //         <span>
+  //           Time Different:{" "}
+  //           <span className={isLate ? "text-red-500" : "text-green-500"}>
+  //             {timeDifferent} mintues late
+  //           </span>
+  //         </span>
+  //       )}
+  //     </div>
+  //   );
+  // };
 
   const EasyTime = (time) => moment(time).format("h:mm A") || "N/A";
 
