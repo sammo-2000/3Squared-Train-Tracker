@@ -1,6 +1,7 @@
 // ------------------- External Libraries -------------------
 import React, { useState, useEffect } from "react";
 import { Drawer, Steps, Select } from "antd";
+import moment from "moment";
 
 // ------------------- Internal Components -------------------
 import MyInput from "./routes/Input.js";
@@ -45,6 +46,115 @@ const Tracker = (props) => {
   const [trainLocations, setTrainLocations] = useState([]);
 
   // ------------------- Functions -------------------
+
+  const TrainDetailTimer = ({ route, schedule }) => {
+    let passingByOnly = schedule.pass ? "Yes" : "No";
+    let expectedPass = schedule.pass || null;
+    let expectedDeparture = null;
+    let expectedArrival = null;
+    let actualArrival = null;
+    let actualDeparture = null;
+    let isPass = false;
+    let isLate = false;
+    let timeDifferent = null;
+
+    selectedOption.movment.map((movment) => {
+      if (movment.tiploc === schedule.tiploc) {
+        expectedArrival = movment.plannedArrival || null;
+        expectedDeparture = new Date(movment.plannedDeparture) || null;
+        actualArrival = movment.actualArrival || null;
+        actualDeparture = new Date(movment.actualDeparture) || null;
+        isPass = actualArrival && actualDeparture ? "Yes" : "No";
+        isLate = actualDeparture - expectedDeparture > 0 ? "Yes" : "No";
+        timeDifferent =
+          moment(actualDeparture).diff(moment(expectedDeparture), "minutes") ||
+          "0";
+      }
+    });
+
+    return (
+      <div className="flex flex-col gap-1">
+        <span className="text-xl">Planned</span>
+        <span>Just Passing By: {passingByOnly}</span>
+        {expectedPass && <span>Expected Pass: {expectedPass}</span>}
+        {expectedArrival && (
+          <span>Expected Arrival: {EasyTime(expectedArrival)}</span>
+        )}
+        {expectedDeparture && (
+          <span>Expected Departure: {EasyTime(expectedDeparture)}</span>
+        )}
+        <span className="text-xl">Actual</span>
+        {actualArrival && (
+          <span>Actual Arrival: {EasyTime(actualArrival)}</span>
+        )}
+        {actualDeparture && (
+          <span>Actual Departure: {EasyTime(actualDeparture)}</span>
+        )}
+        <span className="text-xl">Status</span>
+        {isPass && <span>Passed: {isPass}</span>}
+        {isLate && <span>Late: {isLate}</span>}
+        {timeDifferent && (
+          <span>
+            Time Different:{" "}
+            <span className={isLate ? "text-red-500" : "text-green-500"}>
+              {timeDifferent} mintues late
+            </span>
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const TrainDetailTimerPassed = ({ route, schedule }) => {
+    let passingByOnly = schedule.pass ? "Yes" : "No";
+    let expectedPass = schedule.pass || null;
+    let expectedDeparture = null;
+    let expectedArrival = null;
+    let actualArrival = null;
+    let actualDeparture = null;
+    let isPass = false;
+    let isLate = false;
+    let timeDifferent = null;
+
+    selectedOption.movment.map((movment) => {
+      if (movment.tiploc === schedule.tiploc) {
+        expectedArrival = movment.plannedArrival || null;
+        expectedDeparture = new Date(movment.plannedDeparture) || null;
+        actualArrival = movment.actualArrival || null;
+        actualDeparture = new Date(movment.actualDeparture) || null;
+        isPass = actualArrival && actualDeparture ? "Yes" : "No";
+        isLate = actualDeparture - expectedDeparture > 0 ? "Yes" : "No";
+        timeDifferent =
+          moment(actualDeparture).diff(moment(expectedDeparture), "minutes") ||
+          "0";
+      }
+    });
+
+    return (
+      <div className="flex flex-col gap-1">
+        <span className="text-xl">Departure & Arrival Times</span>
+        {actualArrival && (
+          <span>Actual Arrival: {EasyTime(actualArrival)}</span>
+        )}
+        {actualDeparture && (
+          <span>Actual Departure: {EasyTime(actualDeparture)}</span>
+        )}
+        <span className="text-xl">Status</span>
+        {isPass && <span>Passed: {isPass}</span>}
+        {isLate && <span>Late: {isLate}</span>}
+        {timeDifferent && (
+          <span>
+            Time Different:{" "}
+            <span className={isLate ? "text-red-500" : "text-green-500"}>
+              {timeDifferent} mintues late
+            </span>
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const EasyTime = (time) => moment(time).format("h:mm A") || "N/A";
 
   // ------------------- useEffects -------------------
   useEffect(() => {
@@ -100,7 +210,9 @@ const Tracker = (props) => {
         bodyStyle={drawerStyle}
       >
         {/* Dropdown for tracked routes */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: "5%" }}
+        >
           <Select
             showSearch
             style={{ width: 200 }}
@@ -160,11 +272,28 @@ const Tracker = (props) => {
                       : "")}
                 </>
               );
+
+              let minutesLateDescription = "Minutes late: ";
+              // let testing = ({TrainDetailTimer({ route: route, schedule })});
               return (
                 <Steps.Step
                   key={index}
                   title={scheduleItem.location}
-                  description={description}
+                  // description={TrainDetailTimer({
+                  //   route: selectedOption,
+                  //   schedule: scheduleItem,
+                  // })}
+                  description={
+                    index < lastReportedTiplocIndex
+                      ? TrainDetailTimerPassed({
+                          route: selectedOption,
+                          schedule: scheduleItem,
+                        })
+                      : TrainDetailTimer({
+                          route: selectedOption,
+                          schedule: scheduleItem,
+                        })
+                  }
                 />
               );
             })}
