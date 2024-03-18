@@ -78,6 +78,7 @@ const TrainDetailTimer = ({ route, schedule }) => {
 
   return (
     <div className="flex flex-col gap-1">
+      {/* Show Planned Details */}
       <span className="text-xl">Planned</span>
       <span>Just Passing By: {passingByOnly}</span>
       {expectedPass && <span>Expected Pass: {expectedPass}</span>}
@@ -87,18 +88,28 @@ const TrainDetailTimer = ({ route, schedule }) => {
       {expectedDeparture && (
         <span>Expected Departure: {EasyTime(expectedDeparture)}</span>
       )}
-      <span className="text-xl">Actual</span>
+
+      {/* Show Acutal Time */}
+      {actualArrival || actualDeparture ? (
+        <span className="text-xl">Actual</span>
+      ) : null}
       {actualArrival && <span>Actual Arrival: {EasyTime(actualArrival)}</span>}
       {actualDeparture && (
         <span>Actual Departure: {EasyTime(actualDeparture)}</span>
       )}
-      <span className="text-xl">Status</span>
+
+      {/* Show Status */}
+      {isPass || isLate || timeDifferent ? (
+        <span className="text-xl">Status</span>
+      ) : null}
       {isPass && <span>Passed: {isPass}</span>}
       {isLate && <span>Late: {isLate}</span>}
       {timeDifferent && (
         <span>
           Time Different:{" "}
-          <span className={isLate ? "text-red-500" : "text-green-500"}>
+          <span
+            className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
+          >
             {timeDifferent} mintues late
           </span>
         </span>
