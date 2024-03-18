@@ -34,6 +34,7 @@ const Locations = (props) => {
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [recentlyUsed, setRecentlyUsed] = useState([]);
+  const [searchFilterModal, setSearchFilterModal] = useState(false);
   const [data, setData] = useState([]);
   const [notificationContext, notificationApi] = props.notifications;
   const [messageContext, messageApi] = props.messages;
@@ -178,6 +179,7 @@ const Locations = (props) => {
         <SearchFilter
           isOpen={searchFilterModal}
           setOpen={setSearchFilterModal}
+          defaultKey="1"
         />
         <Input
           placeholder="Search Locations"
@@ -323,7 +325,7 @@ const Locations = (props) => {
                 loading={data.length === 0 ? true : false}
                 dataSource={data
                   .filter((item) => {
-                    // console.log(item);
+                    console.log(item.Details.TPS_StationType);
                     return (
                       (item.DisplayName.toLowerCase().includes(
                         searchText.toLowerCase()

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import { Button, Modal, Tabs, Typography, Tooltip, TreeSelect } from "antd";
 import { SettingOutlined, DownOutlined } from "@ant-design/icons";
-import { Dropdown, message, Space, Input } from "antd";
+import { Dropdown, message, Space, Input, Slider } from "antd";
 import { NumericInput } from "../inputs/NumericInput";
 import Icon from "../Icons";
 
@@ -87,19 +87,51 @@ const SearchFilter = (props) => {
           </Draggable>
         )}
       >
-        <Tabs defaultActiveKey="1">
-          <TabPane tab={<span>Options</span>} key="1">
+        <Tabs defaultActiveKey={props.defaultKey}>
+          <TabPane tab={<span>Locations</span>} key="1">
             <dl className="divide-y divide-gray-100">
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                 <dt className="text-sm font-medium leading-6 text-gray-900">
-                  Filter
+                  Availability
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  National Map for the Rail Network in the UK, providing a
-                  schematic representation of routes, stops, and the progress of
-                  trains. The map will utilize data from the 3Squared Train Data
-                  API, offering information such as coordinates for locations on
-                  the rail network and the schedule for each train's journey.
+                  <Dropdown
+                    menu={{
+                      items: [],
+                      selectable: true,
+                      selectedKeys: [0],
+                      onClick: () => {},
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        Online & Offline Visible
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div>
+                  <dt className="text-sm font-medium leading-6 text-gray-900">
+                    Distance
+                  </dt>
+                  <p class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                    From your map centre
+                  </p>
+                </div>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Slider
+                    range={{
+                      draggableTrack: true,
+                    }}
+                    tooltip={{
+                      formatter: (value) => `${value} km`,
+                    }}
+                    defaultValue={[20, 50]}
+                    max={200}
+                  />
                 </dd>
               </div>
             </dl>
