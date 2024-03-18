@@ -3,24 +3,11 @@ import React, { useState, useEffect } from "react";
 import { Drawer, Steps, Select } from "antd";
 import moment from "moment";
 
-// ------------------- Internal Components -------------------
-import MyInput from "./routes/Input.js";
-import MyPopupConfirm from "./routes/PopupConfirm.js";
-import MyListItem from "./routes/ListItem.js";
-import Search from "./routes/SearchFunction.js";
-
 // ------------------- Style Utilities -------------------
-import { getBackgroundColor, getHoverStyles } from "./routes/ListItemStyle.js";
 import "../../css/steps.css";
 
 // ------------------- Custom Hooks -------------------
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
-import { UseRoutes } from "../../hooks/RoutesHook.js";
-import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
-
-// ------------------- API Functions -------------------
-import { tiplocAPI } from "../../api/tiplocAPI.js";
-import { detailAPI } from "../../api/detailAPI.js";
 
 // ------------------- CSS Styles -------------------
 import "../../css/drawer.css";
@@ -33,10 +20,10 @@ const { Option } = Select;
 const Tracker = (props) => {
   // ------------------- useState -------------------
   const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const [selectedValue, setSelectedValue] = useState();
   // Routes
-  const [searchText, setSearchText] = useState("");
-  const [searchedRoutes, setSearchedRoutes] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
+
   // Track Routes
   const [trackedSearchText, setTrackedSearchText] = useState("");
   const [trackedSearchedRoutes, setTrackedSearchedRoutes] = useState([]);
@@ -108,7 +95,11 @@ const Tracker = (props) => {
             <span
               className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
             >
-              {timeDifferent} mintues late
+              {timeDifferent == 0
+                ? "On Time"
+                : isLate === "Yes"
+                ? `${Math.abs(timeDifferent)} mintues late`
+                : `${Math.abs(timeDifferent)} mintues early`}
             </span>
           </span>
         )}
@@ -168,62 +159,17 @@ const Tracker = (props) => {
             <span
               className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
             >
-              {timeDifferent} mintues late
+              {timeDifferent == 0
+                ? "On Time"
+                : isLate === "Yes"
+                ? `${Math.abs(timeDifferent)} mintues late`
+                : `${Math.abs(timeDifferent)} mintues early`}
             </span>
           </span>
         )}
       </div>
     );
   };
-
-  // const TrainDetailTimerPassed = ({ route, schedule }) => {
-  //   let passingByOnly = schedule.pass ? "Yes" : "No";
-  //   let expectedPass = schedule.pass || null;
-  //   let expectedDeparture = null;
-  //   let expectedArrival = null;
-  //   let actualArrival = null;
-  //   let actualDeparture = null;
-  //   let isPass = false;
-  //   let isLate = false;
-  //   let timeDifferent = null;
-
-  //   selectedOption.movment.map((movment) => {
-  //     if (movment.tiploc === schedule.tiploc) {
-  //       expectedArrival = movment.plannedArrival || null;
-  //       expectedDeparture = new Date(movment.plannedDeparture) || null;
-  //       actualArrival = movment.actualArrival || null;
-  //       actualDeparture = new Date(movment.actualDeparture) || null;
-  //       isPass = actualArrival && actualDeparture ? "Yes" : "No";
-  //       isLate = actualDeparture - expectedDeparture > 0 ? "Yes" : "No";
-  //       timeDifferent =
-  //         moment(actualDeparture).diff(moment(expectedDeparture), "minutes") ||
-  //         "0";
-  //     }
-  //   });
-
-  //   return (
-  //     <div className="flex flex-col gap-1">
-  //       <span className="text-xl">Departure & Arrival Times</span>
-  //       {actualArrival && (
-  //         <span>Actual Arrival: {EasyTime(actualArrival)}</span>
-  //       )}
-  //       {actualDeparture && (
-  //         <span>Actual Departure: {EasyTime(actualDeparture)}</span>
-  //       )}
-  //       <span className="text-xl">Status</span>
-  //       {isPass && <span>Passed: {isPass}</span>}
-  //       {isLate && <span>Late: {isLate}</span>}
-  //       {timeDifferent && (
-  //         <span>
-  //           Time Different:{" "}
-  //           <span className={isLate ? "text-red-500" : "text-green-500"}>
-  //             {timeDifferent} mintues late
-  //           </span>
-  //         </span>
-  //       )}
-  //     </div>
-  //   );
-  // };
 
   const EasyTime = (time) => moment(time).format("h:mm A") || "N/A";
 
@@ -239,7 +185,6 @@ const Tracker = (props) => {
   }, [trackedRoutes]);
 
   // ------------------- Local Variables -------------------
-  // This are to set common styles for both drawers at once
   const placement = "left";
   const closeIcon = <Icon iconName="close" />;
   const drawerStyle = { padding: 0 };
@@ -274,6 +219,7 @@ const Tracker = (props) => {
         title="Route Tracker"
         onClose={() => {
           props.setActiveDraw("menu");
+          setSelectedOption(undefined);
         }}
         open={props.isOpen}
         placement={placement}
@@ -331,29 +277,10 @@ const Tracker = (props) => {
             className="custom-dot-size custom-step-distance"
           >
             {selectedOption.schedule.map((scheduleItem, index) => {
-              let description = (
-                <>
-                  {scheduleItem.tiploc}
-                  <br />
-                  {"EST Arrival: " +
-                    (typeof scheduleItem.pass === "string"
-                      ? scheduleItem.pass.slice(0, 2) +
-                        ":" +
-                        scheduleItem.pass.slice(2)
-                      : "")}
-                </>
-              );
-
-              let minutesLateDescription = "Minutes late: ";
-              // let testing = ({TrainDetailTimer({ route: route, schedule })});
               return (
                 <Steps.Step
                   key={index}
                   title={scheduleItem.location}
-                  // description={TrainDetailTimer({
-                  //   route: selectedOption,
-                  //   schedule: scheduleItem,
-                  // })}
                   description={
                     index < lastReportedTiplocIndex
                       ? TrainDetailTimerPassed({
