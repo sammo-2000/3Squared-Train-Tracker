@@ -6,17 +6,20 @@ import { useMap } from "../hooks/MapHook";
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
 import LocationDetails from "./modals/LocationDetails";
-import TrainMarker from "./TrainMarker";
+import TrainMarker from "./map/TrainMarker";
 import { plotPoints } from "../api/routePlottingAPI";
 
 // Hooks
 import { useSettings } from "../hooks/SettingsHook";
 import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
-import StationMarker from "./StationMarker";
+import StationMarker from "./map/StationMarker";
+import StartEndMarkers from "./map/StartEndMarkers";
+import TIPLOCMarkers from "./map/TIPLOCMarkers";
 
 // Components
-import setRouteOnMap from "./SetRouteOnMap";
+import setRouteOnMap from "./map/SetRouteOnMap";
+import { Circle } from "react-leaflet";
 
 const Map = (props) => {
   const { map, setMap } = useMap();
@@ -118,6 +121,8 @@ const Map = (props) => {
           ;
           <StationMarker />
           <TrainMarker />
+          <StartEndMarkers />
+          <TIPLOCMarkers />
           {plotPointsState.length !== 0 ? setRouteComponent() : null}
           {/* {plotPointsState.length !== 0
             ? plotPointsState.map((route, index) => {
@@ -137,18 +142,7 @@ const Map = (props) => {
                 subArray.slice().reverse()
               )}
             />
-          ) : null}
-          {plotPointsState.length !== 0 ? (
-            <>
-              {plotPointsState.map((point) => (
-                <Circle
-                  center={Array.from(point).reverse()}
-                  pathOptions={{ fillColor: "blue" }}
-                  radius={200}
-                />
-              ))}
-            </>
-          ) : null} */}
+              ) : null */}
         </MapContainer>
       </div>
     </>

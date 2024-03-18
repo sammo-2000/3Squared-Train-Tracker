@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Draggable from 'react-draggable'; // Import Draggable
+import Draggable from "react-draggable"; // Import Draggable
 
 import logo from "../assets/icons/3squared.jpg";
 import Icon from "./Icons";
@@ -40,25 +40,29 @@ function Navbar() {
         setActiveDraw={setActiveDrawer}
       />
       <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
-      
-        <div className="">
-          <Draggable bounds="body" grid={[1, 1]} >
+
+      <div className="">
+        <Draggable bounds="body" grid={[1, 1]}>
           <div
             className={`absolute top-0 ${
               settings.menuDirection.value === "right" ? "right-0" : "left-0"
-            } flex flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-100 overflow-hidden divide-x-2 divide-y-2 divide-gray-100`}
-            >
+            } flex flex-col text-center z-[1000] m-3 rounded-xl bg-white border-2 border-gray-100 overflow-hidden divide-x-2 divide-y-2 divide-gray-100 shadow-xl `}
+          >
             <div
               key={0}
               className="flex items-center flex-col transition-color duration-200 justify-center p-4 text-gray-700"
-              >
-              <img style={{ width: "7rem", pointerEvents: 'none' }} src={logo} alt={`Icon ${0}`}/>
+            >
+              <img
+                style={{ width: "7rem", pointerEvents: "none" }}
+                src={logo}
+                alt={`Icon ${0}`}
+              />
             </div>
             <div
               key={1}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer text-gray-700"
               onClick={() => setActiveDrawer("locations")}
-              >
+            >
               <Icon iconName="location" />
               <span>Locations</span>
             </div>
@@ -74,13 +78,13 @@ function Navbar() {
               key={4}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
               onClick={() => setSettingsModal(settingsModal ? false : true)}
-              >
+            >
               <Icon iconName="settings" />
               <span>Settings</span>
             </div>
           </div>
-          </Draggable>
-        </div>
+        </Draggable>
+      </div>
     </div>
   );
 }
