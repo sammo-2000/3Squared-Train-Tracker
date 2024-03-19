@@ -22,7 +22,7 @@ import TIPLOCMarkers from "./map/TIPLOCMarkers";
 import setRouteOnMap from "./map/SetRouteOnMap";
 import { Circle } from "react-leaflet";
 
-const Map = (props) => {
+const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   const { map, setMap } = useMap();
 
   const { settings, setSettings } = useSettings();
@@ -129,6 +129,20 @@ const Map = (props) => {
               borderColor: "gray-100",
             }}
           />
+          <FloatButton
+            ref4={ref4}
+            icon={<AimOutlined />}
+            onClick={() => setOpen(true)}
+            style={{
+              zIndex: "1000",
+              position: "absolute",
+              right: "40%",
+              bottom: "10px",
+              backgroundColor: "white",
+              border: "2px",
+              borderColor: "gray-100",
+            }}
+          />
           ;
           <MarkerClusterGroup chunkedLoading>
             <StationMarker />
@@ -141,6 +155,6 @@ const Map = (props) => {
       </div>
     </>
   );
-};
+});
 
 export default Map;

@@ -13,7 +13,7 @@ import { useSettings } from "../hooks/SettingsHook";
 
 import { notification, message } from "antd";
 
-function Navbar() {
+function Navbar(ref1, ref2, ref3) {
   const { settings, setSettings } = useSettings();
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [settingsModal, setSettingsModal] = useState(false);
@@ -61,6 +61,7 @@ function Navbar() {
             </div>
             <div
               key={1}
+              ref1={ref1}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer text-gray-700"
               onClick={() => setActiveDrawer("locations")}
             >
@@ -68,7 +69,8 @@ function Navbar() {
               <span>Locations</span>
             </div>
             <div
-              key={3}
+              key={2}
+              ref2={ref2}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
               onClick={() => setActiveDrawer("routes")}
             >
@@ -76,7 +78,8 @@ function Navbar() {
               <span>Routes</span>
             </div>
             <div
-              key={4}
+              key={3}
+              ref3={ref3}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
               onClick={() => setSettingsModal(settingsModal ? false : true)}
             >
