@@ -20,7 +20,7 @@ import {
   notificationsOptions,
   menuAutoCloseItems,
   railsItems,
-} from "../../settings/settingsOptions";
+} from "../../options/settingsOptions";
 
 const allCookies = Cookies.get();
 

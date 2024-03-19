@@ -1,6 +1,6 @@
 import { useState, createContext } from "react";
 import { notification } from "antd";
-import { defaultSettings } from "../settings/settingsOptions";
+import { defaultSettings } from "../options/settingsOptions";
 
 export const SettingsContext = createContext();
 

@@ -48,3 +48,9 @@
   .modal-content.height-transition {
     height: auto !important; /* Use !important to override the inline style */
   }
+  .w-full > .ant-select-selector {
+    width: 100%;
+  }
+  .w-full > .ant-space-item:first-child {
+    width: 100%;
+  }

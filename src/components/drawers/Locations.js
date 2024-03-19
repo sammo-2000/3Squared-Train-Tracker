@@ -10,6 +10,7 @@ import {
   Menu,
   message,
   Tag,
+  Badge,
 } from "antd";
 
 import "../../css/drawer.css";
@@ -26,22 +27,36 @@ import LocationDetails from "../modals/LocationDetails";
 import Cookies from "js-cookie";
 
 import { BranchesOutlined } from "@ant-design/icons";
-
-import SearchFilter from "./../modals/SearchFilter";
+import { useFilter } from "../../hooks/FilterHook";
+import Filter from "../modals/Filter";
 
 const Locations = (props) => {
-  const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
-  const [childrenDrawer, setChildrenDrawer] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [recentlyUsed, setRecentlyUsed] = useState([]);
-  const [searchFilterModal, setSearchFilterModal] = useState(false);
+  // Data
   const [data, setData] = useState([]);
+  const [selectedDetails, setSelectedDetails] = useState({});
+
+  // Notifications
   const [notificationContext, notificationApi] = props.notifications;
   const [messageContext, messageApi] = props.messages;
+
+  // Modals
   const [detailsModal, setDetailsModal] = useState(false);
-  const [selectedDetails, setSelectedDetails] = useState({});
+  const [searchFilterModal, setSearchFilterModal] = useState(false);
+
+  // Filtering
+  const [searchText, setSearchText] = useState("");
+  const [recentlyUsed, setRecentlyUsed] = useState([]);
+
+  // Contexts
+  const { trackedLocations, setTrackedLocations } = UseTrackedLocations();
   const { map, setMap } = useMap();
   const { settings, setSettings } = useSettings();
+  const { filter, setFilter } = useFilter();
+
+  // Drawers
+  const [childrenDrawer, setChildrenDrawer] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [newTrackWidth, setNewTrackWidth] = useState(378);
 
   const validateNotification = (notification) => {
     return (
@@ -123,10 +138,20 @@ const Locations = (props) => {
     }
   });
 
+  const displayDot = () => {
+    const s = filter.selected.location;
+    const l = filter.options.location;
+    return (
+      s.stationType.length !== l.stationType.length ||
+      s.distance.length !== l.distance.length ||
+      s.category.length !== l.category.length ||
+      s.availability.key !== l.availability[0].key ||
+      s.timingPoint.length !== l.timingPoint.length
+    );
+  };
+
   const beginSearch = (value) => {
     setSearchText(value);
-
-    // TODO: Implement search functionality
   };
 
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
@@ -147,6 +172,74 @@ const Locations = (props) => {
   const deg2rad = (deg) => {
     return deg * (Math.PI / 180);
   };
+
+  const filteredData = data
+    .filter((item) => {
+      return (
+        (item.DisplayName.toLowerCase().includes(searchText.toLowerCase()) ||
+          item.Tiploc.toLowerCase().includes(searchText.toLowerCase())) &&
+        !trackedLocations.some(
+          (trackedItem) => trackedItem.Tiploc === item.Tiploc
+        )
+      );
+    })
+    .sort((a, b) => {
+      const aMatches = Array.from(a.Tiploc.toLowerCase()).filter((char) =>
+        searchText.toLowerCase().includes(char)
+      ).length;
+      const bMatches = Array.from(b.Tiploc.toLowerCase()).filter((char) =>
+        searchText.toLowerCase().includes(char)
+      ).length;
+
+      const aLengthDifference = Math.abs(a.Tiploc.length - searchText.length);
+      const bLengthDifference = Math.abs(b.Tiploc.length - searchText.length);
+
+      const aScore = aMatches - aLengthDifference;
+      const bScore = bMatches - bLengthDifference;
+
+      return bScore - aScore; // sort in descending order of score
+    })
+    .filter((item) => {
+      // item.Details.TPS_StationCategory
+      // item.Details.BPlan_TimingPoint
+
+      // Off network filter
+
+      if (
+        item.Details.OffNetwork === false &&
+        filter.selected.location.availability.value === "OfflineOnly"
+      ) {
+        return false;
+      }
+
+      if (
+        item.Details.OffNetwork === true &&
+        filter.selected.location.availability.value === "OnlineOnly"
+      ) {
+        return false;
+      }
+
+      // Station Type filter
+      if (item.Details.hasOwnProperty("TPS_StationType")) {
+        if (
+          filter.selected.location.stationType
+            .map((i) => {
+              if (i.hasOwnProperty("value")) {
+                return i.value;
+              } else {
+                return i;
+              }
+            })
+            .includes(item.Details.TPS_StationType) === false
+        ) {
+          return false;
+        }
+      }
+
+      return true;
+
+      // console.log(item);
+    });
 
   return (
     <>
@@ -176,13 +269,13 @@ const Locations = (props) => {
           </Space>
         }
       >
-        <SearchFilter
+        <Filter
           isOpen={searchFilterModal}
           setOpen={setSearchFilterModal}
           defaultKey="1"
         />
         <Input
-          placeholder="Search Locations"
+          placeholder={`Search Locations`}
           allowClear
           size="large"
           prefix={<Icon iconName="search" />}
@@ -282,7 +375,7 @@ const Locations = (props) => {
           bodyStyle={{ padding: 0 }}
         >
           <Input
-            placeholder="Search TIPLOCs"
+            placeholder={`Search ${filteredData.length.toLocaleString()} Locations`}
             allowClear
             size="large"
             prefix={<Icon className="px-1" iconName="search" />}
@@ -306,7 +399,9 @@ const Locations = (props) => {
                 type="text"
                 className="px-1"
               >
-                <Icon iconName="filter" />
+                <Badge status="processing" dot={displayDot()}>
+                  <Icon iconName="filter" />
+                </Badge>
               </Button>
             }
           />
@@ -323,41 +418,7 @@ const Locations = (props) => {
               <List
                 size="large"
                 loading={data.length === 0 ? true : false}
-                dataSource={data
-                  .filter((item) => {
-                    console.log(item.Details.TPS_StationType);
-                    return (
-                      (item.DisplayName.toLowerCase().includes(
-                        searchText.toLowerCase()
-                      ) ||
-                        item.Tiploc.toLowerCase().includes(
-                          searchText.toLowerCase()
-                        )) &&
-                      !trackedLocations.some(
-                        (trackedItem) => trackedItem.Tiploc === item.Tiploc
-                      )
-                    );
-                  })
-                  .sort((a, b) => {
-                    const aMatches = Array.from(a.Tiploc.toLowerCase()).filter(
-                      (char) => searchText.toLowerCase().includes(char)
-                    ).length;
-                    const bMatches = Array.from(b.Tiploc.toLowerCase()).filter(
-                      (char) => searchText.toLowerCase().includes(char)
-                    ).length;
-
-                    const aLengthDifference = Math.abs(
-                      a.Tiploc.length - searchText.length
-                    );
-                    const bLengthDifference = Math.abs(
-                      b.Tiploc.length - searchText.length
-                    );
-
-                    const aScore = aMatches - aLengthDifference;
-                    const bScore = bMatches - bLengthDifference;
-
-                    return bScore - aScore; // sort in descending order of score
-                  })}
+                dataSource={filteredData}
                 pagination={{
                   defaultPageSize: settings.pagination.value,
                   showSizeChanger: false,

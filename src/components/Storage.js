@@ -5,7 +5,7 @@ import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseRoutes } from "../hooks/RoutesHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 import { useSettings } from "../hooks/SettingsHook";
-import { defaultSettings } from "../settings/settingsOptions";
+import { defaultSettings } from "../options/settingsOptions";
 
 // js-cookie
 import Cookies from "js-cookie";
