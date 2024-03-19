@@ -13,6 +13,7 @@
   .ant-menu-vertical >.ant-menu-submenu>.ant-menu-submenu-title {
     padding: 0px;
     margin: 0px;
+    height: auto;
   }
 
   .ant-drawer-mask {
