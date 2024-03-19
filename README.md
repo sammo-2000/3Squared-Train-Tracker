@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# 3Squared
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the user manual for 3Squared - Train App! This document is intended to provide you with all the information you need to get started with and use the software effectively. This is a tool to track the UK rail Network. This user guide will help you make the most out of your experience.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+1.  [Installation](#installation)
+2.  [Usage](#usage)
 
-### `npm start`
+# Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Clone the repository
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    git clone https://github.com/sammo-2000/software-project [NAME]
 
-### `npm test`
+## Navigate to the project directory
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`.env` Content will be found in the submission
 
-### `npm run build`
+### Current terminal [Terminal one]
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    cd [NAME]/server
+    mkdir .env
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### New terminal [Terminal two]
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    cd [NAME]/client
+    mkdir .env
 
-### `npm run eject`
+## Install dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+In both terminals, this will install the node modules
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    npm i
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Usage
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To start running the project in development mode please type cmd below in both terminals
 
-## Learn More
+    npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+If your styles does not look correct, please run following code in client terminal
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    npm run tailwind
 
-### Code Splitting
+Open your web browser and navigate to `http://localhost:3000` to view the project.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Libraries & Tools
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[![Node.js](https://img.shields.io/badge/Node.js-6DA753?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![express](https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![dotenv](https://img.shields.io/badge/dotenv-007272?style=for-the-badge&logo=dotenv&logoColor=white)](https://www.npmjs.com/package/dotenv)

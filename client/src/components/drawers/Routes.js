@@ -1,6 +1,6 @@
 // ------------------- External Libraries -------------------
 import React, { useState, useEffect } from "react";
-import { Drawer, Space, Button, List, Steps, Select } from "antd";
+import { Drawer, Space, Button, List, Steps, Select, Menu } from "antd";
 import moment from "moment";
 
 // ------------------- Internal Components -------------------
@@ -321,6 +321,16 @@ const Routes = (props) => {
     );
   }
 
+  const onTrackedRouteClick = async (item, e) => {
+    if (e.key === "view-details") {
+      await viewTracker(item);
+    }
+
+    if (e.key === "stop-tracking") {
+      await stopTracking(item);
+    }
+  };
+
   return (
     <>
       {/* First menu drawer */}
@@ -331,7 +341,7 @@ const Routes = (props) => {
         }}
         open={props.isOpen}
         placement={"left"}
-        closeIcon={<Icon iconName="close" />}
+        closeIcon={<Icon iconName="back" />}
         bodyStyle={{ padding: 0 }}
         extra={
           <Space>
@@ -357,26 +367,57 @@ const Routes = (props) => {
           dataSource={trackedSearchedRoutes || trackedRoutes}
           style={{ size: "200px" }}
           renderItem={(item) => (
-            <MyOptionsConfirm
-              title="Options"
-              description="Choose an action"
-              onConfirm={async () => {
-                await stopTracking(item);
-              }}
-              onCancel={async () => {
-                await viewTracker(item);
-              }}
-              confirmButtonText="Stop Tracking"
-              cancelButtonText="Open Tracker"
-            >
-              <List.Item
-                className={`${getHoverStyles()} ${getBackgroundColor(
-                  item.tiploc.lastReportedType
-                )}`}
-              >
-                <MyListItem item={item.tiploc} />
-              </List.Item>
-            </MyOptionsConfirm>
+            <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
+              {console.log("Item", item)}
+              <Menu
+                onClick={(e) => onTrackedRouteClick(item, e)}
+                style={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  borderRight: "none",
+                  margin: "0px",
+                  padding: "0px",
+                }}
+                defaultSelectedKeys={[]}
+                mode="vertical"
+                selectable={false}
+                items={[
+                  {
+                    key: item.Tiploc,
+                    label: (
+                      <>
+                        <p className="text-blue-400 text-sm">
+                          {item.tiploc.headCode}
+                        </p>
+                        <p className="text-blue-600 text-sm">
+                          {item.tiploc.toc_Name}
+                        </p>
+                        <p className="font-bold text-lg my-2">
+                          {item.tiploc.originLocation} -{" "}
+                          {item.tiploc.destinationLocation}
+                        </p>
+                        <p className="text-gray-500">
+                          {item.tiploc.lastReportedType}
+                        </p>
+                      </>
+                    ),
+                    defaultSelectedKeys: [],
+                    children: [
+                      {
+                        key: "view-details",
+                        label: "View details",
+                        onClick: null,
+                      },
+                      {
+                        key: "stop-tracking",
+                        label: "Stop tracking",
+                        onClick: null,
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </List.Item>
           )}
         />
         {/* Route Tracker drawer */}

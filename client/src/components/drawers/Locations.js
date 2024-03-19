@@ -29,6 +29,7 @@ import Cookies from "js-cookie";
 import { BranchesOutlined } from "@ant-design/icons";
 import { useFilter } from "../../hooks/FilterHook";
 import Filter from "../modals/Filter";
+import LocationListItem from "./locations/LocationListItem";
 
 const Locations = (props) => {
   // Data
@@ -154,25 +155,6 @@ const Locations = (props) => {
     setSearchText(value);
   };
 
-  const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the earth in km
-    const dLat = deg2rad(lat2 - lat1); // deg2rad below
-    const dLon = deg2rad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in km
-    return Math.round(d * 10) / 10;
-  };
-
-  const deg2rad = (deg) => {
-    return deg * (Math.PI / 180);
-  };
-
   // Filtered Data
   const filteredData = data
     .filter((item) => {
@@ -182,6 +164,105 @@ const Locations = (props) => {
         !trackedLocations.some(
           (trackedItem) => trackedItem.Tiploc === item.Tiploc
         )
+      );
+    })
+    .sort((a, b) => {
+      const aMatches = Array.from(a.Tiploc.toLowerCase()).filter((char) =>
+        searchText.toLowerCase().includes(char)
+      ).length;
+      const bMatches = Array.from(b.Tiploc.toLowerCase()).filter((char) =>
+        searchText.toLowerCase().includes(char)
+      ).length;
+
+      const aLengthDifference = Math.abs(a.Tiploc.length - searchText.length);
+      const bLengthDifference = Math.abs(b.Tiploc.length - searchText.length);
+
+      const aScore = aMatches - aLengthDifference;
+      const bScore = bMatches - bLengthDifference;
+
+      return bScore - aScore; // sort in descending order of score
+    })
+    .filter((item) => {
+      // Off network filter
+      if (
+        item.Details.OffNetwork === false &&
+        filter.selected.location.availability.value === "OfflineOnly"
+      ) {
+        return false;
+      }
+
+      if (
+        item.Details.OffNetwork === true &&
+        filter.selected.location.availability.value === "OnlineOnly"
+      ) {
+        return false;
+      }
+
+      // Station Type filter
+      if (item.Details.hasOwnProperty("TPS_StationType")) {
+        if (
+          filter.selected.location.stationType
+            .map((i) => {
+              if (i.hasOwnProperty("value")) {
+                return i.value;
+              } else {
+                return i;
+              }
+            })
+            .includes(item.Details.TPS_StationType) === false
+        ) {
+          return false;
+        }
+      }
+
+      // Station Category filter
+      // item.Details.TPS_StationCategory
+      if (item.Details.hasOwnProperty("TPS_StationCategory")) {
+        if (
+          filter.selected.location.category
+            .map((i) => {
+              if (i.hasOwnProperty("value")) {
+                return i.value;
+              } else {
+                return i;
+              }
+            })
+            .includes(item.Details.TPS_StationCategory) === false
+        ) {
+          return false;
+        }
+      }
+
+      // Timing Point filter
+      // item.Details.BPlan_TimingPoint
+      if (
+        item.Details.hasOwnProperty("BPlan_TimingPoint") &&
+        item.Details.BPlan_TimingPoint !== null
+      ) {
+        if (
+          filter.selected.location.timingPoint
+            .map((i) => {
+              if (i.hasOwnProperty("value")) {
+                return i.value;
+              } else {
+                return i;
+              }
+            })
+            .includes(item.Details.BPlan_TimingPoint) === false
+        ) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+  // Filtered Data
+  const filteredTrackedLocations = trackedLocations
+    .filter((item) => {
+      return (
+        item.DisplayName.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.Tiploc.toLowerCase().includes(searchText.toLowerCase())
       );
     })
     .sort((a, b) => {
@@ -309,10 +390,10 @@ const Locations = (props) => {
           defaultKey="1"
         />
         <Input
-          placeholder={`Search Locations`}
+          placeholder={`Search ${filteredTrackedLocations.length.toLocaleString()} Tracked Locations`}
           allowClear
           size="large"
-          prefix={<Icon iconName="search" />}
+          prefix={<Icon className="px-1" iconName="search" />}
           onChange={(e) => setSearchText(e.target.value)}
           style={{
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -322,6 +403,19 @@ const Locations = (props) => {
             borderRadius: "0",
             padding: "1rem 1rem",
           }}
+          suffix={
+            <Button
+              onClick={() =>
+                setSearchFilterModal(searchFilterModal ? false : true)
+              }
+              type="text"
+              className="px-1"
+            >
+              <Badge status="processing" dot={displayDot()}>
+                <Icon iconName="filter" />
+              </Badge>
+            </Button>
+          }
         />
 
         <List
@@ -330,11 +424,7 @@ const Locations = (props) => {
             defaultPageSize: settings.pagination.value,
             showSizeChanger: false,
           }}
-          dataSource={trackedLocations.filter((item) => {
-            return item.DisplayName.toLowerCase().includes(
-              searchText.toLowerCase()
-            );
-          })}
+          dataSource={filteredTrackedLocations}
           renderItem={(item) => (
             <List.Item
               className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer"
@@ -373,7 +463,7 @@ const Locations = (props) => {
                 items={[
                   {
                     key: item.Tiploc,
-                    label: item.DisplayName,
+                    label: <LocationListItem item={item} />,
                     defaultSelectedKeys: [],
                     children: [
                       {
@@ -471,38 +561,7 @@ const Locations = (props) => {
                     cancelText="No"
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div class="block">
-                        <h3 class="text-base sm:text-lg font-semibold text-gray-800 ">
-                          {item.Name}
-                        </h3>
-                        <p class="mt-1 text-gray-600 dark:text-gray-400">
-                          {item.Tiploc} -{" "}
-                          {getDistanceFromLatLonInKm(
-                            settings.defaultCenter.Latitude,
-                            settings.defaultCenter.Longitude,
-                            item.Latitude,
-                            item.Longitude
-                          )}{" "}
-                          km Away
-                        </p>
-                        <div className="flex gap-x-1 mt-2">
-                          {item.Stanox !== null ? (
-                            <Tag className="font-semibold text-gray-600">
-                              #{item.Stanox}
-                            </Tag>
-                          ) : null}
-                          {item.Details.OffNetwork !== "" &&
-                          item.Details.OffNetwork === false ? (
-                            <Tag className="font-semibold" color="success">
-                              Online
-                            </Tag>
-                          ) : (
-                            <Tag className="font-semibold" color="warning">
-                              Offline?
-                            </Tag>
-                          )}
-                        </div>
-                      </div>
+                      <LocationListItem item={item} />
                     </List.Item>
                   </Popconfirm>
                 )}
