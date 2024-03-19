@@ -175,9 +175,7 @@ const Tracker = (props) => {
   const EasyTime = (time) => moment(time).format("h:mm A") || "N/A";
 
   // ------------------- useEffects -------------------
-  useEffect(() => {
-    console.log("Selected Option", selectedOption);
-  }, [selectedOption]);
+  useEffect(() => {}, [selectedOption]);
 
   useEffect(() => {
     const updatedTrainLocations = [];

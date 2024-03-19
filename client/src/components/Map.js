@@ -38,18 +38,29 @@ const Map = (props) => {
   let rails = settings.rails;
 
   const [plotPointsState, setPlotPointsState] = useState([]);
+  const [routeColor, setRouteColor] = useState([]);
+  let routeColorArray = [];
 
   const setRouteComponent = () =>
-    plotPointsState.map((train) => {
+    // {
+    //   for (let index = 0; index < plotPointsState.length; index++) {
+    //     return setRouteOnMap(plotPointsState[index], routeColor[index]);
+    //   }
+    // };
+    plotPointsState.map((train, index) => {
       if (!train.isSelected) {
-        return setRouteOnMap(train);
+        return setRouteOnMap(train, routeColor[index]);
       }
-      return null; // or any other fallback if needed
+      return null;
     });
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await plotPoints(trackedRoutes);
+      await trackedRoutes.forEach((singleRoute) => {
+        routeColorArray.push(singleRoute.color);
+        setRouteColor(routeColorArray);
+      });
       if (data.length > 0) {
         await setPlotPointsState(data);
       }

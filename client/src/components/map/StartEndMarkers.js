@@ -15,9 +15,7 @@ const StartEndMarkers = () => {
   const { trackedRoutes } = UseTrackedRoutes();
 
   useEffect(() => {
-    trackedRoutes.map((route) => {
-      console.log(route);
-    });
+    trackedRoutes.map((route) => {});
   }, [trackedRoutes]);
 
   return (
