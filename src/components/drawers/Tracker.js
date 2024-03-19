@@ -17,7 +17,7 @@ import Icon from "../Icons.js";
 
 const { Option } = Select;
 
-const Tracker = (props) => {
+const Tracker = (props, selectedItem, isTrackerOpen, setIsTrackerOpen) => {
   // ------------------- useState -------------------
   const [childrenDrawer, setChildrenDrawer] = useState(false);
   const [selectedValue, setSelectedValue] = useState();
@@ -217,15 +217,16 @@ const Tracker = (props) => {
     <>
       {/* First menu drawer */}
       <Drawer
+        // onClose={() => {
+        //   props.setActiveDraw("menu");
+        //   setSelectedOption(undefined);
+        // }}
         title="Route Tracker"
-        onClose={() => {
-          props.setActiveDraw("menu");
-          setSelectedOption(undefined);
-        }}
-        open={props.isOpen}
-        placement={placement}
+        onClose={() => setIsTrackerOpen(false)}
         closeIcon={closeIcon}
         bodyStyle={drawerStyle}
+        visible={isTrackerOpen}
+        placement={placement}
       >
         {/* Dropdown for tracked routes */}
         <div
