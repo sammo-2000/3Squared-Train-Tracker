@@ -15,13 +15,17 @@ Welcome to the user manual for 3Squared - Train App! This document is intended t
 
 ## Navigate to the project directory
 
-Current terminal [Terminal one]
+`.env` Content will be found in the submission
+
+### Current terminal [Terminal one]
 
     cd [NAME]/server
+    mkdir .env
 
-New terminal [Terminal two]
+### New terminal [Terminal two]
 
     cd [NAME]/client
+    mkdir .env
 
 ## Install dependencies
 
