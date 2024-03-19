@@ -1,5 +1,0 @@
-const  = () => {
-    return (  );
-}
- 
-export default ;
