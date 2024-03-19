@@ -471,11 +471,11 @@ const Locations = (props) => {
                     cancelText="No"
                   >
                     <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-                      <div className="block">
-                        <h3 className="text-base sm:text-lg font-semibold text-gray-800 ">
+                      <div class="block">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-800 ">
                           {item.Name}
                         </h3>
-                        <p className="mt-1 text-gray-600 dark:text-gray-400">
+                        <p class="mt-1 text-gray-600 dark:text-gray-400">
                           {item.Tiploc} -{" "}
                           {getDistanceFromLatLonInKm(
                             settings.defaultCenter.Latitude,
