@@ -6,36 +6,43 @@ Welcome to the user manual for 3Squared - Train App! This document is intended t
 
 1.  [Installation](#installation)
 2.  [Usage](#usage)
-3.  [License](#license)
 
-## Installation
+# Installation
 
-    # Clone the repository
-    https://github.com/sammo-2000/software-project/3squared
+## Clone the repository
 
-    # Navigate to the project directory
+    git clone https://github.com/sammo-2000/software-project [NAME]
 
-    ### This should be done in two different terminals
+## Navigate to the project directory
 
-    cd 3squared/server
-    cd 3squared/client
+Current terminal [Terminal one]
 
-    # Install dependencies
+    cd [NAME]/server
 
-    ### This should be done in both open terminals
+New terminal [Terminal two]
+
+    cd [NAME]/client
+
+## Install dependencies
+
+In both terminals, this will install the node modules
 
     npm i
 
 ## Usage
 
-Please make sure you have created two \`.env\` files for client & server, the exact things to place in each will be attached inside the submission
-
-    # Run the project in both terminals
+To start running the project in development mode please type cmd below in both terminals
 
     npm start
 
+If your styles does not look correct, please run following code in client terminal
+
+    npm run tailwind
+
 Open your web browser and navigate to `http://localhost:3000` to view the project.
 
-## License
+# Libraries & Tools
 
-This project is licensed under the [MIT License](LICENSE).
+[![Node.js](https://img.shields.io/badge/Node.js-6DA753?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![express](https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![dotenv](https://img.shields.io/badge/dotenv-007272?style=for-the-badge&logo=dotenv&logoColor=white)](https://www.npmjs.com/package/dotenv)
