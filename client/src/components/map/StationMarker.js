@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Marker, Popup } from "react-leaflet";
-import { Icon, CircleMarker } from "leaflet";
+import { Icon } from "leaflet";
 import stationIcon from "../../assets/icons/station.svg";
 
 // Hooks & Contexts
@@ -17,20 +17,10 @@ const StationMarker = () => {
 
   return (
     <>
-      {trackedLocations.map((location) => (
-        <div>
-          {/* <CircleMarker
-            center={[location.Latitude, location.Longitude]}
-            radius={15}
-            color="#4da6ff"
-            fillColor="#2492ff"
-            fillOpacity={1}
-            stroke={true}
-            weight={2}
-            className="shadow-xl pulse"
-          ></CircleMarker> */}
+      {trackedLocations.map((location, index) => (
+        <div index={index + location.Latitude}>
           <Marker
-            key={location.id}
+            key={index}
             position={[location.Latitude, location.Longitude]}
             icon={trainStationIcon}
           >

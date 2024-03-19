@@ -53,7 +53,6 @@ const StartMarker = () => {
 
 const TrainDetailTimer = ({ route, schedule }) => {
   let passingByOnly = schedule.pass ? "Yes" : "No";
-  let expectedPass = schedule.pass || null;
   let expectedDeparture = null;
   let expectedArrival = null;
   let actualArrival = null;
@@ -81,7 +80,6 @@ const TrainDetailTimer = ({ route, schedule }) => {
       {/* Show Planned Details */}
       <span className="text-xl">Planned</span>
       <span>Just Passing By: {passingByOnly}</span>
-      {expectedPass && <span>Expected Pass: {expectedPass}</span>}
       {expectedArrival && (
         <span>Expected Arrival: {EasyTime(expectedArrival)}</span>
       )}

@@ -65,7 +65,6 @@ const Icon = ({ iconName }) => {
         className="location"
         style={{ width: "2rem" }}
         xmlns="http://www.w3.org/2000/svg"
-        class="w-fit "
         height="2rem"
         width="2rem"
         viewBox="0 -960 960 960"

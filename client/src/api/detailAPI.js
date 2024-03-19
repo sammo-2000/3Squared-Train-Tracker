@@ -3,6 +3,8 @@
 // You will get array of object that contain tiploc, movment and schedule information
 // Save this details in TrackedRoutesContext
 
+const newColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
+
 const detailAPI = async (RoutesContext) => {
   let data = [];
 
@@ -17,7 +19,7 @@ const detailAPI = async (RoutesContext) => {
         element.scheduleId
       );
 
-      data.push({ tiploc: element, movment, schedule });
+      data.push({ tiploc: element, movment, schedule, color: newColor() });
     })
   );
 

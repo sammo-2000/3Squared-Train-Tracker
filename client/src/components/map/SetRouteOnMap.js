@@ -1,11 +1,9 @@
 import React from "react";
 import { Polyline } from "react-leaflet";
 
-const newColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
-
-const SetRouteOnMap = (route) => {
+const SetRouteOnMap = (route, color) => {
   const lineOptions = {
-    color: newColor(),
+    color: color || "blue",
     outline: "black",
     weight: 4,
     outlineStyle: "solid",
