@@ -1,7 +1,7 @@
 import React from "react";
 import { Popconfirm } from "antd";
 
-const MyPopupConfirm = ({
+const MyOptionsConfirm = ({
   children,
   title,
   description,
@@ -17,12 +17,12 @@ const MyPopupConfirm = ({
       description={description || null}
       onConfirm={onConfirm || null}
       onCancel={onCancel || null}
-      okText={okText || "Confirm"}
-      cancelText={cancelText || "Cancel"}
+      okText={okText || "Stop Tracking"}
+      cancelText={cancelText || "Open Tracker"}
     >
       {children}
     </Popconfirm>
   );
 };
 
-export default MyPopupConfirm;
+export default MyOptionsConfirm;

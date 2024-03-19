@@ -6,6 +6,7 @@ import moment from "moment";
 // ------------------- Internal Components -------------------
 import MyInput from "./routes/Input.js";
 import MyPopupConfirm from "./routes/PopupConfirm.js";
+import MyOptionsConfirm from "./routes/optionsConfirm.js";
 import MyListItem from "./routes/ListItem.js";
 import Search from "./routes/SearchFunction.js";
 
@@ -356,7 +357,7 @@ const Routes = (props) => {
           dataSource={trackedSearchedRoutes || trackedRoutes}
           style={{ size: "200px" }}
           renderItem={(item) => (
-            <MyPopupConfirm
+            <MyOptionsConfirm
               title="Options"
               description="Choose an action"
               onConfirm={async () => {
@@ -375,7 +376,7 @@ const Routes = (props) => {
               >
                 <MyListItem item={item.tiploc} />
               </List.Item>
-            </MyPopupConfirm>
+            </MyOptionsConfirm>
           )}
         />
         {/* Route Tracker drawer */}

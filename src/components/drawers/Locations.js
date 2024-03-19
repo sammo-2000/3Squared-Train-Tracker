@@ -325,7 +325,7 @@ const Locations = (props) => {
                 loading={data.length === 0 ? true : false}
                 dataSource={data
                   .filter((item) => {
-                    console.log(item.Details.TPS_StationType);
+                    // console.log(item.Details.TPS_StationType);
                     return (
                       (item.DisplayName.toLowerCase().includes(
                         searchText.toLowerCase()
