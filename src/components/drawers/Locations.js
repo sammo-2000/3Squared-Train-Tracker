@@ -173,6 +173,7 @@ const Locations = (props) => {
     return deg * (Math.PI / 180);
   };
 
+  // Filtered Data
   const filteredData = data
     .filter((item) => {
       return (
@@ -200,11 +201,7 @@ const Locations = (props) => {
       return bScore - aScore; // sort in descending order of score
     })
     .filter((item) => {
-      // item.Details.TPS_StationCategory
-      // item.Details.BPlan_TimingPoint
-
       // Off network filter
-
       if (
         item.Details.OffNetwork === false &&
         filter.selected.location.availability.value === "OfflineOnly"
@@ -236,9 +233,46 @@ const Locations = (props) => {
         }
       }
 
-      return true;
+      // Station Category filter
+      // item.Details.TPS_StationCategory
+      if (item.Details.hasOwnProperty("TPS_StationCategory")) {
+        if (
+          filter.selected.location.category
+            .map((i) => {
+              if (i.hasOwnProperty("value")) {
+                return i.value;
+              } else {
+                return i;
+              }
+            })
+            .includes(item.Details.TPS_StationCategory) === false
+        ) {
+          return false;
+        }
+      }
 
-      // console.log(item);
+      // Timing Point filter
+      // item.Details.BPlan_TimingPoint
+      if (
+        item.Details.hasOwnProperty("BPlan_TimingPoint") &&
+        item.Details.BPlan_TimingPoint !== null
+      ) {
+        if (
+          filter.selected.location.timingPoint
+            .map((i) => {
+              if (i.hasOwnProperty("value")) {
+                return i.value;
+              } else {
+                return i;
+              }
+            })
+            .includes(item.Details.BPlan_TimingPoint) === false
+        ) {
+          return false;
+        }
+      }
+
+      return true;
     });
 
   return (

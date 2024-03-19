@@ -182,22 +182,17 @@ export const TimingPointOptions = [
   {
     label: "Optional",
     key: "1",
-    value: "optional",
+    value: "Optional",
   },
   {
     label: "Trust",
     key: "2",
-    value: "trust",
+    value: "Trust",
   },
   {
     label: "Mandatory",
     key: "3",
-    value: "mandatory",
-  },
-  {
-    label: "Unknown / Any",
-    key: "4",
-    value: "null",
+    value: "Mandatory",
   },
 ];
 
