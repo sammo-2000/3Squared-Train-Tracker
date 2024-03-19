@@ -17,8 +17,8 @@ const MyPopupConfirm = ({
       description={description || null}
       onConfirm={onConfirm || null}
       onCancel={onCancel || null}
-      okText={okText || "Confirm"}
-      cancelText={cancelText || "Cancel"}
+      okText={okText || "Stop Tracking"}
+      cancelText={cancelText || "Open Tracker"}
     >
       {children}
     </Popconfirm>

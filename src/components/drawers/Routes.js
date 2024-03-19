@@ -8,7 +8,6 @@ import MyInput from "./routes/Input.js";
 import MyPopupConfirm from "./routes/PopupConfirm.js";
 import MyListItem from "./routes/ListItem.js";
 import Search from "./routes/SearchFunction.js";
-import Tracker from "../drawers/Tracker.js";
 
 // ------------------- Style Utilities -------------------
 import { getBackgroundColor, getHoverStyles } from "./routes/ListItemStyle.js";
@@ -70,7 +69,7 @@ const Routes = (props) => {
   };
 
   const viewTracker = async (item) => {
-    setSelectedItem(item);
+    setSelectedOption(item);
     setIsTrackerOpen(true); // Open the Tracker Drawer
   };
 
@@ -233,7 +232,6 @@ const Routes = (props) => {
 
   useEffect(() => {
     const updatedTrainLocations = [];
-
     setTrainLocations(updatedTrainLocations);
   }, [trackedRoutes]);
 
@@ -299,10 +297,6 @@ const Routes = (props) => {
   }, [trackedLocations, trackedRoutes]);
 
   // ------------------- Local Variables -------------------
-  const placement = "left";
-  const closeIcon = <Icon iconName="close" />;
-  const drawerStyle = { padding: 0 };
-
   let lastReportedTiploc;
   if (
     selectedOption &&
@@ -371,8 +365,8 @@ const Routes = (props) => {
               onCancel={async () => {
                 await viewTracker(item);
               }}
-              confirmButtonText="Remove"
-              cancelButtonText="View Tracker"
+              confirmButtonText="Stop Tracking"
+              cancelButtonText="Open Tracker"
             >
               <List.Item
                 className={`${getHoverStyles()} ${getBackgroundColor(
@@ -394,54 +388,6 @@ const Routes = (props) => {
           visible={isTrackerOpen}
           onClose={() => setIsTrackerOpen(false)}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginTop: "5%",
-            }}
-          >
-            <p className="text-center font-bold mb-1">Available Routes</p>
-            <Select
-              showSearch
-              style={{ width: 200 }}
-              placeholder="Select a tracked route"
-              optionFilterProp="children"
-              onChange={(value) => {
-                const selectedRoute = trackedRoutes.find(
-                  (route) =>
-                    route.tiploc.originTiploc +
-                      "-" +
-                      route.tiploc.destinationTiploc ===
-                    value
-                );
-                setSelectedOption(selectedRoute);
-              }}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {trackedRoutes.map((route, index) => (
-                <Option
-                  key={index}
-                  value={
-                    route.tiploc.originTiploc +
-                    "-" +
-                    route.tiploc.destinationTiploc
-                  }
-                >
-                  {index +
-                    1 +
-                    ". " +
-                    route.tiploc.originTiploc +
-                    "-" +
-                    route.tiploc.destinationTiploc}
-                </Option>
-              ))}
-            </Select>
-          </div>
-
           {/* Route Tracker */}
           {selectedOption ? (
             <Steps
