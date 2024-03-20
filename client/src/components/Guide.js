@@ -13,6 +13,9 @@ import tourGif from "../assets/gifs/TourGif4.gif";
 // Cookies
 import Cookies from "js-cookie";
 
+// CSS
+import "../css/guide.css";
+
 const Guide = ({ open, setOpen, refs, autoTour }) => {
   // For auto loading the tour if it's your first time.
 
