@@ -28,7 +28,7 @@ const allCookies = Cookies.get();
 
 const { TabPane } = Tabs;
 
-const Settings = (props) => {
+const Settings = ({ setOpenGuide, ...props }) => {
   const { settings, setSettings } = useSettings();
   const { map, setMap } = useMap();
 
@@ -229,9 +229,7 @@ const Settings = (props) => {
                   Tour
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <Button onClick={() => {}} disabled>
-                    Begin Tour (Coming Soon)
-                  </Button>
+                  <Button onClick={() => setOpenGuide(true)}>Begin Tour</Button>
                 </dd>
               </div>
               <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

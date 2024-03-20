@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Draggable from "react-draggable"; // Import Draggable
 import { FloatButton } from "antd";
 import { AimOutlined } from "@ant-design/icons";
@@ -18,13 +18,19 @@ import { notification, message } from "antd";
 // Context
 import { MapContext } from "../contexts/MapContext";
 
-function Navbar({ ref1, ref2, ref3, ref4 }) {
+function Navbar({ ref1, ref2, ref3, ref4, setOpenGuide, autoTour }) {
   const { settings, setSettings } = useSettings();
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [settingsModal, setSettingsModal] = useState(false);
   const [notificationApi, notificationContext] = notification.useNotification();
   const [messageApi, messageContext] = message.useMessage();
   const { map, setMap } = useContext(MapContext);
+
+  useEffect(() => {
+    if (autoTour) {
+      setOpenGuide(true);
+    }
+  }, [autoTour, setOpenGuide]);
 
   return (
     <div>
@@ -46,7 +52,11 @@ function Navbar({ ref1, ref2, ref3, ref4 }) {
         setActiveDraw={setActiveDrawer}
       />
 
-      <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
+      <Settings
+        isOpen={settingsModal}
+        setOpen={setSettingsModal}
+        setOpenGuide={setOpenGuide}
+      />
 
       <div className="">
         <Draggable bounds="body" grid={[1, 1]}>

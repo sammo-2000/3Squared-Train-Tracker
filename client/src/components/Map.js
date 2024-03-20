@@ -108,19 +108,6 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
               url={rails.url}
             />
           )}
-          <FloatButton
-            icon={<AimOutlined />}
-            onClick={() => setOpen(true)}
-            style={{
-              zIndex: "1000",
-              position: "absolute",
-              right: "40%",
-              bottom: "10px",
-              backgroundColor: "white",
-              border: "2px",
-              borderColor: "gray-100",
-            }}
-          />
           ;
           <MarkerClusterGroup chunkedLoading>
             <StationMarker />

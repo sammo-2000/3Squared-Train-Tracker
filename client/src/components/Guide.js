@@ -1,14 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
+// Ant Design
 import { EllipsisOutlined } from "@ant-design/icons";
 import { Button, Divider, Space, Tour } from "antd";
 
+// Tour Assets
 import tourImage1 from "../assets/images/TourImage1.png";
 import tourImage2 from "../assets/images/TourImage2.png";
 import tourImage3 from "../assets/images/TourImage3.png";
 import tourGif from "../assets/gifs/TourGif4.gif";
 
-const Guide = ({ open, setOpen, refs }) => {
-  console.log(refs);
+// Cookies
+import Cookies from "js-cookie";
+
+const Guide = ({ open, setOpen, refs, autoTour }) => {
+  // For auto loading the tour if it's your first time.
+
   const steps = [
     {
       title: "Locations",
@@ -57,7 +64,15 @@ const Guide = ({ open, setOpen, refs }) => {
 
   return (
     <>
-      <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+      <Tour
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          Cookies.set("tour", false);
+        }}
+        steps={steps}
+        setAutoTour={false}
+      />
     </>
   );
 };
