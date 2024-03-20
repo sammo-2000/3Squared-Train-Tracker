@@ -400,7 +400,7 @@ const Routes = (props) => {
                     children: [
                       {
                         key: "view-details",
-                        label: "View details",
+                        label: "View Journey",
                         onClick: null,
                       },
                       {

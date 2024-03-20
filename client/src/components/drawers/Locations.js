@@ -1,3 +1,16 @@
+import { useState, useEffect } from "react";
+
+// Hooks
+import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
+import { useMap } from "../../hooks/MapHook";
+import { useSettings } from "../../hooks/SettingsHook";
+import { useFilter } from "../../hooks/FilterHook";
+
+// Contexts
+import { findNotification } from "../../contexts/SettingsContext";
+
+// Ant Design
+import { BranchesOutlined } from "@ant-design/icons";
 import {
   Drawer,
   Space,
@@ -13,25 +26,21 @@ import {
   Badge,
 } from "antd";
 
-import "../../css/drawer.css";
-import { useState, useEffect } from "react";
-import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
-import { useMap } from "../../hooks/MapHook";
-import { useSettings } from "../../hooks/SettingsHook";
-import { findNotification } from "../../contexts/SettingsContext";
-
+// Icons
 import Icon from "../Icons";
 
-import LocationDetails from "../modals/LocationDetails";
+// CSS
+import "../../css/drawer.css";
 
+// Cookies
 import Cookies from "js-cookie";
 
-import { BranchesOutlined } from "@ant-design/icons";
-import { useFilter } from "../../hooks/FilterHook";
+// Modals
+import LocationDetails from "../modals/LocationDetails";
 import Filter from "../modals/Filter";
 import LocationListItem from "./locations/LocationListItem";
 
-const Locations = (props) => {
+const Locations = ({ ref1, ...props }) => {
   // Data
   const [data, setData] = useState([]);
   const [selectedDetails, setSelectedDetails] = useState({});

@@ -1,24 +1,39 @@
-import React, { useState } from "react";
-import Draggable from "react-draggable"; // Import Draggable
+import React, { useEffect, useState, useContext } from "react";
 
+// Ant Design
+import Draggable from "react-draggable"; // Import Draggable
+import { AimOutlined } from "@ant-design/icons";
+import { FloatButton, notification, message } from "antd";
+
+// Assets
 import logo from "../assets/icons/3squared.jpg";
 import Icon from "./Icons";
 
+// Drawers
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
 
+// Settings
 import Settings from "./modals/Settings";
 import { useSettings } from "../hooks/SettingsHook";
 
-import { notification, message } from "antd";
+// Context
+import { MapContext } from "../contexts/MapContext";
 
-function Navbar(ref1, ref2, ref3) {
+function Navbar({ ref1, ref2, ref3, ref4, setOpenGuide, autoTour }) {
   const { settings, setSettings } = useSettings();
   const [activeDrawer, setActiveDrawer] = useState(null);
   const [settingsModal, setSettingsModal] = useState(false);
   const [notificationApi, notificationContext] = notification.useNotification();
   const [messageApi, messageContext] = message.useMessage();
+  const { map, setMap } = useContext(MapContext);
+
+  useEffect(() => {
+    if (autoTour) {
+      setOpenGuide(true);
+    }
+  }, [autoTour, setOpenGuide]);
 
   return (
     <div>
@@ -40,7 +55,11 @@ function Navbar(ref1, ref2, ref3) {
         setActiveDraw={setActiveDrawer}
       />
 
-      <Settings isOpen={settingsModal} setOpen={setSettingsModal} />
+      <Settings
+        isOpen={settingsModal}
+        setOpen={setSettingsModal}
+        setOpenGuide={setOpenGuide}
+      />
 
       <div className="">
         <Draggable bounds="body" grid={[1, 1]}>
@@ -61,7 +80,7 @@ function Navbar(ref1, ref2, ref3) {
             </div>
             <div
               key={1}
-              ref1={ref1}
+              ref={ref1}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer text-gray-700"
               onClick={() => setActiveDrawer("locations")}
             >
@@ -70,7 +89,7 @@ function Navbar(ref1, ref2, ref3) {
             </div>
             <div
               key={2}
-              ref2={ref2}
+              ref={ref2}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
               onClick={() => setActiveDrawer("routes")}
             >
@@ -79,7 +98,7 @@ function Navbar(ref1, ref2, ref3) {
             </div>
             <div
               key={3}
-              ref3={ref3}
+              ref={ref3}
               className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
               onClick={() => setSettingsModal(settingsModal ? false : true)}
             >
@@ -88,6 +107,31 @@ function Navbar(ref1, ref2, ref3) {
             </div>
           </div>
         </Draggable>
+        <FloatButton
+          icon={<AimOutlined />}
+          ref={ref4}
+          onClick={() =>
+            setMap(
+              map.setView(
+                [
+                  settings.defaultCenter.Latitude,
+                  settings.defaultCenter.Longitude,
+                ],
+                6
+              )
+            )
+          }
+          style={{
+            zIndex: "1000",
+            position: "absolute",
+            left: "50%",
+            bottom: "10px",
+            transform: "translateX(-50%)",
+            backgroundColor: "white",
+            border: "2px",
+            borderColor: "gray-100",
+          }}
+        />
       </div>
     </div>
   );
