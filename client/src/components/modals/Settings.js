@@ -102,12 +102,6 @@ const Settings = ({ setOpenGuide, ...props }) => {
     }
   }, [superZoom]);
 
-  useEffect(() => {
-    if (settings === null) {
-      console.log("Component has mounted");
-    }
-  }, [settings]);
-
   const handleOk = (e) => {
     props.setOpen(false);
   };
@@ -591,7 +585,6 @@ const Settings = ({ setOpenGuide, ...props }) => {
               showCheckedStrategy={TreeSelect.SHOW_PARENT}
               placeholder="Please select notifications to enable/disable"
               onChange={(e) => {
-                // console.log(e);
                 setSettings({ ...settings, notifications: e });
               }}
             />

@@ -25,7 +25,6 @@ const Storage = () => {
   useEffect(() => {
     const newSettings = localStorage.getItem("settings");
     if (newSettings === null) {
-      console.log("Default settings loaded");
       setSettings(defaultSettings); // Set Default Settings
     }
   }, []);
@@ -102,7 +101,6 @@ const Storage = () => {
         );
 
         if (!exists) {
-          // console.log(trackedRoute);
           _trackedRoutes.push(trackedRoute);
           _trackedRoutesID.push({
             ID: activationId,

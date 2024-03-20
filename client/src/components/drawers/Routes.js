@@ -228,10 +228,6 @@ const Routes = (props) => {
   // ------------------- useEffects -------------------
 
   useEffect(() => {
-    console.log("Selected Option", selectedOption);
-  }, [selectedOption]);
-
-  useEffect(() => {
     const updatedTrainLocations = [];
     setTrainLocations(updatedTrainLocations);
   }, [trackedRoutes]);
@@ -368,7 +364,6 @@ const Routes = (props) => {
           style={{ size: "200px" }}
           renderItem={(item) => (
             <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
-              {console.log("Item", item)}
               <Menu
                 onClick={(e) => onTrackedRouteClick(item, e)}
                 style={{
