@@ -1,19 +1,22 @@
 import React, { useEffect, useState, useContext } from "react";
-import Draggable from "react-draggable"; // Import Draggable
-import { FloatButton } from "antd";
-import { AimOutlined } from "@ant-design/icons";
 
+// Ant Design
+import Draggable from "react-draggable"; // Import Draggable
+import { AimOutlined } from "@ant-design/icons";
+import { FloatButton, notification, message } from "antd";
+
+// Assets
 import logo from "../assets/icons/3squared.jpg";
 import Icon from "./Icons";
 
+// Drawers
 import Locations from "./drawers/Locations";
 import Trains from "./drawers/Trains";
 import Routes from "./drawers/Routes";
 
+// Settings
 import Settings from "./modals/Settings";
 import { useSettings } from "../hooks/SettingsHook";
-
-import { notification, message } from "antd";
 
 // Context
 import { MapContext } from "../contexts/MapContext";
