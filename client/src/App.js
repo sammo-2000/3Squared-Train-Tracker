@@ -9,9 +9,13 @@ import Socket from "./Socket";
 // Tour
 import Guide from "./components/Guide";
 
+// Contexts
+import { MapContext } from "./contexts/MapContext";
+
 const App = () => {
-  // Tour State
+  // States
   const [open, setOpen] = useState(false);
+  const [map, setMap] = useState(null);
 
   // Tour References
   const ref1 = useRef(null);
@@ -22,9 +26,11 @@ const App = () => {
   return (
     <>
       <Socket />
-      <Map setOpen={setOpen} ref4={ref4} />
-      <Guide open={open} setOpen={setOpen} refs={[ref1, ref2, ref3]} />
-      <Navbar ref1={ref1} ref2={ref2} ref3={ref3} />
+      <MapContext.Provider value={{ map, setMap }}>
+        <Map setOpen={setOpen} />
+        <Navbar ref1={ref1} ref2={ref2} ref3={ref3} ref4={ref4} />
+      </MapContext.Provider>
+      <Guide open={open} setOpen={setOpen} refs={[ref1, ref2, ref3, ref4]} />
       <Storage />
     </>
   );

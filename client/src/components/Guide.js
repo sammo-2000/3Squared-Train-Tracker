@@ -3,10 +3,7 @@ import { EllipsisOutlined } from "@ant-design/icons";
 import { Button, Divider, Space, Tour } from "antd";
 
 const Guide = ({ open, setOpen, refs }) => {
-  const ref1 = useRef(null);
-  const ref2 = useRef(null);
-  const ref3 = useRef(null);
-
+  console.log(refs);
   const steps = [
     {
       title: "Upload File",
@@ -29,22 +26,15 @@ const Guide = ({ open, setOpen, refs }) => {
       description: "Click to see other actions.",
       target: () => refs[2].current,
     },
+    {
+      title: "Final",
+      description: "dddd other actions.",
+      target: () => refs[3].current,
+    },
   ];
 
   return (
     <>
-      {/* <Button type="primary" onClick={() => setOpen(true)}>
-        Begin Tour
-      </Button>
-      <Divider />
-      <Space>
-        <Button ref={ref1}> Upload</Button>
-        <Button ref={ref2} type="primary">
-          Save
-        </Button>
-        <Button ref={ref3} icon={<EllipsisOutlined />} />
-      </Space>
-       */}
       <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
     </>
   );
