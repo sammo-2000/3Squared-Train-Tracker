@@ -12,6 +12,7 @@ const SetRouteOnMap = (route, color) => {
     lineCap: "round",
     smoothFactor: 0,
     noClip: true,
+    bubblingMouseEvents: true,
   };
 
   // variable to store the route

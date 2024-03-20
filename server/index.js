@@ -6,84 +6,49 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const server = http.createServer(app);
-app.use(cors());
+const getTipclocData = require("./API/tiplocAPI");
+const getMovmentData = require("./API/movmentApi");
+const getScheduleData = require("./API/scheduleAPI");
+app.use(cors({ origin: "http://localhost:3000" }));
 
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
   },
 });
 
-let TrackedTrainInfo = [];
+let socketID = [];
 
 io.on("connection", (socket) => {
-  // Listen for new data from the client
-  socket.on("updateTrackedLocations", (data) => {
-    TrackedTrainInfo = [];
-    data.forEach((element) => {
-      // TrackedTrainInfo.push({
-      //   activationId: element.tiploc.activationId,
-      //   scheduleId: element.tiploc.scheduleId,
-      // });
-      TrackedTrainInfo.push(element.tiploc);
-    });
+  socket.on("FTBSetDetails", async (data) => {
+    socketID.push({ id: socket.id, data });
+    socket.emit("BTFSetMovment", await updatedMovmentData(data));
   });
-
-  // Send new data to all connected clients
-  setInterval(async () => {
-    // Get updated information
-    const newData = await fetchdata();
-
-    // Send updated information to all connected clients
-    socket.emit("updatedTrackedRoutes", newData);
-  }, 60000);
 });
+
+setInterval(() => {
+  socketID.forEach(async (element) => {
+    io.to(element.id).emit(
+      "BTFSetMovment",
+      await updatedMovmentData(element.data)
+    );
+  });
+}, 5000);
 
 server.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
 
-const fetchdata = async () => {
-  let data = [];
+const updatedMovmentData = async (data) => {
+  data.forEach(async (element) => {
+    const activationId = element.tiploc.activationId;
+    const scheduleId = element.tiploc.scheduleId;
 
-  await Promise.all(
-    TrackedTrainInfo.map(async (element) => {
-      const movment = await getMovementData(
-        element.activationId,
-        element.scheduleId
-      );
-      const schedule = await getScheduleData(
-        element.activationId,
-        element.scheduleId
-      );
+    // Get updated movment data
+    const movmentData = await getMovmentData(activationId, scheduleId);
 
-      data.push({ tiploc: element, movment, schedule });
-    })
-  );
-
+    element.movment = movmentData;
+  });
   return data;
-};
-
-const getMovementData = async (activationId, scheduleId) => {
-  const apiEndPoint = `https://traindata-stag-api.railsmart.io/api/ifmtrains/movement/${activationId}/${scheduleId}/`;
-  const response = await fetch(apiEndPoint, {
-    headers: {
-      "X-ApiKey": process.env.REACT_APP_3SQUARED_API_KEY,
-      "X-ApiVersion": "1.0",
-    },
-  });
-  const movmentData = await response.json();
-  return movmentData;
-};
-
-const getScheduleData = async (activationId, scheduleId) => {
-  const apiEndPoint = `https://traindata-stag-api.railsmart.io/api/ifmtrains/schedule/${activationId}/${scheduleId}/`;
-  const response = await fetch(apiEndPoint, {
-    headers: {
-      "X-ApiKey": process.env.REACT_APP_3SQUARED_API_KEY,
-      "X-ApiVersion": "1.0",
-    },
-  });
-  const movmentData = await response.json();
-  return movmentData;
 };

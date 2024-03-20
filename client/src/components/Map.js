@@ -22,6 +22,9 @@ import TIPLOCMarkers from "./map/TIPLOCMarkers";
 import setRouteOnMap from "./map/SetRouteOnMap";
 import { Circle } from "react-leaflet";
 
+// Context
+import { MapContext } from "../contexts/MapContext";
+
 const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   const { map, setMap } = useMap();
 
@@ -42,11 +45,6 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   let routeColorArray = [];
 
   const setRouteComponent = () =>
-    // {
-    //   for (let index = 0; index < plotPointsState.length; index++) {
-    //     return setRouteOnMap(plotPointsState[index], routeColor[index]);
-    //   }
-    // };
     plotPointsState.map((train, index) => {
       if (!train.isSelected) {
         return setRouteOnMap(train, routeColor[index]);
@@ -70,7 +68,6 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   }, [setPlotPointsState, trackedRoutes]);
 
   useEffect(() => {
-    // console.log(settings);
     if (map) {
       map.zoomControl.setPosition(settings.zoomControlsPosition.value);
     }
@@ -106,48 +103,15 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
               url={rails.url}
             />
           )}
-          <FloatButton
-            icon={<AimOutlined />}
-            onClick={() =>
-              setMap(
-                map.setView(
-                  [
-                    settings.defaultCenter.Latitude,
-                    settings.defaultCenter.Longitude,
-                  ],
-                  6
-                )
-              )
-            }
-            style={{
-              zIndex: "1000",
-              position: "absolute",
-              right: "50%",
-              bottom: "10px",
-              backgroundColor: "white",
-              border: "2px",
-              borderColor: "gray-100",
-            }}
-          />
-          <FloatButton
-            ref4={ref4}
-            icon={<AimOutlined />}
-            onClick={() => setOpen(true)}
-            style={{
-              zIndex: "1000",
-              position: "absolute",
-              right: "40%",
-              bottom: "10px",
-              backgroundColor: "white",
-              border: "2px",
-              borderColor: "gray-100",
-            }}
-          />
           ;
-          <MarkerClusterGroup chunkedLoading>
-            <StationMarker />
+          <MarkerClusterGroup
+            showCoverageOnHover={false}
+            removeOutsideVisibleBounds={true}
+            animate={true}
+          >
             <StartEndMarkers />
             <TIPLOCMarkers />
+            <StationMarker />
           </MarkerClusterGroup>
           <TrainMarker />
           {plotPointsState.length !== 0 ? setRouteComponent() : null}
