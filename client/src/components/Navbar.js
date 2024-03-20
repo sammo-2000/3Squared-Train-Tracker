@@ -121,8 +121,9 @@ function Navbar({ ref1, ref2, ref3, ref4, setOpenGuide, autoTour }) {
           style={{
             zIndex: "1000",
             position: "absolute",
-            right: "50%",
+            left: "50%",
             bottom: "10px",
+            transform: "translateX(-50%)",
             backgroundColor: "white",
             border: "2px",
             borderColor: "gray-100",
