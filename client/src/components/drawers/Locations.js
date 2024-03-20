@@ -31,7 +31,7 @@ import { useFilter } from "../../hooks/FilterHook";
 import Filter from "../modals/Filter";
 import LocationListItem from "./locations/LocationListItem";
 
-const Locations = (props) => {
+const Locations = ({ ref1, ...props }) => {
   // Data
   const [data, setData] = useState([]);
   const [selectedDetails, setSelectedDetails] = useState({});
