@@ -368,7 +368,18 @@ const Routes = (props) => {
     return showDot;
   };
 
-  const sortRoutes = (a, b) => {
+  const sortRoutes = (alpha, beta) => {
+    let a = alpha;
+    let b = beta;
+
+    if (a.hasOwnProperty("tiploc")) {
+      a = a.tiploc;
+    }
+
+    if (b.hasOwnProperty("tiploc")) {
+      b = b.tiploc;
+    }
+
     const aMatches = Array.from(a.originLocation.toLowerCase()).filter((char) =>
       searchText.toLowerCase().includes(char)
     ).length;
@@ -389,7 +400,13 @@ const Routes = (props) => {
     return bScore - aScore; // sort in descending order of score
   };
 
-  const filterRoute = (route) => {
+  const filterRoute = (r) => {
+    let route = r;
+
+    if (route.hasOwnProperty("tiploc")) {
+      route = route.tiploc;
+    }
+
     let advancedSearch = false;
     let advancedFilter = false;
 
@@ -426,15 +443,9 @@ const Routes = (props) => {
 
       if (!searchedTerm || !searchedValue) return true;
 
-      if (route.hasOwnProperty("tiploc")) {
-        advancedFilter = route.tiploc[chosenTerm[searchedTerm]]
-          .toLowerCase()
-          .includes(searchedValue.toLowerCase());
-      } else {
-        advancedFilter = route[chosenTerm[searchedTerm]]
-          .toLowerCase()
-          .includes(searchedValue.toLowerCase());
-      }
+      advancedFilter = route[chosenTerm[searchedTerm]]
+        .toLowerCase()
+        .includes(searchedValue.toLowerCase());
     }
 
     const propertiesToCheck = [
@@ -451,19 +462,136 @@ const Routes = (props) => {
     if (advancedSearch === true) {
       return advancedFilter;
     }
-    if (route.hasOwnProperty("tiploc")) {
-      return propertiesToCheck.some((property) =>
-        route.tiploc[property].toLowerCase().includes(searchText.toLowerCase())
-      );
-    } else {
-      return propertiesToCheck.some((property) =>
-        route[property].toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
+
+    return propertiesToCheck.some((property) =>
+      route[property].toLowerCase().includes(searchText.toLowerCase())
+    );
   };
 
-  const routeFilter = (route) => {
-    // console.log(route);
+  const routeFilter = (r) => {
+    let route = r;
+
+    if (route.hasOwnProperty("tiploc")) {
+      route = route.tiploc;
+    }
+
+    // lastReportedType
+    if (route.hasOwnProperty("lastReportedType")) {
+      if (
+        !filter.selected.routes.lastReportedType
+          .map((i) => {
+            if (i.hasOwnProperty("value")) {
+              return i.value;
+            } else {
+              return i;
+            }
+          })
+          .includes(route.lastReportedType)
+      ) {
+        return false;
+      }
+    }
+
+    // offRoute
+    if (
+      route.hasOwnProperty("offRoute") &&
+      filter.selected.routes.offRoute.value !== null
+    ) {
+      return filter.selected.routes.offRoute.value === route.offRoute;
+    }
+
+    // Train: cancelled
+
+    if (
+      route.hasOwnProperty("cancelled") &&
+      filter.selected.routes.train.cancelled.value !== null
+    ) {
+      return filter.selected.routes.train.cancelled.value === route.cancelled;
+    }
+
+    // Train: cancelledEnRoute
+    if (
+      route.hasOwnProperty("cancelledEnRoute") &&
+      filter.selected.routes.train.cancelledEnRoutes.value !== null
+    ) {
+      return (
+        filter.selected.routes.train.cancelledEnRoutes.value ===
+        route.cancelledEnRoute
+      );
+    }
+
+    // Train: cancelledImmediatly (actual spelling)
+
+    if (
+      route.hasOwnProperty("cancelledImmediatly") &&
+      filter.selected.routes.train.cancelledImmediately.value !== null
+    ) {
+      return (
+        filter.selected.routes.train.cancelledImmediately.value ===
+        route.cancelledImmediatly
+      );
+    }
+
+    // Train: cancelledOutOfPlan
+
+    if (
+      route.hasOwnProperty("cancelledOutOfPlan") &&
+      filter.selected.routes.train.cancelledOutOfPlan.value !== null
+    ) {
+      return (
+        filter.selected.routes.train.cancelledOutOfPlan.value ===
+        route.cancelledOutOfPlan
+      );
+    }
+
+    // Train: shouldHaveDepartedException
+
+    if (
+      route.hasOwnProperty("shouldHaveDepartedException") &&
+      filter.selected.routes.train.shouldHaveDepartedException.value !== null
+    ) {
+      return (
+        filter.selected.routes.train.shouldHaveDepartedException.value ===
+        route.shouldHaveDepartedException
+      );
+    }
+
+    // Schedule: hasSchedule
+
+    if (
+      route.hasOwnProperty("hasSchedule") &&
+      filter.selected.routes.schedule.hasSchedule.value !== null
+    ) {
+      return (
+        filter.selected.routes.schedule.hasSchedule.value === route.hasSchedule
+      );
+    }
+
+    // Schedule: scheduleCancelled
+
+    if (
+      route.hasOwnProperty("scheduleCancelled") &&
+      filter.selected.routes.schedule.scheduleCancelled.value !== null
+    ) {
+      return (
+        filter.selected.routes.schedule.scheduleCancelled.value ===
+        route.scheduleCancelled
+      );
+    }
+
+    // Schedule: scheduleJustForToday
+
+    if (
+      route.hasOwnProperty("scheduleJustForToday") &&
+      filter.selected.routes.schedule.scheduleJustForToday.value !== null
+    ) {
+      return (
+        filter.selected.routes.schedule.scheduleJustForToday.value ===
+        route.scheduleJustForToday
+      );
+    }
+
+    return true;
   };
 
   const filteredRoutes = routes
@@ -471,9 +599,10 @@ const Routes = (props) => {
     .sort((a, b) => sortRoutes(a, b))
     .filter((route) => routeFilter(route));
 
-  const filteredTrackedRoutes = trackedRoutes.filter((route) =>
-    filterRoute(route)
-  );
+  const filteredTrackedRoutes = trackedRoutes
+    .filter((route) => filterRoute(route))
+    .sort((a, b) => sortRoutes(a, b))
+    .filter((route) => routeFilter(route));
 
   return (
     <>
@@ -500,11 +629,13 @@ const Routes = (props) => {
           </Space>
         }
       >
-        <Filter
-          isOpen={searchFilterModal}
-          setOpen={setSearchFilterModal}
-          defaultKey="2"
-        />
+        {!childrenDrawer && (
+          <Filter
+            isOpen={searchFilterModal}
+            setOpen={setSearchFilterModal}
+            defaultKey="2"
+          />
+        )}
         {/* Search box on first menu */}
         <Input
           placeholder={`Search ${trackedRoutes.length.toLocaleString()} Tracked Routes`}
@@ -666,6 +797,11 @@ const Routes = (props) => {
           closeIcon={<Icon iconName="close" />}
           bodyStyle={{ padding: 0 }}
         >
+          <Filter
+            isOpen={searchFilterModal}
+            setOpen={setSearchFilterModal}
+            defaultKey="2"
+          />
           {/* Search box on second menu */}
           <Input
             placeholder={`Search ${filteredRoutes.length.toLocaleString()} Routes`}
