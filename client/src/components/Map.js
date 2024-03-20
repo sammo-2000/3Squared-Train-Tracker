@@ -42,11 +42,6 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   let routeColorArray = [];
 
   const setRouteComponent = () =>
-    // {
-    //   for (let index = 0; index < plotPointsState.length; index++) {
-    //     return setRouteOnMap(plotPointsState[index], routeColor[index]);
-    //   }
-    // };
     plotPointsState.map((train, index) => {
       if (!train.isSelected) {
         return setRouteOnMap(train, routeColor[index]);
@@ -144,10 +139,14 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
             }}
           />
           ;
-          <MarkerClusterGroup chunkedLoading>
-            <StationMarker />
+          <MarkerClusterGroup
+            showCoverageOnHover={false}
+            removeOutsideVisibleBounds={true}
+            animate={true}
+          >
             <StartEndMarkers />
             <TIPLOCMarkers />
+            <StationMarker />
           </MarkerClusterGroup>
           <TrainMarker />
           {plotPointsState.length !== 0 ? setRouteComponent() : null}

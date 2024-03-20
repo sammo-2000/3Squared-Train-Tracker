@@ -1,29 +1,26 @@
-import React, { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import io from "socket.io-client";
 
 // Hooks
 import { UseTrackedRoutes } from "./hooks/TrackedRoutesHook";
 
-// Connect to backend
+// Connect to backend, this is used to know where the backend socket URL is
 const socket = io(process.env.REACT_APP_BACKEND_URL || "http://localhost:4000");
 
 const Socket = () => {
   // Context
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
-  // Update tracked routes
-  useEffect(() => {
-    socket.on("updatedTrackedRoutes", (data) => {
-      setTrackedRoutes(data);
-    });
-  }, [socket]);
+  socket.on("BTFSetMovment", (data) => {
+    console.log(trackedRoutes.length);
+  });
 
-  // Update tracked location in backend
   useEffect(() => {
-    socket.emit("updateTrackedLocations", trackedRoutes);
-  }, [trackedRoutes]);
+    socket.emit("FTBSetDetails", trackedRoutes);
+  }, [trackedRoutes, setTrackedRoutes]);
 
-  // Return nothing, we using this component for it side effects on context
+  // Return null so nothing is being outputted onto the screen
+  // This is just a helper component to handle socket connections
   return null;
 };
 
