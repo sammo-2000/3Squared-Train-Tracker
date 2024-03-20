@@ -1,3 +1,5 @@
+// Location filter options
+
 export const availabilityItems = [
   {
     label: "Online & Offline",
@@ -196,6 +198,198 @@ export const TimingPointOptions = [
   },
 ];
 
+// Routes filter options
+
+export const lastReportedTypeOptions = [
+  {
+    label: "Activated",
+    key: "1",
+    value: "ACTIVATED",
+  },
+  {
+    label: "Arrival",
+    key: "2",
+    value: "ARRIVAL",
+  },
+  {
+    label: "Departure",
+    key: "3",
+    value: "DEPARTURE",
+  },
+  {
+    label: "Terminated",
+    key: "4",
+    value: "TERMINATED",
+  },
+  {
+    label: "Cancelled",
+    key: "5",
+    value: "CANCELLED",
+  },
+];
+
+export const offRouteOptions = [
+  {
+    label: "Off Route & Not Off Route",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Off Route Only",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "Not Off Route Only",
+    key: "3",
+    value: false,
+  },
+];
+
+export const trainCancelledOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Cancelled",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "Not Cancelled",
+    key: "3",
+    value: false,
+  },
+];
+
+export const trainCancelledEnRoutesOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Cancelled En Route",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "Still on Route",
+    key: "3",
+    value: false,
+  },
+];
+
+export const trainCancelledImmediatelyOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Cancelled Immediately",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "Running",
+    key: "3",
+    value: false,
+  },
+];
+
+export const trainCancelledOutOfPlanOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Cancelled Out Of Plan",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "Planned",
+    key: "3",
+    value: false,
+  },
+];
+
+export const trainShouldHaveDepartedExceptionOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Should Have Departed Exception",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "No Exception",
+    key: "3",
+    value: false,
+  },
+];
+
+export const scheduleHasScheduleOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Has Schedule",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "No Schedule",
+    key: "3",
+    value: false,
+  },
+];
+
+export const scheduleCancelledOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Schedule Cancelled",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "Schedule Running",
+    key: "3",
+    value: false,
+  },
+];
+
+export const scheduleJustForTodayOptions = [
+  {
+    label: "Any",
+    key: "1",
+    value: null,
+  },
+  {
+    label: "Just For Today",
+    key: "2",
+    value: true,
+  },
+  {
+    label: "For More Than Today",
+    key: "3",
+    value: false,
+  },
+];
+
 export const options = {
   location: {
     availability: availabilityItems,
@@ -203,6 +397,22 @@ export const options = {
     stationType: stationTypeItems,
     category: stationCategoryItems,
     timingPoint: TimingPointOptions,
+  },
+  routes: {
+    lastReportedType: lastReportedTypeOptions,
+    offRoute: offRouteOptions,
+    train: {
+      cancelled: trainCancelledOptions,
+      cancelledEnRoutes: trainCancelledEnRoutesOptions,
+      cancelledImmediately: trainCancelledImmediatelyOptions,
+      cancelledOutOfPlan: trainCancelledOutOfPlanOptions,
+      shouldHaveDepartedException: trainShouldHaveDepartedExceptionOptions,
+    },
+    schedule: {
+      hasSchedule: scheduleHasScheduleOptions,
+      scheduleCancelled: scheduleCancelledOptions,
+      scheduleJustForToday: scheduleJustForTodayOptions,
+    },
   },
 };
 
@@ -213,5 +423,21 @@ export const selected = {
     stationType: stationTypeItems,
     category: stationCategoryItems,
     timingPoint: TimingPointOptions,
+  },
+  routes: {
+    lastReportedType: lastReportedTypeOptions,
+    offRoute: offRouteOptions[0],
+    train: {
+      cancelled: trainCancelledOptions[0],
+      cancelledEnRoutes: trainCancelledEnRoutesOptions[0],
+      cancelledImmediately: trainCancelledImmediatelyOptions[0],
+      cancelledOutOfPlan: trainCancelledOutOfPlanOptions[0],
+      shouldHaveDepartedException: trainShouldHaveDepartedExceptionOptions[0],
+    },
+    schedule: {
+      hasSchedule: scheduleHasScheduleOptions[0],
+      scheduleCancelled: scheduleCancelledOptions[0],
+      scheduleJustForToday: scheduleJustForTodayOptions[0],
+    },
   },
 };
