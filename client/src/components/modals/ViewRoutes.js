@@ -58,6 +58,7 @@ function ViewRoutes(props) {
     <div>
       <Modal
         centered
+        className={props.isOpen ? "open" : ""}
         title={
           <div
             style={{

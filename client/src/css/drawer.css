@@ -55,3 +55,24 @@
   .w-full > .ant-space-item:first-child {
     width: 100%;
   }
+
+  .ant-modal-body .ant-tabs-content-holder {
+    padding-right: 1rem;
+  }
+
+  .ant-tabs-left >.ant-tabs-content-holder {
+    padding-right: 0px !important;
+  }
+
+
+  .ant-modal {
+    transition: height 0.3s ease-in-out;
+    transition-delay: .2s;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .ant-modal.open {
+    height: 100%;
+    overflow:visible;
+  }

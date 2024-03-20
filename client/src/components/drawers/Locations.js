@@ -18,15 +18,9 @@ import { useState, useEffect } from "react";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook";
 import { useMap } from "../../hooks/MapHook";
 import { useSettings } from "../../hooks/SettingsHook";
-import { findNotification } from "../../contexts/SettingsContext";
-
 import Icon from "../Icons";
-
 import LocationDetails from "../modals/LocationDetails";
-
 import Cookies from "js-cookie";
-
-import { BranchesOutlined } from "@ant-design/icons";
 import { useFilter } from "../../hooks/FilterHook";
 import Filter from "../modals/Filter";
 import LocationListItem from "./locations/LocationListItem";

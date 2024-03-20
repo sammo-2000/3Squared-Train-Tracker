@@ -168,6 +168,7 @@ const Settings = (props) => {
     <>
       <Modal
         centered
+        className={props.isOpen ? "open" : ""}
         title={
           <div
             style={{

@@ -71,7 +71,7 @@ function Navbar(ref1, ref2, ref3) {
             <div
               key={2}
               ref2={ref2}
-              className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer"
+              className="flex items-center flex-col transition-color duration-200 hover:text-blue-600 hover:bg-blue-100 justify-center p-4 cursor-pointer text-gray-700"
               onClick={() => setActiveDrawer("routes")}
             >
               <Icon iconName="route" />
