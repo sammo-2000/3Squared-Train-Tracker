@@ -28,6 +28,7 @@ import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 import { UseRoutes } from "../../hooks/RoutesHook.js";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
 import { useFilter } from "../../hooks/FilterHook";
+import { useSettings } from "../../hooks/SettingsHook";
 
 // ------------------- API Functions -------------------
 import { tiplocAPI } from "../../api/tiplocAPI.js";
@@ -53,7 +54,6 @@ const Routes = (props) => {
   const [searchedRoutes, setSearchedRoutes] = useState([]);
 
   // Track Routes
-  const [trackedSearchText, setTrackedSearchText] = useState("");
   const [trackedSearchedRoutes, setTrackedSearchedRoutes] = useState([]);
 
   // Tracker
@@ -76,6 +76,7 @@ const Routes = (props) => {
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
   const [trainLocations, setTrainLocations] = useState([]);
   const { filter, setFilter } = useFilter();
+  const { settings, setSettings } = useSettings();
 
   // ------------------- Functions -------------------
   // Stop tracking a route
@@ -94,6 +95,10 @@ const Routes = (props) => {
 
   // Start tracking a route
   const startTracking = async (item) => {
+    if (settings.menuAutoClose.value === true) {
+      setChildrenDrawer(false);
+    }
+
     localStorage.clear();
     let _trackedRoutes = [...trackedRoutes];
     const _newData = await detailAPI([item]);
@@ -362,88 +367,107 @@ const Routes = (props) => {
     return showDot;
   };
 
-  const filteredRoutes = routes
-    .filter((route) => {
-      let advancedSearch = false;
-      let advancedFilter = false;
+  const sortRoutes = (a, b) => {
+    const aMatches = Array.from(a.originLocation.toLowerCase()).filter((char) =>
+      searchText.toLowerCase().includes(char)
+    ).length;
+    const bMatches = Array.from(b.originLocation.toLowerCase()).filter((char) =>
+      searchText.toLowerCase().includes(char)
+    ).length;
 
-      // Array of allowed terms
-      const allowedTerms = [
-        "id",
-        "toc",
-        "headcode",
-        "to",
-        "totiploc",
-        "from",
-        "fromtiploc",
-      ];
+    const aLengthDifference = Math.abs(
+      a.originLocation.length - searchText.length
+    );
+    const bLengthDifference = Math.abs(
+      b.originLocation.length - searchText.length
+    );
 
-      const chosenTerm = {
-        id: "trainId",
-        toc: "toc_Name",
-        headcode: "headCode",
-        to: "destinationLocation",
-        totiploc: "destinationTiploc",
-        from: "originLocation",
-        fromtiploc: "originTiploc",
-      };
+    const aScore = aMatches - aLengthDifference;
+    const bScore = bMatches - bLengthDifference;
 
-      if (searchText.includes(":")) {
-        advancedSearch = true;
+    return bScore - aScore; // sort in descending order of score
+  };
 
-        const searchedSplit = searchText.split(":");
-        const searchedTerm = searchedSplit[0].trim().toLowerCase();
-        const searchedValue =
-          searchedSplit.length > 1 ? searchedSplit[1].trim() : true;
+  const filterRoute = (route) => {
+    let advancedSearch = false;
+    let advancedFilter = false;
 
-        if (!allowedTerms.includes(searchedTerm)) return true;
+    // Array of allowed terms
+    const allowedTerms = [
+      "id",
+      "toc",
+      "headcode",
+      "to",
+      "totiploc",
+      "from",
+      "fromtiploc",
+    ];
 
-        if (!searchedTerm || !searchedValue) return true;
+    const chosenTerm = {
+      id: "trainId",
+      toc: "toc_Name",
+      headcode: "headCode",
+      to: "destinationLocation",
+      totiploc: "destinationTiploc",
+      from: "originLocation",
+      fromtiploc: "originTiploc",
+    };
 
+    if (searchText.includes(":")) {
+      advancedSearch = true;
+
+      const searchedSplit = searchText.split(":");
+      const searchedTerm = searchedSplit[0].trim().toLowerCase();
+      const searchedValue =
+        searchedSplit.length > 1 ? searchedSplit[1].trim() : true;
+
+      if (!allowedTerms.includes(searchedTerm)) return true;
+
+      if (!searchedTerm || !searchedValue) return true;
+
+      if (route.hasOwnProperty("tiploc")) {
+        advancedFilter = route.tiploc[chosenTerm[searchedTerm]]
+          .toLowerCase()
+          .includes(searchedValue.toLowerCase());
+      } else {
         advancedFilter = route[chosenTerm[searchedTerm]]
           .toLowerCase()
           .includes(searchedValue.toLowerCase());
       }
+    }
 
-      const propertiesToCheck = [
-        "originTiploc",
-        "destinationTiploc",
-        "destinationLocation",
-        "originLocation",
-        "headCode",
-        "toc_Name",
-        "trainId",
-        "lastReportedType",
-      ];
+    const propertiesToCheck = [
+      "originTiploc",
+      "destinationTiploc",
+      "destinationLocation",
+      "originLocation",
+      "headCode",
+      "toc_Name",
+      "trainId",
+      "lastReportedType",
+    ];
 
-      if (advancedSearch === true) {
-        return advancedFilter;
-      }
-
+    if (advancedSearch === true) {
+      return advancedFilter;
+    }
+    if (route.hasOwnProperty("tiploc")) {
+      return propertiesToCheck.some((property) =>
+        route.tiploc[property].toLowerCase().includes(searchText.toLowerCase())
+      );
+    } else {
       return propertiesToCheck.some((property) =>
         route[property].toLowerCase().includes(searchText.toLowerCase())
       );
-    })
-    .sort((a, b) => {
-      const aMatches = Array.from(a.originLocation.toLowerCase()).filter(
-        (char) => searchText.toLowerCase().includes(char)
-      ).length;
-      const bMatches = Array.from(b.originLocation.toLowerCase()).filter(
-        (char) => searchText.toLowerCase().includes(char)
-      ).length;
+    }
+  };
 
-      const aLengthDifference = Math.abs(
-        a.originLocation.length - searchText.length
-      );
-      const bLengthDifference = Math.abs(
-        b.originLocation.length - searchText.length
-      );
+  const filteredRoutes = routes
+    .filter((route) => filterRoute(route))
+    .sort((a, b) => sortRoutes(a, b));
 
-      const aScore = aMatches - aLengthDifference;
-      const bScore = bMatches - bLengthDifference;
-
-      return bScore - aScore; // sort in descending order of score
-    });
+  const filteredTrackedRoutes = trackedRoutes.filter((route) =>
+    filterRoute(route)
+  );
 
   return (
     <>
@@ -476,7 +500,7 @@ const Routes = (props) => {
           size="large"
           prefix={<Icon className="px-1" iconName="search" />}
           onChange={(e) => {
-            setTrackedSearchText(e.target.value);
+            setSearchText(e.target.value);
           }}
           style={{
             borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
@@ -486,7 +510,7 @@ const Routes = (props) => {
             borderRadius: "0",
             padding: "1rem 1rem",
           }}
-          value={trackedSearchText}
+          value={searchText}
           suffix={
             <Button
               onClick={() =>
@@ -505,7 +529,7 @@ const Routes = (props) => {
         {/* List routes on first menu */}
         <List
           size="large"
-          dataSource={trackedSearchedRoutes || trackedRoutes}
+          dataSource={filteredTrackedRoutes}
           style={{ size: "200px" }}
           renderItem={(item) => (
             <List.Item className="hover:bg-gray-100 transition-colors ease-in-out duration-150 cursor-pointer">
@@ -662,6 +686,7 @@ const Routes = (props) => {
                   title="Track Route"
                   description="Are you sure you want to track this route?"
                   onConfirm={async () => {
+                    setSearchText("");
                     await startTracking(item);
                   }}
                 >
