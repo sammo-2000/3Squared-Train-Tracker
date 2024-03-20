@@ -12,7 +12,7 @@ const Socket = () => {
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
   socket.on("BTFSetMovment", (data) => {
-    console.log(trackedRoutes.length);
+    // console.log(trackedRoutes.length);
   });
 
   useEffect(() => {
