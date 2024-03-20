@@ -375,6 +375,7 @@ const Locations = ({ ref1, ...props }) => {
       <Drawer
         title="Tracked Locations"
         onClose={() => {
+          setSearchText("");
           props.setActiveDraw("menu");
         }}
         open={props.isOpen}
@@ -501,7 +502,10 @@ const Locations = ({ ref1, ...props }) => {
         <Drawer
           title="Track New Location"
           closable={true}
-          onClose={() => setChildrenDrawer(false)}
+          onClose={() => {
+            setSearchText("");
+            setChildrenDrawer(false);
+          }}
           open={childrenDrawer}
           placement={settings.menuDirection.value}
           closeIcon={<Icon iconName="close" />}

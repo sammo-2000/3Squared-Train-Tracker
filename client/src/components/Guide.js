@@ -13,6 +13,9 @@ import tourGif from "../assets/gifs/TourGif4.gif";
 // Cookies
 import Cookies from "js-cookie";
 
+// CSS
+import "../css/guide.css";
+
 const Guide = ({ open, setOpen, refs, autoTour }) => {
   // For auto loading the tour if it's your first time.
 
@@ -32,7 +35,7 @@ const Guide = ({ open, setOpen, refs, autoTour }) => {
     {
       title: "Routes",
       description:
-        "The routes section will allow you to view and track all of the available routes based on your tracked locations. Tracking a route will then plot the route and it's schedule on he map. This section also provides a journey tracker for your to be able to view the progress of the train.",
+        "The routes section will allow you to view and track all of the available routes based on your tracked locations. Tracking a route will then plot the route and it's schedule on the map. This section also provides a journey tracker for your to be able to view the progress of the train.",
       cover: (
         <img
           alt="Image giving a brief overview of the routes section"

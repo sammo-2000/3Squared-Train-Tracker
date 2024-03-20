@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal, Tabs, Typography, Badge, Select } from "antd";
+import { Button, Modal, Tabs, Typography, Badge, Select, Radio } from "antd";
 import { SettingOutlined, DownOutlined } from "@ant-design/icons";
 import { Dropdown, message, Space, Input, Slider } from "antd";
 import { NumericInput } from "../inputs/NumericInput";
@@ -46,9 +46,45 @@ const Filter = (props) => {
     });
   };
 
+  // dot={
+  //   filter.selected.routes.train.cancelled.key !==
+  //   filter.options.routes.train.cancelled[0].key
+  //     ? 1
+  //     : 0
+  // }
+  // status={
+  //   filter.selected.routes.train.cancelled.key !==
+  //   filter.options.routes.train.cancelled[0].key
+  //     ? "processing"
+  //     : "default"
+  // }
+
+  const showDot = (type = "train") => {
+    let showDot = 0;
+    let status = "default";
+
+    // console.log(filter.selected.routes[type]);
+
+    Object.entries(filter.selected.routes[type]).forEach(([key, value]) => {
+      if (
+        JSON.stringify(filter.options.routes[type][key][0]) !==
+        JSON.stringify(filter.selected.routes[type][key])
+      ) {
+        showDot = 1;
+        status = "processing";
+      }
+    });
+
+    return {
+      dot: showDot,
+      status: status,
+    };
+  };
+
   return (
     <>
       <Modal
+        width={600}
         centered
         title={
           <div
@@ -76,6 +112,7 @@ const Filter = (props) => {
             </div>
           </div>
         }
+        className={props.isOpen ? "open" : ""}
         open={props.isOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -486,6 +523,435 @@ const Filter = (props) => {
                     </Button>
                   </Space>
                 </dd>
+              </div>
+            </dl>
+          </TabPane>
+          <TabPane tab={<span>Routes</span>} key="2">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  <Badge
+                    dot={
+                      filter.selected.routes.lastReportedType.length !==
+                      filter.options.routes.lastReportedType.length
+                        ? 1
+                        : 0
+                    }
+                    status={
+                      filter.selected.routes.lastReportedType.length !==
+                      filter.options.routes.lastReportedType.length
+                        ? "processing"
+                        : "default"
+                    }
+                  >
+                    <span className="pr-1">Last Reported Type</span>
+                  </Badge>
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Space direction="horizontal" className="w-full">
+                    <Select
+                      mode={"multiple"}
+                      style={{ width: "100%" }}
+                      placeholder="Select Station Types"
+                      maxTagCount={"responsive"}
+                      options={filter.options.routes.lastReportedType}
+                      value={filter.selected.routes.lastReportedType}
+                      onChange={(value) => {
+                        setFilter((prevFilter) => ({
+                          ...prevFilter,
+                          selected: {
+                            ...prevFilter.selected,
+                            routes: {
+                              ...prevFilter.selected.routes,
+                              lastReportedType: value,
+                            },
+                          },
+                        }));
+                      }}
+                    />
+
+                    <Button
+                      className={
+                        filter.selected.routes.lastReportedType.length !==
+                        filter.options.routes.lastReportedType.length
+                          ? "w-auto"
+                          : "w-0 p-0 opacity-0"
+                      }
+                      onClick={() => {
+                        setFilter((prevFilter) => {
+                          return {
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                lastReportedType:
+                                  prevFilter.options.routes.lastReportedType,
+                              },
+                            },
+                          };
+                        });
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+                        />
+                      </svg>
+                    </Button>
+                  </Space>
+                </dd>
+              </div>
+              <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  <Badge
+                    dot={
+                      filter.selected.routes.offRoute.key !==
+                      filter.options.routes.offRoute[0].key
+                        ? 1
+                        : 0
+                    }
+                    status={
+                      filter.selected.routes.offRoute.key !==
+                      filter.options.routes.offRoute[0].key
+                        ? "processing"
+                        : "default"
+                    }
+                  >
+                    <span className="pr-1">Off Route</span>
+                  </Badge>
+                </dt>
+                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                  <Dropdown
+                    menu={{
+                      items: filter.options.routes.offRoute,
+                      selectable: true,
+                      selectedKeys: [filter.selected.routes.offRoute.key],
+                      onClick: (e) => {
+                        setFilter((prevFilter) => ({
+                          ...prevFilter,
+                          selected: {
+                            ...prevFilter.selected,
+                            routes: {
+                              ...prevFilter.selected.routes,
+                              offRoute:
+                                filter.options.routes.offRoute[e.key - 1],
+                            },
+                          },
+                        }));
+                      },
+                    }}
+                  >
+                    <Typography.Link>
+                      <Space>
+                        {filter.selected.routes.offRoute.label}
+                        <DownOutlined />
+                      </Space>
+                    </Typography.Link>
+                  </Dropdown>
+                </dd>
+              </div>
+              <div className="py-6 ">
+                <Tabs tabPosition="left" defaultActiveKey="a">
+                  <TabPane
+                    tab={
+                      <span>
+                        <Badge dot={showDot().dot} status={showDot().status}>
+                          <span className="pr-1">Train</span>
+                        </Badge>
+                      </span>
+                    }
+                    key="a"
+                  >
+                    <div>
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                train: {
+                                  ...prevFilter.selected.routes.train,
+                                  cancelled:
+                                    filter.options.routes.train.cancelled[
+                                      e.target.value - 1
+                                    ],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={filter.selected.routes.train.cancelled.key}
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.train.cancelled.map((item) => (
+                          <Radio.Button value={item.key}>
+                            {item.label}
+                          </Radio.Button>
+                        ))}
+                      </Radio.Group>
+                    </div>
+                    <div className="mt-4">
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                train: {
+                                  ...prevFilter.selected.routes.train,
+                                  cancelledEnRoutes:
+                                    filter.options.routes.train
+                                      .cancelledEnRoutes[e.target.value - 1],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={
+                          filter.selected.routes.train.cancelledEnRoutes.key
+                        }
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.train.cancelledEnRoutes.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                    <div className="mt-4">
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                train: {
+                                  ...prevFilter.selected.routes.train,
+                                  cancelledImmediately:
+                                    filter.options.routes.train
+                                      .cancelledImmediately[e.target.value - 1],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={
+                          filter.selected.routes.train.cancelledImmediately.key
+                        }
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.train.cancelledImmediately.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                    <div className="mt-4">
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                train: {
+                                  ...prevFilter.selected.routes.train,
+                                  cancelledOutOfPlan:
+                                    filter.options.routes.train
+                                      .cancelledOutOfPlan[e.target.value - 1],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={
+                          filter.selected.routes.train.cancelledOutOfPlan.key
+                        }
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.train.cancelledOutOfPlan.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                    <div className="mt-4">
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                train: {
+                                  ...prevFilter.selected.routes.train,
+                                  shouldHaveDepartedException:
+                                    filter.options.routes.train
+                                      .shouldHaveDepartedException[
+                                      e.target.value - 1
+                                    ],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={
+                          filter.selected.routes.train
+                            .shouldHaveDepartedException.key
+                        }
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.train.shouldHaveDepartedException.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                  </TabPane>
+                  <TabPane
+                    tab={
+                      <span>
+                        <Badge
+                          dot={showDot("schedule").dot}
+                          status={showDot("schedule").status}
+                        >
+                          <span className="pr-1">Schedule</span>
+                        </Badge>
+                      </span>
+                    }
+                    key="b"
+                  >
+                    <div>
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                schedule: {
+                                  ...prevFilter.selected.routes.schedule,
+                                  hasSchedule:
+                                    filter.options.routes.schedule.hasSchedule[
+                                      e.target.value - 1
+                                    ],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={filter.selected.routes.schedule.hasSchedule.key}
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.schedule.hasSchedule.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                    <div className="mt-4">
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                schedule: {
+                                  ...prevFilter.selected.routes.schedule,
+                                  scheduleCancelled:
+                                    filter.options.routes.schedule
+                                      .scheduleCancelled[e.target.value - 1],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={
+                          filter.selected.routes.schedule.scheduleCancelled.key
+                        }
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.schedule.scheduleCancelled.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                    <div className="mt-4">
+                      <Radio.Group
+                        onChange={(e) => {
+                          setFilter((prevFilter) => ({
+                            ...prevFilter,
+                            selected: {
+                              ...prevFilter.selected,
+                              routes: {
+                                ...prevFilter.selected.routes,
+                                schedule: {
+                                  ...prevFilter.selected.routes.schedule,
+                                  scheduleJustForToday:
+                                    filter.options.routes.schedule
+                                      .scheduleJustForToday[e.target.value - 1],
+                                },
+                              },
+                            },
+                          }));
+                        }}
+                        value={
+                          filter.selected.routes.schedule.scheduleJustForToday
+                            .key
+                        }
+                        buttonStyle="solid"
+                      >
+                        {filter.options.routes.schedule.scheduleJustForToday.map(
+                          (item) => (
+                            <Radio.Button value={item.key}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
+                      </Radio.Group>
+                    </div>
+                  </TabPane>
+                </Tabs>
               </div>
             </dl>
           </TabPane>

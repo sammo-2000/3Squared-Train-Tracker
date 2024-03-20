@@ -1,57 +1,83 @@
 .ant-drawer-header-title {
   flex-direction: row-reverse;
-  }
-  .ant-btn-primary {
-    color: white !important;
-    background-color: #1890ff !important;
-  }
+}
+.ant-btn-primary {
+  color: white !important;
+  background-color: #1890ff !important;
+}
 
-  .ant-menu-submenu-title:hover {
-    background-color: transparent !important;
-  }
+.ant-menu-submenu-title:hover {
+  background-color: transparent !important;
+}
 
-  .ant-menu-vertical >.ant-menu-submenu>.ant-menu-submenu-title {
-    padding: 0px;
-    margin: 0px;
-    height: auto;
-  }
+.ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title {
+  padding: 0px;
+  margin: 0px;
+  height: auto;
+}
 
-  .ant-drawer-mask {
-    background: rgba(0, 0, 0, 0.3) !important;
-    transition: all ease-out .2s;
-  }
+.ant-drawer-mask {
+  background: rgba(0, 0, 0, 0.3) !important;
+  transition: all ease-out 0.2s;
+}
 
-  .ant-drawer-mask:hover {
-    background: rgba(0, 0, 0, 0.1)  !important;
-    transition: all ease-in .2s;
-  }
+.ant-drawer-mask:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+  transition: all ease-in 0.2s;
+}
 
-  .ant-modal-mask {
-    background: rgba(0, 0, 0, 0.3) !important;
-    transition: all ease-out .2s;
-  }
+.ant-modal-mask {
+  background: rgba(0, 0, 0, 0.3) !important;
+  transition: all ease-out 0.2s;
+}
 
-  .ant-modal-content:not(:hover) .ant-modal-mask {
-    background: rgba(0, 0, 0, 0.1)  !important;
-    transition: all ease-in .2s;
-  }
+.ant-modal-content:not(:hover) .ant-modal-mask {
+  background: rgba(0, 0, 0, 0.1) !important;
+  transition: all ease-in 0.2s;
+}
 
-  .ant-modal-body .ant-tabs-content-holder {
-    max-height: 75vh;
-    overflow-y: auto;
-    padding-right: 2rem;
-  }
+.ant-modal-body .ant-tabs-content-holder {
+  max-height: 75vh;
+  overflow-y: auto;
+  padding-right: 2rem;
+}
 
-  .modal-content {
-    transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
-  }
+.modal-content {
+  transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
+}
 
-  .modal-content.height-transition {
-    height: auto !important; /* Use !important to override the inline style */
-  }
-  .w-full > .ant-select-selector {
-    width: 100%;
-  }
-  .w-full > .ant-space-item:first-child {
-    width: 100%;
-  }
+.modal-content.height-transition {
+  height: auto !important; /* Use !important to override the inline style */
+}
+.w-full > .ant-select-selector {
+  width: 100%;
+}
+.w-full > .ant-space-item:first-child {
+  width: 100%;
+}
+
+.ant-modal-body .ant-tabs-content-holder {
+  padding-right: 1rem;
+}
+
+.ant-tabs-left > .ant-tabs-content-holder {
+  padding-right: 0px !important;
+}
+
+.ant-modal {
+  transition: height 0.3s ease-in-out;
+  transition-delay: 0.2s;
+  height: 0;
+  overflow: hidden;
+}
+.ant-modal.open {
+  height: 100%;
+  overflow: visible;
+}
+.ant-modal-wrap {
+  overflow-y: hidden;
+}
+:where(.css-dev-only-do-not-override-1rqnfsa).ant-list
+  .ant-list-pagination-align-end {
+  text-align: center !important;
+}

@@ -13,7 +13,6 @@ const Socket = () => {
 
   socket.on("BTFSetMovment", (data) => {
     if (data.length === 0) return;
-    console.log(data);
     setTrackedRoutes(data);
   });
 
