@@ -12,12 +12,14 @@ const Socket = () => {
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
 
   socket.on("BTFSetMovment", (data) => {
-    console.log(trackedRoutes.length);
+    if (data.length === 0) return;
+    console.log(data);
+    setTrackedRoutes(data);
   });
 
   useEffect(() => {
     socket.emit("FTBSetDetails", trackedRoutes);
-  }, [trackedRoutes, setTrackedRoutes]);
+  }, [setTrackedRoutes]);
 
   // Return null so nothing is being outputted onto the screen
   // This is just a helper component to handle socket connections
