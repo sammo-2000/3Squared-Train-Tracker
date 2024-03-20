@@ -729,7 +729,7 @@ const Routes = (props) => {
         />
         {/* Route Tracker drawer */}
         <Drawer
-          title="Tracker"
+          title="Route Tracking"
           closable={true}
           closeIcon={<Icon iconName="close" />}
           placement="left"
@@ -751,7 +751,7 @@ const Routes = (props) => {
                 <Steps
                   direction="vertical"
                   current={lastReportedTiplocIndex || 0}
-                  className="custom-dot-size custom-step-distance"
+                  className="custom-dot-size custom-step-distance w-auto"
                 >
                   {selectedOption.schedule.map((scheduleItem, index) => {
                     return (

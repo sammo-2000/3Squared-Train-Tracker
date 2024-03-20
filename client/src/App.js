@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { ConfigProvider, theme } from "antd";
 
 // Component
 import Map from "./components/Map";
@@ -31,18 +32,27 @@ const App = () => {
   return (
     <>
       <Socket />
-      <MapContext.Provider value={{ map, setMap }}>
-        <Map setOpen={setOpen} />
-        <Navbar
-          ref1={ref1}
-          ref2={ref2}
-          ref3={ref3}
-          ref4={ref4}
-          setOpenGuide={setOpen}
-          autoTour={autoTour}
-          setAutoTour={setAutoTour}
-        />
-      </MapContext.Provider>
+      <ConfigProvider
+        theme={{
+          algorithm: theme.lightAlgorithm,
+
+          // light algorithm and compact algorithm
+          //algorithm: theme.compactAlgorithm,
+        }}
+      >
+        <MapContext.Provider value={{ map, setMap }}>
+          <Map setOpen={setOpen} />
+          <Navbar
+            ref1={ref1}
+            ref2={ref2}
+            ref3={ref3}
+            ref4={ref4}
+            setOpenGuide={setOpen}
+            autoTour={autoTour}
+            setAutoTour={setAutoTour}
+          />
+        </MapContext.Provider>
+      </ConfigProvider>
       <Guide
         open={open}
         setOpen={setOpen}

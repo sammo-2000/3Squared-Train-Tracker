@@ -230,7 +230,7 @@ export const lastReportedTypeOptions = [
 
 export const offRouteOptions = [
   {
-    label: "Off Route & Not Off Route",
+    label: "Any",
     key: "1",
     value: null,
   },
