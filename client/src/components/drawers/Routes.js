@@ -648,9 +648,16 @@ const Routes = (props) => {
                 </p>
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane key={1} tab={"Details"}>
-              a
-            </Tabs.TabPane>
+            {selectedOption ? (
+              <Tabs.TabPane key={1} tab={"Details"}>
+                {console.log(selectedOption)}
+                <h2>Scheduled Stops: {selectedOption.schedule.length}</h2>
+              </Tabs.TabPane>
+            ) : (
+              <p className="text-center mt-2 text-gray-400">
+                Please select a route to view its steps.
+              </p>
+            )}
           </Tabs>
         </Drawer>
         {/* Second menu drawer */}
