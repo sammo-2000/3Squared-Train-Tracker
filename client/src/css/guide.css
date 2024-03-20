@@ -10,13 +10,6 @@
   .ant-tour-inner
   .ant-tour-cover {
   padding: 0px !important;
-  /* border-radius: 2px 2px 0 0; */
-}
-
-:where(.css-dev-only-do-not-override-1rqnfsa).ant-tour
-  .ant-tour-inner
-  .ant-tour-close {
-  top: 303px !important;
 }
 
 :where(.css-dev-only-do-not-override-1rqnfsa).ant-tour .ant-tour-inner {
