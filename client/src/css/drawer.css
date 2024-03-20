@@ -64,6 +64,7 @@
   padding-right: 0px !important;
 }
 
+<<<<<<< Updated upstream
 .ant-modal {
   transition: height 0.3s ease-in-out;
   transition-delay: 0.2s;
@@ -75,6 +76,17 @@
   height: 100%;
   overflow: visible;
 }
+=======
+  .ant-modal-wrap {
+    overflow-y: hidden;
+  }
+  .ant-modal {
+    transition: height, translateY 0.3s ease-in-out;
+    transition-delay: .2s;
+    height: 0;
+    overflow: hidden;
+  }
+>>>>>>> Stashed changes
 
 :where(.css-dev-only-do-not-override-1rqnfsa).ant-list
   .ant-list-pagination-align-end {

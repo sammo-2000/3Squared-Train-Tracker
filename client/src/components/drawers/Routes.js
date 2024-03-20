@@ -10,6 +10,7 @@ import {
   Menu,
   Input,
   Badge,
+  Tabs,
 } from "antd";
 import moment from "moment";
 
@@ -461,9 +462,14 @@ const Routes = (props) => {
     }
   };
 
+  const routeFilter = (route) => {
+    // console.log(route);
+  };
+
   const filteredRoutes = routes
     .filter((route) => filterRoute(route))
-    .sort((a, b) => sortRoutes(a, b));
+    .sort((a, b) => sortRoutes(a, b))
+    .filter((route) => routeFilter(route));
 
   const filteredTrackedRoutes = trackedRoutes.filter((route) =>
     filterRoute(route)
@@ -475,6 +481,7 @@ const Routes = (props) => {
       <Drawer
         title="Tracked Routes"
         onClose={() => {
+          setSearchText("");
           props.setActiveDraw("menu");
         }}
         open={props.isOpen}
@@ -493,6 +500,11 @@ const Routes = (props) => {
           </Space>
         }
       >
+        <Filter
+          isOpen={searchFilterModal}
+          setOpen={setSearchFilterModal}
+          defaultKey="2"
+        />
         {/* Search box on first menu */}
         <Input
           placeholder={`Search ${trackedRoutes.length.toLocaleString()} Tracked Routes`}
@@ -594,54 +606,66 @@ const Routes = (props) => {
           visible={isTrackerOpen}
           onClose={() => setIsTrackerOpen(false)}
         >
-          {/* Route Tracker */}
-          {selectedOption ? (
-            <Steps
-              direction="vertical"
-              current={lastReportedTiplocIndex || 0}
-              className="custom-dot-size custom-step-distance"
-            >
-              {selectedOption.schedule.map((scheduleItem, index) => {
-                return (
-                  <Steps.Step
-                    key={index}
-                    title={scheduleItem.location}
-                    description={
-                      index < lastReportedTiplocIndex
-                        ? TrainDetailTimerPassed({
-                            route: selectedOption,
-                            schedule: scheduleItem,
-                          })
-                        : TrainDetailTimer({
-                            route: selectedOption,
-                            schedule: scheduleItem,
-                          })
-                    }
-                  />
-                );
-              })}
-            </Steps>
-          ) : (
-            <p className="text-center mt-2 text-gray-400">
-              Please select a route to view its steps.
-            </p>
-          )}
+          <Tabs
+            defaultActiveKey="0"
+            tabBarStyle={{
+              padding: ".5rem 2rem 0px 2rem",
+              fontWeight: "500",
+              marginBottom: "0px",
+            }}
+          >
+            <Tabs.TabPane key={0} tab={"Steps"}>
+              {/* Route Tracker */}
+              {selectedOption ? (
+                <Steps
+                  direction="vertical"
+                  current={lastReportedTiplocIndex || 0}
+                  className="custom-dot-size custom-step-distance"
+                >
+                  {selectedOption.schedule.map((scheduleItem, index) => {
+                    return (
+                      <Steps.Step
+                        key={index}
+                        title={scheduleItem.location}
+                        description={
+                          index < lastReportedTiplocIndex
+                            ? TrainDetailTimerPassed({
+                                route: selectedOption,
+                                schedule: scheduleItem,
+                              })
+                            : TrainDetailTimer({
+                                route: selectedOption,
+                                schedule: scheduleItem,
+                              })
+                        }
+                      />
+                    );
+                  })}
+                </Steps>
+              ) : (
+                <p className="text-center mt-2 text-gray-400">
+                  Please select a route to view its steps.
+                </p>
+              )}
+            </Tabs.TabPane>
+            <Tabs.TabPane key={1} tab={"Details"}>
+              a
+            </Tabs.TabPane>
+          </Tabs>
         </Drawer>
         {/* Second menu drawer */}
         <Drawer
           title="Track New Route"
           closable={true}
-          onClose={openCloseChildrenDrawer}
+          onClose={() => {
+            setSearchText("");
+            openCloseChildrenDrawer();
+          }}
           open={childrenDrawer}
           placement={"left"}
           closeIcon={<Icon iconName="close" />}
           bodyStyle={{ padding: 0 }}
         >
-          <Filter
-            isOpen={searchFilterModal}
-            setOpen={setSearchFilterModal}
-            defaultKey="2"
-          />
           {/* Search box on second menu */}
           <Input
             placeholder={`Search ${filteredRoutes.length.toLocaleString()} Routes`}
