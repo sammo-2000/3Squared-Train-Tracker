@@ -32,7 +32,7 @@ const Guide = ({ open, setOpen, refs, autoTour }) => {
     {
       title: "Routes",
       description:
-        "The routes section will allow you to view and track all of the available routes based on your tracked locations. Tracking a route will then plot the route and it's schedule on he map. This section also provides a journey tracker for your to be able to view the progress of the train.",
+        "The routes section will allow you to view and track all of the available routes based on your tracked locations. Tracking a route will then plot the route and it's schedule on the map. This section also provides a journey tracker for your to be able to view the progress of the train.",
       cover: (
         <img
           alt="Image giving a brief overview of the routes section"

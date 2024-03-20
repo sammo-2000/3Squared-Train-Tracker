@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, version } from "react";
 import Draggable from "react-draggable";
 import { Button, Modal, Tabs, Typography, Tooltip, TreeSelect } from "antd";
 import { SettingOutlined, DownOutlined } from "@ant-design/icons";
@@ -29,6 +29,9 @@ const allCookies = Cookies.get();
 const { TabPane } = Tabs;
 
 const Settings = ({ setOpenGuide, ...props }) => {
+  // Set the current Version number
+  let versionNumber = "1.46.0";
+
   const { settings, setSettings } = useSettings();
   const { map, setMap } = useMap();
 
@@ -237,8 +240,8 @@ const Settings = ({ setOpenGuide, ...props }) => {
                   Version
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  <Tooltip title="Version 1.0.0">
-                    <Typography.Link>v1.2.0</Typography.Link>
+                  <Tooltip title={`Version: ${versionNumber}`}>
+                    <Typography.Link>{versionNumber}</Typography.Link>
                   </Tooltip>
                 </dd>
               </div>
@@ -248,22 +251,32 @@ const Settings = ({ setOpenGuide, ...props }) => {
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 flex flex-col gap-y-2">
                   <div className="flex gap-x-2">
-                    <Tooltip title="Author: John Doe">
-                      <Typography.Link>Ethan Morrison</Typography.Link>
+                    <Tooltip title="GitHub: emorrisn">
+                      <Typography.Link href="https://github.com/emorrisn">
+                        Ethan Morrison
+                      </Typography.Link>
                     </Tooltip>
-                    <Tooltip title="Author: John Doe">
-                      <Typography.Link>Joe Grierson</Typography.Link>
+                    <Tooltip title="GitHub: musicjoe12">
+                      <Typography.Link href="https://github.com/musicjoe12">
+                        Joe Grierson
+                      </Typography.Link>
                     </Tooltip>
-                    <Tooltip title="Author: John Doe">
-                      <Typography.Link>Sam Knowles</Typography.Link>
+                    <Tooltip title="GitHub: Samuel12372">
+                      <Typography.Link href="https://github.com/Samuel12372">
+                        Sam Knowles
+                      </Typography.Link>
                     </Tooltip>
                   </div>
                   <div className="flex gap-x-2">
-                    <Tooltip title="Author: John Doe">
-                      <Typography.Link>Matthew Richards</Typography.Link>
+                    <Tooltip title="GitHub: mRichardio">
+                      <Typography.Link href="https://github.com/mRichardio">
+                        Matthew Richards
+                      </Typography.Link>
                     </Tooltip>
-                    <Tooltip title="Author: John Doe">
-                      <Typography.Link>Ayman Sammo</Typography.Link>
+                    <Tooltip title="GitHub: sammo-2000">
+                      <Typography.Link href="https://github.com/sammo-2000">
+                        Ayman Sammo
+                      </Typography.Link>
                     </Tooltip>
                   </div>
                 </dd>
@@ -274,7 +287,9 @@ const Settings = ({ setOpenGuide, ...props }) => {
                 </dt>
                 <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                   <Tooltip title="MIT License">
-                    <Typography.Link>MIT License</Typography.Link>
+                    <Typography.Link href="https://en.wikipedia.org/wiki/MIT_License">
+                      MIT License
+                    </Typography.Link>
                   </Tooltip>
                 </dd>
               </div>
@@ -595,6 +610,10 @@ const Settings = ({ setOpenGuide, ...props }) => {
                       for (const cookieName in allCookies) {
                         Cookies.remove(cookieName);
                       }
+
+                      // Fix for tour not resetting sometimes, don't remove
+                      Cookies.remove("tour");
+
                       for (const item in localStorage) {
                         localStorage.removeItem(item);
                       }
