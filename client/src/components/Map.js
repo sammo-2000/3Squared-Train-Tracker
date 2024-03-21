@@ -109,11 +109,11 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
             removeOutsideVisibleBounds={true}
             animate={true}
           >
-            <StartEndMarkers />
-            <TIPLOCMarkers />
-            <StationMarker />
+            <StartEndMarkers key="startEndMarkers" />
+            <TIPLOCMarkers key="tiplocMarkers" />
+            <StationMarker key="stationMarkers" />
           </MarkerClusterGroup>
-          <TrainMarker />
+          <TrainMarker key={"trainMarker"} />
           {plotPointsState.length !== 0 && trackedRoutes.length !== 0
             ? setRouteComponent()
             : null}

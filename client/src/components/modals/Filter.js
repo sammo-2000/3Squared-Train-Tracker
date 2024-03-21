@@ -695,11 +695,13 @@ const Filter = (props) => {
                         value={filter.selected.routes.train.cancelled.key}
                         buttonStyle="solid"
                       >
-                        {filter.options.routes.train.cancelled.map((item) => (
-                          <Radio.Button value={item.key}>
-                            {item.label}
-                          </Radio.Button>
-                        ))}
+                        {filter.options.routes.train.cancelled.map(
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
+                              {item.label}
+                            </Radio.Button>
+                          )
+                        )}
                       </Radio.Group>
                     </div>
                     <div className="mt-4">
@@ -727,8 +729,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.train.cancelledEnRoutes.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )
@@ -760,8 +762,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.train.cancelledImmediately.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )
@@ -793,8 +795,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.train.cancelledOutOfPlan.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )
@@ -829,8 +831,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.train.shouldHaveDepartedException.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )
@@ -875,8 +877,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.schedule.hasSchedule.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )
@@ -908,8 +910,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.schedule.scheduleCancelled.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )
@@ -942,8 +944,8 @@ const Filter = (props) => {
                         buttonStyle="solid"
                       >
                         {filter.options.routes.schedule.scheduleJustForToday.map(
-                          (item) => (
-                            <Radio.Button value={item.key}>
+                          (item, index) => (
+                            <Radio.Button value={item.key} key={index}>
                               {item.label}
                             </Radio.Button>
                           )

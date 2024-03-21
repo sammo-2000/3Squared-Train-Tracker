@@ -14,16 +14,11 @@ const trainStationIcon = new Icon({
 const StartEndMarkers = () => {
   const { trackedRoutes } = UseTrackedRoutes();
 
-  useEffect(() => {
-    trackedRoutes.map((route) => {});
-  }, [trackedRoutes]);
-
   return (
     <>
-      {trackedRoutes.map((route) => (
-        <>
+      {trackedRoutes.map((route, index) => (
+        <React.Fragment key={index}>
           <Marker
-            key={route.tiploc.activationId}
             position={[
               route.schedule[0].latLong.latitude,
               route.schedule[0].latLong.longitude,
@@ -44,7 +39,6 @@ const StartEndMarkers = () => {
             </Popup>
           </Marker>
           <Marker
-            key={route.tiploc.activationId}
             position={[
               route.schedule[route.schedule.length - 1].latLong.latitude,
               route.schedule[route.schedule.length - 1].latLong.longitude,
@@ -64,7 +58,7 @@ const StartEndMarkers = () => {
               </div>
             </Popup>
           </Marker>
-        </>
+        </React.Fragment>
       ))}
     </>
   );

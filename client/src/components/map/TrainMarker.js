@@ -47,6 +47,7 @@ const TrainMarker = () => {
       {trainLocations.map((train, index) => (
         <div>
           <CircleMarker
+            key={index}
             center={train.position}
             radius={15}
             color="#4da6ff"
@@ -98,10 +99,6 @@ const SetTrainDetails = (route) => {
         }
       });
     });
-
-    console.log("--------------------");
-    console.log(minValue, currentValue, maxValue);
-
     return (
       <div className="min-w-[250px]">
         <strong className="text-lg text-center block">
