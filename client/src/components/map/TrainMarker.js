@@ -3,7 +3,7 @@ import { Marker, Popup, CircleMarker } from "react-leaflet";
 import { Icon } from "leaflet";
 import stationIcon from "../../assets/icons/train.svg";
 import "../../css/leaflet.css";
-import { Slider } from "antd";
+import { Slider, Tag } from "antd";
 
 // Hooks & Contexts
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook";
@@ -108,25 +108,36 @@ const SetTrainDetails = (route) => {
         <div className="flex flex-col gap-1">
           <span className="text-xl">Train Details</span>
           {/* trainId, tocName, headCode,  */}
-          <span>Train ID: {route.tiploc.trainId}</span>
-          <span>Head Code: {route.tiploc.headCode}</span>
-          <span>TOC Name: {route.tiploc.toc_Name}</span>
+          <span>
+            Train ID: <Tag>{route.tiploc.trainId}</Tag>
+          </span>
+          <span>
+            Head Code: <Tag>{route.tiploc.headCode}</Tag>
+          </span>
+          <span>
+            TOC Name: <Tag>{route.tiploc.toc_Name}</Tag>
+          </span>
         </div>
         {route.movment[0] && (
           <div className="flex flex-col gap-1">
             <span className="text-xl">Actual</span>
             {/* arrival, departure */}
-            <span>Actual Departure: {EasyTime(route.movment[0].actual)}</span>
+            <span>
+              Actual Departure: <Tag>{EasyTime(route.movment[0].actual)}</Tag>
+            </span>
             <span>
               Expected Arrival:{" "}
-              {EasyTime(
-                moment(route.movment[0].actual).add(
-                  moment.duration(
-                    moment(route.tiploc.scheduledArrival) -
-                      moment(route.tiploc.scheduledDeparture)
+              <Tag>
+                {" "}
+                {EasyTime(
+                  moment(route.movment[0].actual).add(
+                    moment.duration(
+                      moment(route.tiploc.scheduledArrival) -
+                        moment(route.tiploc.scheduledDeparture)
+                    )
                   )
-                )
-              )}
+                )}
+              </Tag>
             </span>
           </div>
         )}
@@ -134,26 +145,30 @@ const SetTrainDetails = (route) => {
           <span className="text-xl">Planned</span>
           {/* arrival, departure */}
           <span>
-            Schedule Departure: {EasyTime(route.tiploc.scheduledDeparture)}
+            Schedule Departure:{" "}
+            <Tag>{EasyTime(route.tiploc.scheduledDeparture)}</Tag>
           </span>
           <span>
-            Schedule Arrival: {EasyTime(route.tiploc.scheduledArrival)}
+            Schedule Arrival:{" "}
+            <Tag>{EasyTime(route.tiploc.scheduledArrival)}</Tag>
           </span>
         </div>
         <div className="flex flex-col gap-1">
           <span className="text-xl">Status</span>
           {/* isLate, lateAmount */}
-          <span>Late: {isLate}</span>
+          <span>
+            Late: <Tag color={isLate === "Yes" ? "red" : "green"}>{isLate}</Tag>
+          </span>
           <span>
             Time Different:{" "}
-            <span
-              className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
-            >
-              {timeDifferent === 0
-                ? "On Time"
-                : isLate === "Yes"
-                ? `${Math.abs(timeDifferent)} mintues late`
-                : `${Math.abs(timeDifferent)} mintues early`}
+            <span>
+              <Tag color={isLate === "Yes" ? "red" : "green"}>
+                {timeDifferent === 0
+                  ? "On Time"
+                  : isLate === "Yes"
+                  ? `${Math.abs(timeDifferent)} mintues late`
+                  : `${Math.abs(timeDifferent)} mintues early`}
+              </Tag>
             </span>
           </span>
           <span>
@@ -168,6 +183,9 @@ const SetTrainDetails = (route) => {
           <span className="text-xs text-gray-500">
             The time shown above is not current time, it is time different when
             train took off and expected timer
+            <br />
+            The slider feature is currently in its experimental stage and may
+            not always function reliably.
           </span>
         </div>
       </div>
