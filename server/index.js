@@ -6,9 +6,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const server = http.createServer(app);
-const getTipclocData = require("./API/tiplocAPI");
 const getMovmentData = require("./API/movmentApi");
-const getScheduleData = require("./API/scheduleAPI");
 app.use(cors({ origin: "http://localhost:3000" }));
 
 const io = new Server(server, {

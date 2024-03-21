@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import stationIcon from "../../assets/icons/location-pin-outlined.png";
@@ -15,40 +15,50 @@ const trainStationIcon = new Icon({
 
 const StartMarker = () => {
   const { trackedRoutes } = UseTrackedRoutes();
-
-  return (
-    <>
-      {trackedRoutes.map((route) =>
-        route.schedule.map((schedule) => (
-          <>
-            <Marker
-              key={route.tiploc.activationId + "_" + schedule.pass}
-              position={[schedule.latLong.latitude, schedule.latLong.longitude]}
-              icon={trainStationIcon}
-            >
-              <Popup>
-                <div className="min-w-[250px]">
-                  <strong className="text-lg text-center block">
-                    {schedule.location}
-                  </strong>
-                  <div className="w-full h-[1px] bg-gray-400 my-1"></div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xl">Train Details</span>
-                    <span>Train ID: {route.tiploc.trainId}</span>
-                    <span>Origin Location: {route.tiploc.originLocation}</span>
-                    <span>
-                      Destination Location: {route.tiploc.destinationLocation}
-                    </span>
-                    {TrainDetailTimer({ route: route, schedule })}
+  try {
+    return (
+      <>
+        {trackedRoutes.map((route, index) =>
+          route.schedule.map((schedule) => (
+            <>
+              <Marker
+                key={
+                  route.tiploc.activationId + "_" + schedule.pass + "_" + index
+                }
+                position={[
+                  schedule.latLong ? schedule.latLong.latitude : 0,
+                  schedule.latLong ? schedule.latLong.longitude : 0,
+                ]}
+                icon={trainStationIcon}
+              >
+                <Popup>
+                  <div className="min-w-[250px]">
+                    <strong className="text-lg text-center block">
+                      {schedule.location}
+                    </strong>
+                    <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xl">Train Details</span>
+                      <span>Train ID: {route.tiploc.trainId}</span>
+                      <span>
+                        Origin Location: {route.tiploc.originLocation}
+                      </span>
+                      <span>
+                        Destination Location: {route.tiploc.destinationLocation}
+                      </span>
+                      {TrainDetailTimer({ route: route, schedule })}
+                    </div>
                   </div>
-                </div>
-              </Popup>
-            </Marker>
-          </>
-        ))
-      )}
-    </>
-  );
+                </Popup>
+              </Marker>
+            </>
+          ))
+        )}
+      </>
+    );
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const TrainDetailTimer = ({ route, schedule }) => {
@@ -73,6 +83,7 @@ const TrainDetailTimer = ({ route, schedule }) => {
         moment(actualDeparture).diff(moment(expectedDeparture), "minutes") ||
         "0";
     }
+    return null;
   });
 
   return (
@@ -108,7 +119,7 @@ const TrainDetailTimer = ({ route, schedule }) => {
           <span
             className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
           >
-            {timeDifferent == 0
+            {timeDifferent === 0
               ? "On Time"
               : isLate === "Yes"
               ? `${Math.abs(timeDifferent)} mintues late`
