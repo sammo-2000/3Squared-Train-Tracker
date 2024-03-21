@@ -13,14 +13,6 @@ const callApi = async (startEnd) => {
   return [];
 };
 
-// const filterApi = async (steps) => {
-//   if (Array.isArray(steps) && steps !== null) {
-//     const locations = steps.map((step) => step.maneuver.location);
-//     return locations;
-//   }
-//   return [];
-// };
-
 export const plotPoints = async (trackedRoutes) => {
   let myTrackRoutes = [];
 

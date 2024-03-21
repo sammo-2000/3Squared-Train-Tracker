@@ -18,26 +18,28 @@ const StationMarker = () => {
   return (
     <>
       {trackedLocations.map((location, index) => (
-        <div index={index + location.Latitude}>
-          <Marker
-            key={index}
-            position={[location.Latitude, location.Longitude]}
-            icon={trainStationIcon}
-          >
-            <Popup>
-              <div className="min-w-[250px]">
-                <strong className="text-lg text-center block">
-                  {location.Name}
-                </strong>
-                <div className="w-full h-[1px] bg-gray-400 my-1"></div>
-                <div className="text-xs text-gray-500">
-                  <strong>Tiploc </strong>
-                  {location.Tiploc}
+        <React.Fragment key={index}>
+          <div index={index + location.Latitude}>
+            <Marker
+              key={index}
+              position={[location.Latitude, location.Longitude]}
+              icon={trainStationIcon}
+            >
+              <Popup>
+                <div className="min-w-[250px]">
+                  <strong className="text-lg text-center block">
+                    {location.Name}
+                  </strong>
+                  <div className="w-full h-[1px] bg-gray-400 my-1"></div>
+                  <div className="text-xs text-gray-500">
+                    <strong>Tiploc </strong>
+                    {location.Tiploc}
+                  </div>
                 </div>
-              </div>
-            </Popup>
-          </Marker>
-        </div>
+              </Popup>
+            </Marker>
+          </div>
+        </React.Fragment>
       ))}
     </>
   );

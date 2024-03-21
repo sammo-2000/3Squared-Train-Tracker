@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { FloatButton } from "antd";
-import { AimOutlined } from "@ant-design/icons";
 import { useMap } from "../hooks/MapHook";
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
@@ -12,7 +10,6 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 
 // Hooks
 import { useSettings } from "../hooks/SettingsHook";
-import { UseTrackedLocations } from "../hooks/TrackedLocationsHook";
 import { UseTrackedRoutes } from "../hooks/TrackedRoutesHook";
 import StationMarker from "./map/StationMarker";
 import StartEndMarkers from "./map/StartEndMarkers";
@@ -20,19 +17,15 @@ import TIPLOCMarkers from "./map/TIPLOCMarkers";
 
 // Components
 import setRouteOnMap from "./map/SetRouteOnMap";
-import { Circle } from "react-leaflet";
-
-// Context
-import { MapContext } from "../contexts/MapContext";
 
 const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   const { map, setMap } = useMap();
 
-  const { settings, setSettings } = useSettings();
+  const { settings } = useSettings();
   const [detailsModal, setDetailsModal] = useState(false);
-  const [selectedDetails, setSelectedDetails] = useState({});
+  const [selectedDetails] = useState({});
 
-  const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
+  const { trackedRoutes } = UseTrackedRoutes();
 
   const center = props.center || [54.45088, -2.41332];
   const zoom = props.zoom || 6;
@@ -109,11 +102,11 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
             removeOutsideVisibleBounds={true}
             animate={true}
           >
-            <StartEndMarkers />
-            <TIPLOCMarkers />
-            <StationMarker />
+            <StartEndMarkers key="startEndMarkers" />
+            <TIPLOCMarkers key="tiplocMarkers" />
+            <StationMarker key="stationMarkers" />
           </MarkerClusterGroup>
-          <TrainMarker />
+          <TrainMarker key={"trainMarker"} />
           {plotPointsState.length !== 0 && trackedRoutes.length !== 0
             ? setRouteComponent()
             : null}

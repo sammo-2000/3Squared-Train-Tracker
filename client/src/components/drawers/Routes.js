@@ -638,7 +638,7 @@ const Routes = (props) => {
           />
         )}
         {/* Search box on first menu */}
-        <Input
+        {/* <Input
           placeholder={`Search ${trackedRoutes.length.toLocaleString()} Tracked Routes`}
           allowClear
           size="large"
@@ -668,7 +668,21 @@ const Routes = (props) => {
               </Badge>
             </Button>
           }
-        />
+        /> */}
+
+        <div className="flex justify-end p-4">
+          <Button
+            onClick={() =>
+              setSearchFilterModal(searchFilterModal ? false : true)
+            }
+            type="text"
+            className="px-1"
+          >
+            <Badge status="processing" dot={displayDot()}>
+              <Icon iconName="filter" />
+            </Badge>
+          </Button>
+        </div>
 
         {/* List routes on first menu */}
         <List
@@ -932,7 +946,7 @@ const Routes = (props) => {
             defaultKey="2"
           />
           {/* Search box on second menu */}
-          <Input
+          {/* <Input
             placeholder={`Search ${filteredRoutes.length.toLocaleString()} Routes`}
             allowClear
             size="large"
@@ -962,7 +976,21 @@ const Routes = (props) => {
                 </Badge>
               </Button>
             }
-          />
+          /> */}
+
+          <div className="flex justify-end p-4">
+            <Button
+              onClick={() =>
+                setSearchFilterModal(searchFilterModal ? false : true)
+              }
+              type="text"
+              className="px-1"
+            >
+              <Badge status="processing" dot={displayDot()}>
+                <Icon iconName="filter" />
+              </Badge>
+            </Button>
+          </div>
 
           {routes && routes.length > 0 && (
             <List

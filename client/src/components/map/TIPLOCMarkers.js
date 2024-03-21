@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import stationIcon from "../../assets/icons/location-pin-outlined.png";
@@ -18,14 +18,16 @@ const StartMarker = () => {
   try {
     return (
       <>
-        {trackedRoutes.map((route) =>
+        {trackedRoutes.map((route, index) =>
           route.schedule.map((schedule) => (
             <>
               <Marker
-                key={route.tiploc.activationId + "_" + schedule.pass}
+                key={
+                  route.tiploc.activationId + "_" + schedule.pass + "_" + index
+                }
                 position={[
-                  schedule.latLong.latitude,
-                  schedule.latLong.longitude,
+                  schedule.latLong ? schedule.latLong.latitude : 0,
+                  schedule.latLong ? schedule.latLong.longitude : 0,
                 ]}
                 icon={trainStationIcon}
               >
@@ -81,6 +83,7 @@ const TrainDetailTimer = ({ route, schedule }) => {
         moment(actualDeparture).diff(moment(expectedDeparture), "minutes") ||
         "0";
     }
+    return null;
   });
 
   return (
@@ -116,7 +119,7 @@ const TrainDetailTimer = ({ route, schedule }) => {
           <span
             className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
           >
-            {timeDifferent == 0
+            {timeDifferent === 0
               ? "On Time"
               : isLate === "Yes"
               ? `${Math.abs(timeDifferent)} mintues late`
