@@ -80,7 +80,9 @@ const SetTrainDetails = (route) => {
     let timeDifferent = null;
 
     expectedDeparture = new Date(route.tiploc.scheduledDeparture) || null;
-    actualDeparture = new Date(route.movment[0].actual) || null;
+    actualDeparture = route.movment[0]
+      ? new Date(route.movment[0].actual)
+      : null;
     isLate = actualDeparture - expectedDeparture > 0 ? "Yes" : "No";
     timeDifferent =
       moment(actualDeparture).diff(moment(expectedDeparture), "minutes") || 0;
@@ -113,22 +115,24 @@ const SetTrainDetails = (route) => {
           <span>Head Code: {route.tiploc.headCode}</span>
           <span>TOC Name: {route.tiploc.toc_Name}</span>
         </div>
-        <div className="flex flex-col gap-1">
-          <span className="text-xl">Actual</span>
-          {/* arrival, departure */}
-          <span>Actual Departure: {EasyTime(route.movment[0].actual)}</span>
-          <span>
-            Expected Arrival:{" "}
-            {EasyTime(
-              moment(route.movment[0].actual).add(
-                moment.duration(
-                  moment(route.tiploc.scheduledArrival) -
-                    moment(route.tiploc.scheduledDeparture)
+        {route.movment[0] && (
+          <div className="flex flex-col gap-1">
+            <span className="text-xl">Actual</span>
+            {/* arrival, departure */}
+            <span>Actual Departure: {EasyTime(route.movment[0].actual)}</span>
+            <span>
+              Expected Arrival:{" "}
+              {EasyTime(
+                moment(route.movment[0].actual).add(
+                  moment.duration(
+                    moment(route.tiploc.scheduledArrival) -
+                      moment(route.tiploc.scheduledDeparture)
+                  )
                 )
-              )
-            )}
-          </span>
-        </div>
+              )}
+            </span>
+          </div>
+        )}
         <div className="flex flex-col gap-1">
           <span className="text-xl">Planned</span>
           {/* arrival, departure */}
@@ -172,7 +176,7 @@ const SetTrainDetails = (route) => {
       </div>
     );
   } catch (error) {
-    return null;
+    return error.message;
   }
 };
 
