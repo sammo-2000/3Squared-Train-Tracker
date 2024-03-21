@@ -11,6 +11,7 @@ import {
   Input,
   Badge,
   Tabs,
+  Tag,
 } from "antd";
 import moment from "moment";
 
@@ -781,8 +782,129 @@ const Routes = (props) => {
             </Tabs.TabPane>
             {selectedOption ? (
               <Tabs.TabPane key={1} tab={"Details"}>
-                {console.log(selectedOption)}
-                <h2>Scheduled Stops: {selectedOption.schedule.length}</h2>
+                {console.log("Route im working on :)", selectedOption)}
+
+                {/* Top Bar */}
+                <div className="bg-slate-100 w-full h-full p-4 shadow-md">
+                  <h1 className="text-center font-bold text-xl">
+                    {selectedOption.tiploc.toc_Name}
+                  </h1>
+                  <h1 className="text-center text-blue-600 text-lg">
+                    {selectedOption.tiploc.originTiploc} -{" "}
+                    {selectedOption.tiploc.destinationTiploc}
+                  </h1>
+                  <h1 className="text-center font-bold text-lg">
+                    <Tag className="font-semibold text-gray-600">
+                      {selectedOption.tiploc.headCode}
+                    </Tag>
+                    {selectedOption.tiploc.lastReportedLocation ===
+                    selectedOption.tiploc.destinationLocation ? (
+                      <Tag className="font-semibold" color="warning">
+                        Terminated
+                      </Tag>
+                    ) : selectedOption.tiploc.cancelled ? (
+                      <Tag className="font-semibold" color="red">
+                        Cancelled
+                      </Tag>
+                    ) : (
+                      <Tag className="font-semibold" color="green">
+                        Active
+                      </Tag>
+                    )}
+                  </h1>
+                </div>
+
+                {/* Train Details */}
+                <>
+                  <div className="bg-slate-50 border-t-2 border-b-2">
+                    <p>
+                      <strong>Train Details</strong>
+                    </p>
+                    <p>ID: {selectedOption.tiploc.trainId}</p>
+                    <p>Head Code: {selectedOption.tiploc.headCode}</p>
+                    <p>
+                      Service Code: {selectedOption.tiploc.trainServiceCode}
+                    </p>
+                    <p>UID: {selectedOption.tiploc.trainUid}</p>
+                    <p>
+                      Off Route:{" "}
+                      {selectedOption.tiploc.offRoute ? "True" : "False"}
+                    </p>
+                  </div>
+                </>
+
+                {/* Schedule Details */}
+                <>
+                  <div className="bg-slate-50 border-b-2">
+                    <p>
+                      <strong>Schedule Details</strong>
+                    </p>
+                    <p>ID: {selectedOption.tiploc.scheduleId}</p>
+                    <p>Stops: {selectedOption.schedule.length}</p>
+                    <p>
+                      Repeating:{" "}
+                      {selectedOption.schedule.scheduleJustForToday
+                        ? "Yes"
+                        : "No"}
+                    </p>
+                    <p>Sector Code: {selectedOption.tiploc.sector_Code}</p>
+                    <p>Departure: {selectedOption.tiploc.scheduledDeparture}</p>
+                    <p>Arrival: {selectedOption.tiploc.scheduledArrival}</p>
+                    <p>
+                      Destination: {selectedOption.tiploc.destinationLocation}
+                    </p>
+                    <p>
+                      Destination Tiploc:{" "}
+                      {selectedOption.tiploc.destinationTiploc}
+                    </p>
+                    <p>Origin: {selectedOption.tiploc.originLocation}</p>
+                    <p>Origin Tiploc: {selectedOption.tiploc.originTiploc}</p>
+                    <p>
+                      Last Location:{" "}
+                      {selectedOption.tiploc.lastReportedLocation}
+                    </p>
+                  </div>
+                </>
+
+                {/* Cancelled */}
+                {selectedOption.tiploc.cancelled ? (
+                  <>
+                    <div className="bg-slate-50 border-b-2">
+                      <p>
+                        <strong>Cancelled</strong>
+                      </p>
+                      <p>
+                        Cancelled:{" "}
+                        {selectedOption.tiploc.cancelled ? "Yes" : "No"}
+                      </p>
+                      <p>
+                        {selectedOption.tiploc.cancelledAtOrigin
+                          ? "Point: Origin"
+                          : null}
+                      </p>
+                      <p>
+                        {selectedOption.tiploc.cancelledAtOrigin
+                          ? "Point: En Route"
+                          : null}
+                      </p>
+                      <p>
+                        {selectedOption.tiploc.cancelledImmediatly
+                          ? "Timing: Immediately"
+                          : null}
+                      </p>
+                      <p>
+                        {selectedOption.tiploc.cancelledOutOfPlan
+                          ? "Timing: Unplanned"
+                          : null}
+                      </p>
+                      <p>
+                        {selectedOption.tiploc.cancelled
+                          ? `Timestamp: ${selectedOption.tiploc.cancelledTimestamp}`
+                          : null}
+                      </p>
+                    </div>
+                  </>
+                ) : null}
               </Tabs.TabPane>
             ) : (
               <p className="text-center mt-2 text-gray-400">
