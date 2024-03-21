@@ -149,7 +149,7 @@ const SetTrainDetails = (route) => {
             <span
               className={isLate === "Yes" ? "text-red-500" : "text-green-500"}
             >
-              {timeDifferent == 0
+              {timeDifferent === 0
                 ? "On Time"
                 : isLate === "Yes"
                 ? `${Math.abs(timeDifferent)} mintues late`

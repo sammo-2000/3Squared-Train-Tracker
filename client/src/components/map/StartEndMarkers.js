@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import stationIcon from "../../assets/icons/location-pin-outlined.png";

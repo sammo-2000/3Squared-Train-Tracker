@@ -1,9 +1,8 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button, Modal, Tabs, Typography, Badge, Select, Radio } from "antd";
-import { SettingOutlined, DownOutlined } from "@ant-design/icons";
-import { Dropdown, message, Space, Input, Slider } from "antd";
-import { NumericInput } from "../inputs/NumericInput";
+import { DownOutlined } from "@ant-design/icons";
+import { Dropdown, Space } from "antd";
 import Icon from "../Icons";
 
 import { useFilter } from "../../hooks/FilterHook";
