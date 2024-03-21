@@ -822,52 +822,130 @@ const Routes = (props) => {
 
                 {/* Train Details */}
                 <>
-                  <div className="bg-slate-50 border-t-2 border-b-2">
-                    <p>
+                  <div className="bg-slate-50 border-t-2 border-b-2 p-6 pb-3">
+                    <p className="text-lg">
                       <strong>Train Details</strong>
                     </p>
-                    <p>ID: {selectedOption.tiploc.trainId}</p>
-                    <p>Head Code: {selectedOption.tiploc.headCode}</p>
-                    <p>
-                      Service Code: {selectedOption.tiploc.trainServiceCode}
+                    <p className="mb-1">
+                      ID:{" "}
+                      <Tag className="font-semibold" color="blue">
+                        {selectedOption.tiploc.trainId}
+                      </Tag>
                     </p>
-                    <p>UID: {selectedOption.tiploc.trainUid}</p>
-                    <p>
+                    <p className="mb-1">
+                      Head Code:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {selectedOption.tiploc.headCode}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
+                      Service Code:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {selectedOption.tiploc.trainServiceCode}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
+                      UID:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {selectedOption.tiploc.trainUid}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
                       Off Route:{" "}
-                      {selectedOption.tiploc.offRoute ? "True" : "False"}
+                      {selectedOption.tiploc.offRoute ? (
+                        <Tag className="font-semibold" color="green">
+                          Yes
+                        </Tag>
+                      ) : (
+                        <Tag className="font-semibold" color="red">
+                          No
+                        </Tag>
+                      )}
                     </p>
                   </div>
                 </>
 
                 {/* Schedule Details */}
                 <>
-                  <div className="bg-slate-50 border-b-2">
-                    <p>
+                  <div className="bg-slate-50 border-b-2 p-6 pb-3">
+                    <p className="text-lg">
                       <strong>Schedule Details</strong>
                     </p>
-                    <p>ID: {selectedOption.tiploc.scheduleId}</p>
-                    <p>Stops: {selectedOption.schedule.length}</p>
-                    <p>
+                    <p className="mb-1">
+                      ID: {""}
+                      <Tag className="font-semibold" color="blue">
+                        {selectedOption.tiploc.scheduleId}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
+                      Stops:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {selectedOption.schedule.length}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
                       Repeating:{" "}
-                      {selectedOption.schedule.scheduleJustForToday
-                        ? "Yes"
-                        : "No"}
+                      {selectedOption.schedule.scheduleJustForToday ? (
+                        <Tag className="font-semibold" color="red">
+                          Yes
+                        </Tag>
+                      ) : (
+                        <Tag className="font-semibold" color="green">
+                          No
+                        </Tag>
+                      )}
                     </p>
-                    <p>Sector Code: {selectedOption.tiploc.sector_Code}</p>
-                    <p>Departure: {selectedOption.tiploc.scheduledDeparture}</p>
-                    <p>Arrival: {selectedOption.tiploc.scheduledArrival}</p>
-                    <p>
-                      Destination: {selectedOption.tiploc.destinationLocation}
+                    <p className="mb-1">
+                      Sector Code:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {selectedOption.tiploc.sector_Code}
+                      </Tag>
                     </p>
-                    <p>
+                    <p className="mb-1">
+                      Departure:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {moment(
+                          selectedOption.tiploc.scheduledDeparture
+                        ).format("MM/DD/YYYY h:mm A")}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
+                      Arrival:{" "}
+                      <Tag className="font-semibold" color="default">
+                        {moment(selectedOption.tiploc.scheduledArrival).format(
+                          "MM/DD/YYYY h:mm A"
+                        )}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
+                      Destination:{" "}
+                      <Tag className="font-semibold" color="purple">
+                        {selectedOption.tiploc.destinationLocation}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
                       Destination Tiploc:{" "}
-                      {selectedOption.tiploc.destinationTiploc}
+                      <Tag className="font-semibold" color="purple">
+                        {selectedOption.tiploc.destinationTiploc}
+                      </Tag>
                     </p>
-                    <p>Origin: {selectedOption.tiploc.originLocation}</p>
-                    <p>Origin Tiploc: {selectedOption.tiploc.originTiploc}</p>
-                    <p>
+                    <p className="mb-1">
+                      Origin:{" "}
+                      <Tag className="font-semibold" color="purple">
+                        {selectedOption.tiploc.originLocation}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
+                      Origin Tiploc:{" "}
+                      <Tag className="font-semibold" color="purple">
+                        {selectedOption.tiploc.originTiploc}
+                      </Tag>
+                    </p>
+                    <p className="mb-1">
                       Last Location:{" "}
-                      {selectedOption.tiploc.lastReportedLocation}
+                      <Tag className="font-semibold" color="cyan">
+                        {selectedOption.tiploc.lastReportedLocation}
+                      </Tag>
                     </p>
                   </div>
                 </>
@@ -875,38 +953,73 @@ const Routes = (props) => {
                 {/* Cancelled */}
                 {selectedOption.tiploc.cancelled ? (
                   <>
-                    <div className="bg-slate-50 border-b-2">
-                      <p>
+                    <div className="bg-slate-50 border-b-2 p-6 pb-3">
+                      <p className="text-lg">
                         <strong>Cancelled</strong>
                       </p>
-                      <p>
+                      <p className="mb-1">
                         Cancelled:{" "}
-                        {selectedOption.tiploc.cancelled ? "Yes" : "No"}
+                        {selectedOption.tiploc.cancelled ? (
+                          <Tag className="font-semibold" color="red">
+                            Yes
+                          </Tag>
+                        ) : (
+                          <Tag className="font-semibold" color="Green">
+                            No
+                          </Tag>
+                        )}
                       </p>
-                      <p>
-                        {selectedOption.tiploc.cancelledAtOrigin
-                          ? "Point: Origin"
-                          : null}
+                      <p className="mb-1">
+                        {selectedOption.tiploc.cancelledAtOrigin ? (
+                          <>
+                            Point:
+                            <Tag className="font-semibold" color="default">
+                              Origin
+                            </Tag>
+                          </>
+                        ) : null}
                       </p>
-                      <p>
-                        {selectedOption.tiploc.cancelledAtOrigin
-                          ? "Point: En Route"
-                          : null}
+                      <p className="mb-1">
+                        {selectedOption.tiploc.cancelledAtOrigin ? (
+                          <>
+                            Point:
+                            <Tag className="font-semibold" color="default">
+                              En Route
+                            </Tag>
+                          </>
+                        ) : null}
                       </p>
-                      <p>
-                        {selectedOption.tiploc.cancelledImmediatly
-                          ? "Timing: Immediately"
-                          : null}
+                      <p className="mb-1">
+                        {selectedOption.tiploc.cancelledImmediatly ? (
+                          <>
+                            Timing:
+                            <Tag className="font-semibold" color="default">
+                              Immediately
+                            </Tag>
+                          </>
+                        ) : null}
                       </p>
-                      <p>
-                        {selectedOption.tiploc.cancelledOutOfPlan
-                          ? "Timing: Unplanned"
-                          : null}
+                      <p className="mb-1">
+                        {selectedOption.tiploc.cancelledOutOfPlan ? (
+                          <>
+                            Timing:
+                            <Tag className="font-semibold" color="default">
+                              Unplanned
+                            </Tag>
+                          </>
+                        ) : null}
                       </p>
-                      <p>
-                        {selectedOption.tiploc.cancelled
-                          ? `Timestamp: ${selectedOption.tiploc.cancelledTimestamp}`
-                          : null}
+                      <p className="mb-1">
+                        {selectedOption.tiploc.cancelled ? (
+                          <>
+                            Timestamp:
+                            <Tag className="font-semibold" color="default">
+                              {moment(
+                                selectedOption.tiploc.cancelledTimestamp
+                              ).format("MM/DD/YYYY h:mm A")}
+                            </Tag>
+                          </>
+                        ) : null}
                       </p>
                     </div>
                   </>

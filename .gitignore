@@ -24,4 +24,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-client/src/css/tailwind.css
+client/src/css/components/tailwind.css
