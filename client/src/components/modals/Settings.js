@@ -1,7 +1,19 @@
-import React, { useRef, useState, useEffect, version } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
-import { Button, Modal, Tabs, Typography, Tooltip, TreeSelect } from "antd";
-import { SettingOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Modal,
+  Tabs,
+  Typography,
+  Tooltip,
+  TreeSelect,
+  Form,
+} from "antd";
+import {
+  SettingOutlined,
+  DownOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { Dropdown, message, Space, Input } from "antd";
 import { NumericInput } from "../inputs/NumericInput";
 
@@ -21,6 +33,9 @@ import {
   menuAutoCloseItems,
   railsItems,
 } from "../../options/settingsOptions";
+
+// icons
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const allCookies = Cookies.get();
 
@@ -160,7 +175,6 @@ const Settings = ({ setOpenGuide, ...props }) => {
       );
     }
   };
-
   return (
     <>
       <Modal
@@ -619,6 +633,98 @@ const Settings = ({ setOpenGuide, ...props }) => {
                     Reset
                   </Button>
                 </dd>
+              </div>
+              <div className="px-4 py-6 ">
+                <dt className="text-sm font-medium leading-6 text-gray-900">
+                  Developer Map Settings
+                </dt>
+                <Form
+                  name="dynamic_form_nest_item"
+                  onFinish={(values) => {
+                    values.layers.map((layer) => {
+                      railsItems.push({
+                        label: layer.name,
+                        key: railsItems.length.toString(),
+                        url: layer.url,
+                      });
+                    });
+
+                    // setSettings({ ...settings, mapTheme: themeItem });
+
+                    message.info(`Custom layers changes made`);
+                  }}
+                  className="mt-4"
+                  autoComplete="off"
+                >
+                  <Form.List name="layers">
+                    {(fields, { add, remove }) => (
+                      <>
+                        {fields.map(({ key, name, ...restField }) => (
+                          <Space
+                            key={key}
+                            style={{
+                              display: "flex",
+                              marginBottom: 8,
+                            }}
+                            align="baseline"
+                          >
+                            <Form.Item
+                              {...restField}
+                              name={[name, "name"]}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Missing name",
+                                },
+                              ]}
+                            >
+                              <Input placeholder="Name" />
+                            </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              name={[name, "url"]}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Missing url",
+                                },
+                              ]}
+                            >
+                              <Input placeholder="URL" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </Space>
+                        ))}
+                        <Form.Item>
+                          <Button
+                            type="dashed"
+                            onClick={() => add()}
+                            block
+                            icon={<PlusOutlined />}
+                          >
+                            Add custom rail overlay
+                          </Button>
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                  <Form.Item>
+                    <Space>
+                      <Button type="primary" htmlType="submit">
+                        Submit Changes
+                      </Button>
+                      <Tooltip title="Visit Leaflet Providers - Do not include {ext}!">
+                        <QuestionCircleOutlined
+                          onClick={() =>
+                            window.open(
+                              "https://leaflet-extras.github.io/leaflet-providers/preview/index.html"
+                            )
+                          }
+                        />
+                      </Tooltip>
+                    </Space>
+                  </Form.Item>
+                </Form>
               </div>
             </dl>
           </TabPane>

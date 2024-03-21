@@ -67,8 +67,8 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
   }, [map, settings]);
 
   const ukBounds = [
-    [48.27494, -13.41394],
-    [60.86117, 4.06502],
+    [45.23723, -20.52906],
+    [62.47728, 12.71931],
   ];
 
   return (

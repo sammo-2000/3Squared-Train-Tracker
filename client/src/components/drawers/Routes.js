@@ -15,54 +15,41 @@ import {
 } from "antd";
 import moment from "moment";
 
-// ------------------- Internal Components -------------------
-import MyInput from "./routes/Input.js";
+// Components
 import MyPopupConfirm from "./routes/PopupConfirm.js";
-import MyOptionsConfirm from "./routes/optionsConfirm.js";
 import MyListItem from "./routes/ListItem.js";
 import Filter from "../modals/Filter.js";
 
-// ------------------- Style Utilities -------------------
+// Style Utilities
 import { getBackgroundColor, getHoverStyles } from "./routes/ListItemStyle.js";
 
-// ------------------- Custom Hooks -------------------
+// Custom Hooks
 import { UseTrackedRoutes } from "../../hooks/TrackedRoutesHook.js";
 import { UseRoutes } from "../../hooks/RoutesHook.js";
 import { UseTrackedLocations } from "../../hooks/TrackedLocationsHook.js";
 import { useFilter } from "../../hooks/FilterHook";
 import { useSettings } from "../../hooks/SettingsHook";
 
-// ------------------- API Functions -------------------
+// API Functions
 import { tiplocAPI } from "../../api/tiplocAPI.js";
 import { detailAPI } from "../../api/detailAPI.js";
 
-// ------------------- CSS Styles -------------------
+// CSS Styles
 import "../../css/drawer.css";
 import "../../css/steps.css";
 
-// ------------------- Icons -------------------
+// Icons
 import Icon from "../Icons.js";
 
-// ------------------- Cookies -------------------
+// Cookies
 import Cookies from "js-cookie";
 
-const { Option } = Select;
-
 const Routes = (props) => {
-  // ------------------- useState -------------------
+  // Drawer
   const [childrenDrawer, setChildrenDrawer] = useState(false);
-
-  // Routes
-  const [searchedRoutes, setSearchedRoutes] = useState([]);
-
-  // Track Routes
-  const [trackedSearchedRoutes, setTrackedSearchedRoutes] = useState([]);
 
   // Tracker
   const [isTrackerOpen, setIsTrackerOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-
-  const [selectedValue, setSelectedValue] = useState();
 
   // Routes
   const [selectedOption, setSelectedOption] = useState(null);
@@ -72,7 +59,7 @@ const Routes = (props) => {
   const [searchFilterModal, setSearchFilterModal] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
 
-  // ------------------- Custom Hooks -------------------
+  // Custom Hooks
   const { trackedLocations } = UseTrackedLocations();
   const { routes, setRoutes } = UseRoutes();
   const { trackedRoutes, setTrackedRoutes } = UseTrackedRoutes();
@@ -80,7 +67,7 @@ const Routes = (props) => {
   const { filter, setFilter } = useFilter();
   const { settings, setSettings } = useSettings();
 
-  // ------------------- Functions -------------------
+  // Functions
   // Stop tracking a route
   const stopTracking = async (item) => {
     localStorage.clear();
