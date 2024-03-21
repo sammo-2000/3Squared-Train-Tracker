@@ -66,6 +66,11 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
     }
   }, [map, settings]);
 
+  const ukBounds = [
+    [48.27494, -13.41394],
+    [60.86117, 4.06502],
+  ];
+
   return (
     <>
       <LocationDetails
@@ -80,6 +85,10 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
           zoom={zoom}
           scrollWheelZoom={true}
           whenReady={(e) => setMap(e.target)}
+          maxBounds={ukBounds} // Restrict panning outside the bounds of the UK
+          maxBoundsViscosity={1.0}
+          minZoom={6}
+          bounds={ukBounds} // Restrict map to the bounds of the UKrevent panning outside the bounds of the UK
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
