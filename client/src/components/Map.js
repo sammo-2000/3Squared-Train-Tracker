@@ -114,7 +114,9 @@ const Map = React.forwardRef(({ setOpen, ...props }, ref4) => {
             <StationMarker />
           </MarkerClusterGroup>
           <TrainMarker />
-          {plotPointsState.length !== 0 ? setRouteComponent() : null}
+          {plotPointsState.length !== 0 && trackedRoutes.length !== 0
+            ? setRouteComponent()
+            : null}
         </MapContainer>
       </div>
     </>
