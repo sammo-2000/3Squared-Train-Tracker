@@ -466,7 +466,7 @@ const Routes = (props) => {
 
     return propertiesToCheck.some((property) => {
       if (route.hasOwnProperty(property)) {
-        route[property].toLowerCase().includes(searchText.toLowerCase());
+        return route[property].toLowerCase().includes(searchText.toLowerCase());
       } else {
         // console.log(route);
         // console.log(property);
